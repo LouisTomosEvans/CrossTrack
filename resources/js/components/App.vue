@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-navigation-drawer elevation=0 app class="background d-none d-md-block" absolute style="height: 100%;" permanent >
+    <v-navigation-drawer v-model='mobile' elevation=0 app class="background d-block" absolute style="height: 100%;" permanent >
     <v-list-item class="home">
         <v-list-item-content class="header">
             <img src="/HuntIntelLogo.png" style="width: 50% !important;" />
@@ -27,7 +27,7 @@
           </v-list-item-content>
         </v-list-item>
 
-        <v-list-item :to="'/records'" v-ripple="false" class="p-1 pl-5" style="text-decoration: none; color: inherit;" >
+        <!-- <v-list-item :to="'/records'" v-ripple="false" class="p-1 pl-5" style="text-decoration: none; color: inherit;" >
           <v-list-item-icon>
             <v-icon style="color: white;">mdi-content-save</v-icon>
           </v-list-item-icon>
@@ -35,7 +35,7 @@
           <v-list-item-content>
             <v-list-item-title style="color: white;" class="sidebarText">My Records</v-list-item-title>
           </v-list-item-content>
-        </v-list-item>
+        </v-list-item> -->
 
         <v-list-item :to="'/knowledge-base'" v-ripple="false" class="p-1 pl-5" style="text-decoration: none; color: inherit;" >
           <v-list-item-icon>
@@ -57,7 +57,7 @@
         </v-list-item>
 
 
-        <v-list-item :to="'/account-finder'" v-ripple="false" class="p-1 pl-5" style="text-decoration: none; color: inherit;" >
+        <!-- <v-list-item :to="'/account-finder'" v-ripple="false" class="p-1 pl-5" style="text-decoration: none; color: inherit;" >
           <v-list-item-icon>
             <v-icon style="color: white;">mdi-account-search</v-icon>
           </v-list-item-icon>
@@ -65,7 +65,7 @@
           <v-list-item-content>
             <v-list-item-title style="color: white;" class="sidebarText">Account Finder</v-list-item-title>
           </v-list-item-content>
-        </v-list-item>
+        </v-list-item> -->
 
         <v-list-item :to="'/location-tools'" v-ripple="false" class="p-1 pl-5" style="text-decoration: none; color: inherit;" >
           <v-list-item-icon class="d-flex align-items-center">
@@ -77,7 +77,7 @@
           </v-list-item-content>
         </v-list-item>
 
-        <v-list-item :to="'/person-finder'" v-ripple="false" class="p-1 pl-5" style="text-decoration: none; color: inherit;" >
+        <!-- <v-list-item :to="'/person-finder'" v-ripple="false" class="p-1 pl-5" style="text-decoration: none; color: inherit;" >
           <v-list-item-icon>
             <v-icon style="color: white;">mdi-account-tie</v-icon>
           </v-list-item-icon>
@@ -85,9 +85,9 @@
           <v-list-item-content>
             <v-list-item-title style="color: white;" class="sidebarText">Person Finder</v-list-item-title>
           </v-list-item-content>
-        </v-list-item>
+        </v-list-item> -->
 
-        <v-list-item :to="'/text-analyser'" v-ripple="false" class="p-1 pl-5" style="text-decoration: none; color: inherit;" >
+        <!-- <v-list-item :to="'/text-analyser'" v-ripple="false" class="p-1 pl-5" style="text-decoration: none; color: inherit;" >
           <v-list-item-icon>
             <v-icon style="color: white;">mdi-text-box-search</v-icon>
           </v-list-item-icon>
@@ -95,9 +95,9 @@
           <v-list-item-content>
             <v-list-item-title style="color: white;" class="sidebarText">Text Analyser</v-list-item-title>
           </v-list-item-content>
-        </v-list-item>
+        </v-list-item> -->
 
-        <v-list-item :to="'/image-analyser'" v-ripple="false" class="p-1 pl-5" style="text-decoration: none; color: inherit;" >
+        <!-- <v-list-item :to="'/image-analyser'" v-ripple="false" class="p-1 pl-5" style="text-decoration: none; color: inherit;" >
           <v-list-item-icon>
             <v-icon style="color: white;">mdi-image</v-icon>
           </v-list-item-icon>
@@ -105,10 +105,10 @@
           <v-list-item-content>
             <v-list-item-title style="color: white;" class="sidebarText">Image Analyser</v-list-item-title>
           </v-list-item-content>
-        </v-list-item>
+        </v-list-item> -->
 
 
-        <v-list-item :to="'/leak-finder'" v-ripple="false" class="p-1 pl-5" style="text-decoration: none; color: inherit;" >
+        <!-- <v-list-item :to="'/leak-finder'" v-ripple="false" class="p-1 pl-5" style="text-decoration: none; color: inherit;" >
           <v-list-item-icon>
             <v-icon style="color: white;">mdi-water-outline</v-icon>
           </v-list-item-icon>
@@ -116,30 +116,35 @@
           <v-list-item-content>
             <v-list-item-title style="color: white;" class="sidebarText">Leak Finder</v-list-item-title>
           </v-list-item-content>
-        </v-list-item>
+        </v-list-item> -->
 
         </v-list-item-group>
     </v-list>
     </v-navigation-drawer>
     <v-app-bar absolute elevation=0 style="cursor: pointer; background-color: #242424; height: 60px; border-bottom: 2px solid #44d62c;" app>
-        <v-icon style="color: white;">mdi-magnify</v-icon>
+        <!-- <v-icon style="color: white;">mdi-magnify</v-icon> -->
         <v-spacer></v-spacer>
                 <v-list-item class="navbar" style="padding-right: 0px !important;">
-                    <v-menu bottom right>
-                        <template v-slot:activator="{ on, attrs }">
-                        <v-list-item-content style="text-align: right;"
-                        v-bind="attrs" v-on="on">
+                        <v-list-item-content style="text-align: right;">
                             <v-list-item-title style="color: white; font-size: 0.75rem;"><b>{{user}}</b></v-list-item-title>
                             <v-list-item-subtitle style="color: white; font-size: 0.75rem;">{{plan}}</v-list-item-subtitle>
                         </v-list-item-content>
-                        <v-list-item-avatar style="margin-left: 12px;s">
-                            <img src="https://randomuser.me/api/portraits/men/51.jpg">
+                        <v-menu bottom right>
+                        <template v-slot:activator="{ on, attrs }">
+                        <v-list-item-avatar style="margin-left: 12px;"  v-bind="attrs" v-on="on">
+                            <img :src="'profile.png'">
                         </v-list-item-avatar>
-                    </template>
-                    <v-list dark>
-                    <v-list-item>
-                        <v-list-item-title>Logout</v-list-item-title>
-                    </v-list-item>
+                        </template>
+                    <v-list dark width="140px">
+                        <v-list-item href="/profile">
+                            <v-list-item-title>Profile</v-list-item-title>
+                        </v-list-item>
+                        <v-list-item href="/billing">
+                            <v-list-item-title>Billing</v-list-item-title>
+                        </v-list-item>
+                        <v-list-item href="/logout">
+                            <v-list-item-title>Logout</v-list-item-title>
+                        </v-list-item>
                     </v-list>
                     </v-menu>
                 </v-list-item>
@@ -160,6 +165,7 @@ export default {
     return{
         user: '',
         plan: '',
+        mobile: null,
     }},
     mounted() {
         this.getUser();

@@ -44,8 +44,8 @@ return [
     */
 
     'brand' =>  [
-         //'logo' => realpath(__DIR__.'/../public/HuntIntelGreenLogo.png'),
-         'color' => 'bg-green-400',
+         'logo' => realpath(__DIR__.'/../public/HuntSVG.svg'),
+         'color' => '#44d62c',
     ],
 
     /*
@@ -95,9 +95,9 @@ return [
     'receipt_data' => [
         'vendor' => 'Hunt Intelligence',
         'product' => 'Hunt Intelligence Platform',
-        'street' => '111 Example St.',
-        'location' => 'Los Angeles, CA',
-        'phone' => '555-555-5555',
+        'street' => '35 Clos Halket',
+        'location' => 'Cardiff, Wales',
+        'phone' => '07935911537',
     ],
 
     /*
@@ -121,54 +121,21 @@ return [
             'model' => User::class,
 
             'default_interval' => 'monthly',
+            'trial_days' => 7,
 
             'plans' => [
                 [
-                    'name' => 'Free',
-                    'short_description' => 'This is a short, human friendly description of the plan.',
-                    'monthly_id' => 'price_1KXNTaD5fy9Yqy8V6en6b2Ad',
-                    'features' => [
-                        'Feature 1',
-                        'Feature 2',
-                        'Feature 3',
-                    ],
-
-                ],
-                [
                     'name' => '🥈 Silver',
-                    'short_description' => 'This is a short, human friendly description of the plan.',
-                    'monthly_id' => 'price_1KXA9tD5fy9Yqy8VzNQR91FQ',
-                    'yearly_id' => 'price_1KXA9tD5fy9Yqy8VMg0hkDsZ',
+                    'short_description' => 'Get started using hunt intelligence via the Silver Plan',
+                    'monthly_id' => 'price_1KfvgeD5fy9Yqy8V2MSuiHYa',
+                    'yearly_id' => 'price_1KfvgeD5fy9Yqy8VfKiFQEaM',
+                    'yearly_incentive' => 'Get 2 Months Free',
                     'features' => [
-                        'Feature 1',
-                        'Feature 2',
-                        'Feature 3',
+                        'Locate Facebook and Instagram Places',
+                        'Locate VKontakte Photos (Russian Social Media)',
+                        'Find Tweets by Location',
+                        'and many more features...',
                     ],
-
-                ],
-                [
-                    'name' => '🥇 Gold',
-                    'short_description' => 'This is a short, human friendly description of the plan.',
-                    'monthly_id' => 'price_1KXA8sD5fy9Yqy8VO00FnkoA',
-                    'yearly_id' => 'price_1KXA8sD5fy9Yqy8VIKyRzZH8',
-                    'features' => [
-                        'Feature 1',
-                        'Feature 2',
-                        'Feature 3',
-                    ],
-
-                ],
-                [
-                    'name' => '💎 Diamond',
-                    'short_description' => 'This is a short, human friendly description of the plan.',
-                    'monthly_id' => 'price_1KXA7cD5fy9Yqy8VEasFNxlt',
-                    'yearly_id' => 'price_1KXA7cD5fy9Yqy8VjsLERttp',
-                    'features' => [
-                        'Feature 1',
-                        'Feature 2',
-                        'Feature 3',
-                    ],
-                    'trial_days' => 7,
 
                 ],
             ],

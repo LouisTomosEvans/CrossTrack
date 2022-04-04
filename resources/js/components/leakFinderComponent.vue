@@ -1,6 +1,6 @@
 <template>
   <v-container class="col-12" style="padding: 24px; padding-top: 12px; justify-content: space-between;">
-        <v-row>  
+        <v-row>
           <div class="col-12" style="padding: 12px;">
             <h5 style="color:white;">
               <b>

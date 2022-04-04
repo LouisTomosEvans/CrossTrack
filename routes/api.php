@@ -7,6 +7,8 @@ use App\Http\Controllers\MapSearchController;
 use App\Http\Controllers\TwitterSearchController;
 use App\Http\Controllers\MetaPlaceSearchController;
 use App\Http\Controllers\MetaPlaceController;
+use App\Http\Controllers\VKPhotoSearchController;
+use App\Http\Controllers\VKPhotoController;
 
 
 /*
@@ -20,16 +22,29 @@ use App\Http\Controllers\MetaPlaceController;
 |
 */
 
-Route::middleware(['auth:sanctum', 'subscribed'])->get('/user', function (Request $request) {
+Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware(['auth:sanctum', 'verified', 'subscribed'])->get('/app', [AppController::class, 'index'])->name('app');
+// Plan
+Route::middleware(['auth:sanctum'])->get('/plan', [AppController::class, 'plan'])->name('plan');
 
-Route::middleware(['auth:sanctum', 'verified', 'subscribed'])->post('/mapsearch/create', [MapSearchController::class, 'create'])->name('mapsearch.create');
+// Dashboard
+Route::middleware(['auth:sanctum', 'verified'])->get('/app', [AppController::class, 'index'])->name('app');
 
-Route::middleware(['auth:sanctum', 'verified', 'subscribed'])->post('/twittersearch/create', [TwitterSearchController::class, 'create'])->name('twittersearch.create');
+// Location
+Route::middleware(['auth:sanctum', 'verified'])->post('/mapsearch/create', [MapSearchController::class, 'create'])->name('mapsearch.create');
 
-Route::middleware(['auth:sanctum', 'verified', 'subscribed'])->post('/metaplacesearch/create', [MetaPlaceSearchController::class, 'create'])->name('metaplacesearch.create');
 
-Route::middleware(['auth:sanctum', 'verified', 'subscribed'])->post('/metaplace/create', [MetaPlaceController::class, 'create'])->name('metaplace.create');
+// Location Twitter
+Route::middleware(['auth:sanctum', 'verified'])->post('/twittersearch/create', [TwitterSearchController::class, 'create'])->name('twittersearch.create');
+
+
+// Location Meta
+Route::middleware(['auth:sanctum', 'verified'])->post('/metaplacesearch/create', [MetaPlaceSearchController::class, 'create'])->name('metaplacesearch.create');
+Route::middleware(['auth:sanctum', 'verified'])->post('/metaplace/create', [MetaPlaceController::class, 'create'])->name('metaplace.create');
+
+
+// Location VK
+Route::middleware(['auth:sanctum', 'verified'])->post('/vkphotosearch/create', [VKPhotoSearchController::class, 'create'])->name('vkphotosearch.create');
+Route::middleware(['auth:sanctum', 'verified'])->post('/vkphoto/create', [VKPhotoController::class, 'create'])->name('vkphoto.create');

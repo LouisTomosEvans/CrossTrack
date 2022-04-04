@@ -18,11 +18,27 @@ class AppController extends Controller
 
     public function index()
     {
+        $plan = null;
         $user = Auth::user();
         if($user->subscribed()){
             $plan = $user->sparkPlan()->name;
-            return [$user->name, $plan];
         }
-        return $user;
+        if ($plan == null) {
+            $plan = 'Free Trial';
+        }
+        return [$user->name, $plan];
+    }
+    public function plan()
+    {
+        $user = Auth::user();
+        $plan = null;
+        if($user->subscribed()){
+            $plan = $user->sparkPlan()->name;
+        }
+        if ($plan == null) {
+            $plan = 'Free Trial';
+            $endDate = $user->trial_ends_at;
+        }
+        return [$plan, $endDate];
     }
 }

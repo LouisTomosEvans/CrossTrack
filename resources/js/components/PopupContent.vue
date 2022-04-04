@@ -19,36 +19,34 @@
 </template>
 
 <script>
-
-export default {
+import Vue from 'vue'
+export default Vue.extend({
     name: 'PopupContent',
-  props: {
+    props: {
     feature: {
-      required: true,
-      type: Object,
+        required: true,
+        type: Object,
     }
-  },
-  methods: {
-    viewClicked() {
-        let route = "/location/show/{id}";
-        var newRoute = route.replace("{id}", this.feature.id);
-        this.$router.push(newRoute);
     },
-    readableDate(date){
-      return window.Utils.dateTimeToDDMMYYYY(date);
-    },
-    openInstagram(){
-            let url = 'https://www.instagram.com/explore/locations/' + this.feature.features[0].properties.id;
-            window.open(url, '_blank');
-    },
-    openFacebook(){
-            let url = 'https://www.facebook.com/' + this.feature.features[0].properties.id;
-            window.open(url, '_blank');
-    },
-
-
-  }
-}
+    methods: {
+        viewClicked() {
+            let route = "/location/show/{id}";
+            var newRoute = route.replace("{id}", this.feature.id);
+            this.$router.push(newRoute);
+        },
+        readableDate(date){
+            return window.Utils.dateTimeToDDMMYYYY(date);
+        },
+        openInstagram(){
+                let url = 'https://www.instagram.com/explore/locations/' + this.feature.features[0].properties.id;
+                window.open(url, '_blank');
+        },
+        openFacebook(){
+                let url = 'https://www.facebook.com/' + this.feature.features[0].properties.id;
+                window.open(url, '_blank');
+        },
+    }
+})
 </script>
 
 <style scoped>

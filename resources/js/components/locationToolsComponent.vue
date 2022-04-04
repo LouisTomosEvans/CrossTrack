@@ -2,7 +2,7 @@
     <div>
         <div id="mainLoading" v-show="this.loading == true" class="background"  style="text-align: center;">
             <div class="text-center" style="margin-top:25vh">
-                <img width="250px"  src="HuntIntelMainLogo.png">
+                <img width="150px"  src="HuntIntelLogo.png">
                 <v-progress-linear indeterminate color="#44d62c" style="width: 150px; margin-left: auto; margin-right:auto; margin-top: 1.5rem;" height=3 background-opacity="0"></v-progress-linear>
             </div>
         </div>
@@ -10,7 +10,7 @@
             <v-overlay
                 opacity="0.66"
                 color="#000000"
-                :value="searchDialog || addDialog || settingsDialog"
+                :value="searchDialog || addDialog || settingsDialog || showVKDialog"
             ></v-overlay>
 
             <!-- this is the dialog box itself the customDialog class gives you the ability to style it using custom css ensure the stlye tag isn't scoped -->
@@ -65,10 +65,11 @@
                             <p style="text-align: left; font-size: 0.75rem;"><b>Below is a list of geo-location tools used for OSINT.</b> Clicking on one of these tools will redirect you, in a new tab, to that tool for your chosen location.</p>
                             <v-divider class="my-6"></v-divider>
                             </div>
-                            <div class="col-12">
+                            <!-- <div class="col-12">
                             <v-text-field dark clearable hide-details dense color="white" style="font-size: 0.75rem; margin: 0px; padding: 0px; font-color: white; margin-bottom: 1rem;" label="Search Tools" prepend-inner-icon="mdi-magnify" outlined></v-text-field>
-                            </div>
-                            <div class="col-12 col-xxl-6" style="padding: 12px; display: inline-block;  vertical-align: top;">
+                            </div> -->
+                            <v-row style="padding: 12px;">
+                            <div class="col-12 col-xl-6" style="padding: 12px; display: inline-block;  vertical-align: top;">
                                 <v-card class="cardShadow displayCardBackground" style="padding: 12px; text-align: center;" height="400px">
                                 <div class="articleHeader" style="background-color: #5DA9DD">
                                     <div style="height: 100%; padding: 12px; background-color: transparent; border-radius: 50%; width: 12rem; display: flex; align-items: center; justify-content: center; margin-left: auto; margin-right: auto;"><v-icon style="color: white !important; font-size: 3rem;">mdi-twitter</v-icon></div>
@@ -81,7 +82,7 @@
                                 <v-btn class="toolButton" @click="twitterToggle()" tile style="background-color: #44d62c25; color: #44d62c !important;" icon><v-icon style="color: #44d62c !important;">mdi-arrow-right-bold</v-icon></v-btn>
                                 </v-card>
                             </div>
-                            <div class="col-12 col-xxl-6" style="padding: 12px; display: inline-block;  vertical-align: top;">
+                            <div class="col-12 col-xl-6" style="padding: 12px; display: inline-block;  vertical-align: top;">
                                 <v-card class="cardShadow displayCardBackground" style="padding: 12px; text-align: center;" height="400px">
                                 <div class="articleHeader" style="background-color: #f2ee00">
                                     <div style="height: 100%; padding: 12px; background-color: transparent; border-radius: 50%; width: 12rem; display: flex; align-items: center; justify-content: center; margin-left: auto; margin-right: auto;"><img class="pinLogo" src="SnapMapsLogo.png"></div>
@@ -94,7 +95,7 @@
                                 <v-btn class="toolButton" tile @click="goToSnapMaps()" style="background-color: #44d62c25; color: #44d62c !important;" icon><v-icon style="color: #44d62c !important;">mdi-arrow-right-bold</v-icon></v-btn>
                                 </v-card>
                             </div>
-                            <div class="col-12 col-xxl-6" style="padding: 12px; display: inline-block;  vertical-align: top;">
+                            <div class="col-12 col-xl-6" style="padding: 12px; display: inline-block;  vertical-align: top;">
                                 <v-card class="cardShadow displayCardBackground" style="padding: 12px; text-align: center;" height="400px">
                                 <div class="articleHeader" style="background-color: #34A853">
                                     <div style="height: 100%; padding: 12px; background-color: transparent; border-radius: 50%; width: 12rem; display: flex; align-items: center; justify-content: center; margin-left: auto; margin-right: auto;"><v-icon style="color: white !important; font-size: 3rem;">mdi-google-maps</v-icon></div>
@@ -120,7 +121,7 @@
                                 <v-btn class="toolButton" tile style="background-color: #44d62c25; color: #44d62c !important;" icon><v-icon style="color: #44d62c !important;">mdi-arrow-right-bold</v-icon></v-btn>
                                 </v-card>
                             </div> -->
-                            <div class="col-12 col-xxl-6" style="padding: 12px; display: inline-block; vertical-align: top;">
+                            <div class="col-12 col-xl-6" style="padding: 12px; display: inline-block; vertical-align: top;">
                                 <v-card class="cardShadow displayCardBackground" style="padding: 12px; text-align: center;" height="400px">
                                 <div class="articleHeader" style="background-color: #008272">
                                     <div style="height: 100%; padding: 12px; background-color: transparent; border-radius: 50%; width: 12rem; display: flex; align-items: center; justify-content: center; margin-left: auto; margin-right: auto;"><v-icon style="color: white !important; font-size: 3rem;">mdi-microsoft-bing</v-icon></div>
@@ -146,7 +147,7 @@
                                 <v-btn class="toolButton" tile @click="goToBaiduMaps()" style="background-color: #44d62c25; color: #44d62c !important;" icon><v-icon style="color: #44d62c !important;">mdi-arrow-right-bold</v-icon></v-btn>
                                 </v-card>
                             </div> -->
-                            <div class="col-12 col-xxl-6" style="padding: 12px; display: inline-block; vertical-align: top;">
+                            <div class="col-12 col-xl-6" style="padding: 12px; display: inline-block; vertical-align: top;">
                                 <v-card class="cardShadow displayCardBackground" style="padding: 12px; text-align: center;" height="400px">
                                 <div class="articleHeader" style="background-color: #FEBD00">
                                     <div style="height: 100%; padding: 12px; background-color: transparent; border-radius: 50%; width: 12rem; display: flex; align-items: center; justify-content: center; margin-left: auto; margin-right: auto;"><v-icon style="color: white !important; font-size: 3rem;">mdi-weather-sunny</v-icon></div>
@@ -159,7 +160,7 @@
                                 <v-btn class="toolButton" tile @click="goToSunCalc()" style="background-color: #44d62c25; color: #44d62c !important;" icon><v-icon style="color: #44d62c !important;">mdi-arrow-right-bold</v-icon></v-btn>
                                 </v-card>
                             </div>
-                            <div class="col-12 col-xxl-6" style="padding: 12px; display: inline-block; vertical-align: top;">
+                            <div class="col-12 col-xl-6" style="padding: 12px; display: inline-block; vertical-align: top;">
                                 <v-card class="cardShadow displayCardBackground" style="padding: 12px; text-align: center;" height="400px">
                                 <div class="articleHeader" style="background-color: #FF4433">
                                     <div style="height: 100%; padding: 12px; background-color: transparent; border-radius: 50%; width: 12rem; display: flex; align-items: center; justify-content: center; margin-left: auto; margin-right: auto;"><img class="pinLogo" src="YandexMapsLogo.png"></div>
@@ -172,7 +173,7 @@
                                 <v-btn class="toolButton" tile  @click="goToYandexMaps()" style="background-color: #44d62c25; color: #44d62c !important;" icon><v-icon style="color: #44d62c !important;">mdi-arrow-right-bold</v-icon></v-btn>
                                 </v-card>
                             </div>
-                            <div class="col-12 col-xxl-6" style="padding: 12px; display: inline-block;  vertical-align: top;">
+                            <div class="col-12 col-xl-6" style="padding: 12px; display: inline-block;  vertical-align: top;">
                                 <v-card class="cardShadow displayCardBackground" style="padding: 12px; text-align: center;" height="400px">
                                 <div class="articleHeader" style="background-color: #33AA6A">
                                     <div style="height: 100%; padding: 12px; background-color: transparent; border-radius: 50%; width: 12rem; display: flex; align-items: center; justify-content: center; margin-left: auto; margin-right: auto;"><img class="pinLogo" src="MapillaryLogo.png"></div>
@@ -185,7 +186,7 @@
                                 <v-btn class="toolButton" tile @click="goToMapillary()" style="background-color: #44d62c25; color: #44d62c !important;" icon><v-icon style="color: #44d62c !important;">mdi-arrow-right-bold</v-icon></v-btn>
                                 </v-card>
                             </div>
-                            <div class="col-12 col-xxl-6" style="padding: 12px; display: inline-block;  vertical-align: top;">
+                            <div class="col-12 col-xl-6" style="padding: 12px; display: inline-block;  vertical-align: top;">
                                 <v-card class="cardShadow displayCardBackground" style="padding: 12px; text-align: center;" height="400px">
                                 <div class="articleHeader" style="background-color: #0C1C2C">
                                     <div style="height: 100%; padding: 12px; background-color: transparent; border-radius: 50%; width: 12rem; display: flex; align-items: center; justify-content: center; margin-left: auto; margin-right: auto;"><img class="pinLogo" src="KartaViewLogo.png"></div>
@@ -198,7 +199,7 @@
                                 <v-btn class="toolButton" tile @click="goToKartaView()" style="background-color: #44d62c25; color: #44d62c !important;" icon><v-icon style="color: #44d62c !important;">mdi-arrow-right-bold</v-icon></v-btn>
                                 </v-card>
                             </div>
-                            <div class="col-12 col-xxl-6" style="padding: 12px; display: inline-block;  vertical-align: top;">
+                            <div class="col-12 col-xl-6" style="padding: 12px; display: inline-block;  vertical-align: top;">
                                 <v-card class="cardShadow displayCardBackground" style="padding: 12px; text-align: center;" height="400px">
                                 <div class="articleHeader" style="background-color: #ABBB2B">
                                     <div style="height: 100%; padding: 12px; background-color: transparent; border-radius: 50%; width: 12rem; display: flex; align-items: center; justify-content: center; margin-left: auto; margin-right: auto;"><img class="pinLogo" src="SentinelHubLogo.png"></div>
@@ -211,7 +212,7 @@
                                 <v-btn class="toolButton" tile @click="goToSentinelHub()" style="background-color: #44d62c25; color: #44d62c !important;" icon><v-icon style="color: #44d62c !important;">mdi-arrow-right-bold</v-icon></v-btn>
                                 </v-card>
                             </div>
-                            <div class="col-12 col-xxl-6" style="padding: 12px; display: inline-block;  vertical-align: top;">
+                            <div class="col-12 col-xl-6" style="padding: 12px; display: inline-block;  vertical-align: top;">
                                 <v-card class="cardShadow displayCardBackground" style="padding: 12px; text-align: center;" height="400px">
                                 <div class="articleHeader" style="background-color: #ED1C24">
                                     <div style="height: 100%; padding: 12px; background-color: transparent; border-radius: 50%; width: 12rem; display: flex; align-items: center; justify-content: center; margin-left: auto; margin-right: auto;"><img class="pinLogo" src="WikiMapiaLogo.png"></div>
@@ -224,7 +225,7 @@
                                 <v-btn class="toolButton" tile @click="goToWikiMapia()" style="background-color: #44d62c25; color: #44d62c !important;" icon><v-icon style="color: #44d62c !important;">mdi-arrow-right-bold</v-icon></v-btn>
                                 </v-card>
                             </div>
-                            <div class="col-12 col-xxl-6" style="padding: 12px; vertical-align: top;">
+                            <div class="col-12 col-xl-6" style="padding: 12px; vertical-align: top;">
                                 <v-card class="cardShadow displayCardBackground" style="padding: 12px; text-align: center;" height="400px">
                                 <div class="articleHeader" style="background-color: #5FCBD9">
                                     <div style="height: 100%; padding: 12px; background-color: transparent; border-radius: 50%; width: 12rem; display: flex; align-items: center; justify-content: center; margin-left: auto; margin-right: auto;"><img class="pinLogo" src="PeakVisorLogo.png"></div>
@@ -237,6 +238,7 @@
                                 <v-btn class="toolButton" tile @click="goToPeakVisor()" style="background-color: #44d62c25; color: #44d62c !important;" icon><v-icon style="color: #44d62c !important;">mdi-arrow-right-bold</v-icon></v-btn>
                                 </v-card>
                             </div>
+                            </v-row>
                         </div>
                         <div class="col-12 col-md-10 text-center padding-mobile" v-if="twitterClicked">
                             <div class="col-12">
@@ -350,7 +352,7 @@
                         <div class="col-1 hidden-mobile padding-mobile" />
 
                         <!-- title of dialog box -->
-                        <v-toolbar-title v-if="!metaClicked"
+                        <v-toolbar-title v-if="!metaClicked && !vkClicked"
                             ><strong style="color: white;"
                                 >ADD DATA<span style="color: #44d62c">.</span></strong
                             ></v-toolbar-title
@@ -361,14 +363,24 @@
                                 <v-icon style="color: #44d62c;">mdi-arrow-left-bold</v-icon>
                             </v-btn>
                         </v-toolbar-items>
+                        <v-toolbar-items v-if="vkClicked">
+                            <!-- close button and icon -->
+                            <v-btn icon @click="vkBack()">
+                                <v-icon style="color: #44d62c;">mdi-arrow-left-bold</v-icon>
+                            </v-btn>
+                        </v-toolbar-items>
                         <v-spacer></v-spacer>
                         <v-toolbar-title v-if="metaClicked">
                             <strong style="color: white;"
                                 >FIND META PLACES<span style="color: #44d62c">.</span>
                             </strong>
-                        </v-toolbar-title
-                        >
-                        <v-toolbar-items v-if="!metaClicked">
+                        </v-toolbar-title>
+                        <v-toolbar-title v-if="vkClicked">
+                            <strong style="color: white;"
+                                >FIND VK PHOTOS<span style="color: #44d62c">.</span>
+                            </strong>
+                        </v-toolbar-title>
+                        <v-toolbar-items v-if="!metaClicked && !vkClicked">
                             <!-- close button and icon -->
                             <v-btn icon @click="addClose()">
                                 <v-icon style="color: #44d62c;">mdi-close</v-icon>
@@ -379,15 +391,16 @@
                     <div class="row m-0 p-2">
                         <!-- spacer for the dialog content -->
                         <div class="col-1 hidden-mobile padding-mobile" />
-                        <div class="col-12 col-md-10 text-center padding-mobile" v-if="!metaClicked">
+                        <div class="col-12 col-md-10 text-center padding-mobile" v-if="!metaClicked && !vkClicked">
                             <div class="col-12">
                             <p style="text-align: left; font-size: 0.75rem;"><b>Below is a list of data that can be added to the Hunt Intelligence Map.</b> Clicking on one of these tools will direct you to instructions on how to add that data to your map.</p>
                             <v-divider class="my-6"></v-divider>
                             </div>
-                            <div class="col-12">
-                            <v-text-field dark clearable hide-details dense color="white" style="font-size: 0.75rem; margin: 0px; padding: 0px; font-color: white; margin-bottom: 1rem;" label="Search Tools" prepend-inner-icon="mdi-magnify" outlined></v-text-field>
-                            </div>
-                            <div class="col-12 col-xxl-6" style="padding: 12px;">
+                            <!-- <div class="col-12"> -->
+                            <!-- <v-text-field dark clearable hide-details dense color="white" style="font-size: 0.75rem; margin: 0px; padding: 0px; font-color: white; margin-bottom: 1rem;" label="Search Tools" prepend-inner-icon="mdi-magnify" outlined></v-text-field> -->
+                            <!-- </div> -->
+                            <v-row style="padding: 12px;">
+                            <div class="col-12 col-xl-6" style="padding: 12px; display: inline-block; vertical-align: top;">
                                 <v-card class="cardShadow displayCardBackground" style="padding: 12px; text-align: center;" height="400px">
                                 <div class="articleHeader" style="background-color: #0082FF">
                                     <div style="height: 100%; padding: 12px; background-color: transparent; border-radius: 50%; width: 12rem; display: flex; align-items: center; justify-content: center; margin-left: auto; margin-right: auto;"><img class="pinLogo" src="metaLogo.png"></div>
@@ -400,6 +413,20 @@
                                 <v-btn @click="metaClick()" class="toolButton" tile style="background-color: #44d62c25; color: #44d62c !important;" icon><v-icon style="color: #44d62c !important;">mdi-arrow-right-bold</v-icon></v-btn>
                                 </v-card>
                             </div>
+                            <div class="col-12 col-xl-6" style="padding: 12px; display: inline-block; vertical-align: top;">
+                                <v-card class="cardShadow displayCardBackground" style="padding: 12px; text-align: center;" height="400px">
+                                <div class="articleHeader" style="background-color: #2787F5">
+                                    <div style="height: 100%; padding: 12px; background-color: transparent; border-radius: 50%; width: 12rem; display: flex; align-items: center; justify-content: center; margin-left: auto; margin-right: auto;"><img class="pinLogo" src="VKLogo.png"></div>
+                                </div>
+
+                                <div style="text-align: left; margin-top: 200px; padding: 12px">
+                                        <h6 style="color: white;">VKontakte Photos</h6>
+                                        <p style="color: white; font-size: 0.75rem;">VK is a Russian online social media and social networking service based in Saint Petersburg. VK is available in multiple languages but it is predominantly used by Russian speakers.</p>
+                                </div>
+                                <v-btn @click="vkClick()" class="toolButton" tile style="background-color: #44d62c25; color: #44d62c !important;" icon><v-icon style="color: #44d62c !important;">mdi-arrow-right-bold</v-icon></v-btn>
+                                </v-card>
+                            </div>
+                            </v-row>
                         </div>
                         <div class="col-12 col-md-10 text-center padding-mobile" v-if="metaClicked">
                             <div class="col-12">
@@ -413,8 +440,28 @@
                             </div>
                             <div class="col-12">
                                 <p style="text-align: left; font-size: 0.75rem;"><b>STEP 2:<br>Copy and paste the "Place Data"</b> - Copy the entirety of your place data and paste it into the box below.</p>
-                                <v-textarea outlined v-model="placeData"></v-textarea>
-                                <v-btn color="#44d62c" @click="submitMetaData()" elevation="0" :disabled="!jsonValidator" class="col-12 no-padding" outlined><span >Add Meta Places</span></v-btn>
+                                <v-textarea style="font-size: 0.75rem;" outlined v-model="placeData"></v-textarea>
+                                <v-btn color="#44d62c" @click="submitMetaData()" :loading="metaLoading" elevation="0" :disabled="!jsonValidator" class="col-12 no-padding" outlined><span >Add Meta Places</span></v-btn>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-10 text-center padding-mobile" v-if="vkClicked">
+                            <div class="col-12">
+                            <p style="text-align: left; font-size: 0.75rem;"><b>VK Photos requires you to have a VK account</b> - You will need to be logged in to VK and get an application API key to find photos.</p>
+                            <v-divider class="my-6"></v-divider>
+                            </div>
+                            <div class="col-12">
+                                <p style="text-align: left; font-size: 0.75rem;"><b>STEP 1:<br>Click the "Get Meta Place Data" button</b> - After clicking the button, if you are logged out, a new tab will open where you'll be re-directed to the Instagram log in page. Please log in and accept cookies. You'll then be re-directed to your "Place Data".</p>
+                                <v-text-field v-model="vkAccessToken" dark hide-details append-outer-icon="mdi-content-save" @click:append-outer="saveVKAPIKey" dense color="white" placeholder="VK Secret API Key"  style="font-size: 0.75rem; margin: 0px; padding: 0px; font-color: white; margin-bottom: 1rem;" label="VK Secret API Key" outlined></v-text-field>
+                            </div>
+                            <div class="col-12">
+                                <p style="text-align: left; font-size: 0.75rem;"><b>STEP 2:<br>Click the "Get VK Photo Data" button</b> - After clicking the button, if you are logged out, a new tab will open where you'll be re-directed to the Instagram log in page. Please log in and accept cookies. You'll then be re-directed to your "VK Photo Data".</p>
+                                <v-btn color="#44d62c" elevation="0" @click="openVKData()" class="col-12 no-padding" outlined><span >Get VK Photo Data</span></v-btn>
+                                <a id="vk-link" target="_blank" :href="this.generatedVKLink" download hidden></a>
+                            </div>
+                            <div class="col-12">
+                                <p style="text-align: left; font-size: 0.75rem;"><b>STEP 3:<br>Copy and paste the "VK Photo Data"</b> - Copy the entirety of yourvk photo data and paste it into the box below.</p>
+                                <v-textarea style="font-size: 0.75rem;" outlined v-model="vkPhotoData"></v-textarea>
+                                <v-btn color="#44d62c" @click="submitVKData()" :loading="vkLoading" elevation="0" :disabled="!VKJsonValidator" class="col-12 no-padding" outlined><span >Add VK Photos</span></v-btn>
                             </div>
                         </div>
                     </div>
@@ -493,12 +540,12 @@
                                     </v-expansion-panel-content>
                                 </v-expansion-panel>
                                 <v-expansion-panel style="border: 1px solid #44d62c10;" flat>
-                                    <v-expansion-panel-header><b style="font-size: 0.75rem;">How to use BirdHunt</b></v-expansion-panel-header>
+                                    <v-expansion-panel-header><b style="font-size: 0.75rem;">How to use our location tools</b></v-expansion-panel-header>
                                     <v-expansion-panel-content>
                                     </v-expansion-panel-content>
                                 </v-expansion-panel>
                                 <v-expansion-panel style="border: 1px solid #44444410;" flat>
-                                    <v-expansion-panel-header><b style="font-size: 0.75rem;">About BirdHunt</b></v-expansion-panel-header>
+                                    <v-expansion-panel-header><b style="font-size: 0.75rem;">About our location tools</b></v-expansion-panel-header>
                                     <v-expansion-panel-content>
                                     </v-expansion-panel-content>
                                 </v-expansion-panel>
@@ -508,8 +555,77 @@
                 </v-card>
             </v-dialog>
 
+            <v-dialog
+                v-model="showVKDialog"
+                content-class="customDialog noScroll"
+                fullscreen
+                transition="dialog-bottom-transition"
+                dark
+                color="#242424"
+            >
+                <!-- no shadow and no rounded corners on the card -->
+                <v-card style="background-color: #242424;" class="rounded-0" elevation="0">
+                    <!-- white "flat look" vuetify tool bar -->
+                    <v-toolbar class="elevation-2 mb-3">
+                        <!-- this is used as a spacer for the title -->
+                        <div class="col-1 hidden-mobile padding-mobile" />
+
+                        <!-- title of dialog box -->
+                        <v-toolbar-title
+                            ><strong style="color: white;"
+                                >VK Photo<span style="color: #44d62c">.</span></strong
+                            ></v-toolbar-title
+                        >
+                        <v-spacer></v-spacer>
+                        <v-toolbar-items>
+                            <!-- close button and icon -->
+                            <v-btn icon @click="vkResultsClose()">
+                                <v-icon style="color: #44d62c;">mdi-close</v-icon>
+                            </v-btn>
+                        </v-toolbar-items>
+
+                        <div class="col-1 hidden-mobile padding-mobile" />
+                    </v-toolbar>
+
+                    <div class="row m-0 p-2">
+                        <!-- spacer for the dialog content -->
+                        <div class="col-1 hidden-mobile padding-mobile" />
+
+                        <div class="col-12 col-md-10 text-center padding-mobile">
+                                <v-card class="cardShadow" style="text-align: right;">
+                                <img v-if="vkResultURL" :src="vkResultURL" width="100%" style="border-bottom: 2px solid #44d62c" />
+                                <div v-if="vkResultDate" style="text-align: right; padding: 12px">
+                                    <p style="color: white; font-size: 0.75rem; opacity: 0.5;">
+                                        <b>Date:</b> {{vkResultDate}}
+                                    </p>
+                                </div>
+                                <div v-if="vkResultText" style="text-align: left; padding: 12px">
+                                    <p style="color: white; font-size: 0.75rem;"><b>Caption:</b></p>
+                                    <p style="color: white; font-size: 0.75rem;">{{vkResultText}}</p>
+                                </div>
+                                <div style="text-align: left; padding: 12px; width: 100%; padding-top: 0px; font-size: 0.75rem;">
+                                <p style="color: white; font-size: 0.75rem;"><b>VK Photo Links:</b></p>
+                                <a @click="goToVKProfile()" style="color: #2787F5 !important; text-decoration: underline;">Go To Profile</a>
+                                |
+                                <a @click="goToVKPhoto()" style="color: #2787F5 !important; text-decoration: underline;">Go To Photo</a>
+                                </div>
+                                <div style="text-align: left; padding: 12px; width: 100%; margin-bottom: 1rem; padding-top: 0px; font-size: 0.75rem;">
+                                <p style="color: white; font-size: 0.75rem;"><b>Reverse Image Search Tools:</b></p>
+                                <a @click="googleReverseImageSearch()" style="color: #E94235 !important; text-decoration: underline;">Google Image Search</a>
+                                |
+                                <a @click="bingReverseImageSearch()" style="color: #007E6E !important; text-decoration: underline;">Bing Image Search</a>
+                                |
+                                <a @click="yandexReverseImageSearch()" style="color: #FFCC00 !important; text-decoration: underline;">Yandex Image Search</a>
+                                |
+                                <a @click="tinyeyeReverseImageSearch()" style="color: #2C71A1 !important; text-decoration: underline;">TinyEye Search</a>
+                                </div>
+                                </v-card>
+                        </div>
+                    </div>
+                </v-card>
+            </v-dialog>
+
             <v-speed-dial
-                v-model="fab"
                 direction="bottom"
                 transition="slide-y-reverse-transition"
                 id="actionsBtn"
@@ -521,31 +637,31 @@
                     fab
                     dark
                     small
-                    color="#1a1a1a"
-                    style="box-shadow: 0px 0px 15px #44d62c10;"
+                    color="#44d62c"
+                    style="box-shadow: 0px 0px 15px #1a1a1a;"
                     @click="searchClicked()"
                 >
-                    <v-icon style="color: #44d62c;">mdi-magnify</v-icon>
+                    <v-icon style="color: #1a1a1a;">mdi-magnify</v-icon>
                 </v-btn>
                 <v-btn
                     fab
                     dark
                     small
-                    color="#1a1a1a"
-                    style="box-shadow: 0px 0px 15px #44d62c10;"
+                    color="#44d62c"
+                    style="box-shadow: 0px 0px 15px #1a1a1a;"
                     @click="addClicked()"
                 >
-                    <v-icon style="color: #44d62c;">mdi-plus</v-icon>
+                    <v-icon style="color: #1a1a1a;">mdi-plus</v-icon>
                 </v-btn>
                 <v-btn
                     fab
                     dark
                     small
-                    color="#1a1a1a"
-                    style="box-shadow: 0px 0px 15px #44d62c10;"
+                    color="#44d62c"
+                    style="box-shadow: 0px 0px 15px #1a1a1a;"
                     @click="settingsClicked()"
                 >
-                    <v-icon style="color: #44d62c;">mdi-cog</v-icon>
+                    <v-icon style="color: #1a1a1a;">mdi-cog</v-icon>
                 </v-btn>
             </v-speed-dial>
             <v-alert dense id="alert" v-if="errorMessage" type="error"><span class="hidden-mobile">No Location Selected! Please click on the map to s</span><span class="visible-mobile">S</span>elect a location to search for tweets</v-alert>
@@ -555,7 +671,7 @@
                 :map-options="{
                     style: 'mapbox://styles/birdhunt/ckzf3vnph000414ny5b52cb18',
                     center: ['0', '7'],
-                    zoom: 2,
+                    zoom: 1,
                 }"
                 :attribution-control="{
                     show: true,
@@ -573,9 +689,12 @@
                 @map-load="loaded"
                 @map-click="mapClicked"
                 @map-dblclick="doubleClicked"
-                @map-mouseenter:place-markers="mouseEntered"
-                @map-mouseleave:place-markers="mouseLeft"
-                @map-click:place-markers="mouseClicked"
+                @map-mouseenter:meta-place-markers="mouseMetaEntered"
+                @map-mouseleave:meta-place-markers="mouseMetaLeft"
+                @map-click:meta-place-markers="mouseMetaClicked"
+                @map-render="render"
+                @map-mouseenter:vk-place-markers="vkMarkerEntered"
+                @map-click:vk-place-markers="vkMarkerClicked"
             />
         </div>
 
@@ -588,6 +707,8 @@ import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import mapboxgl from 'mapbox-gl/dist/mapbox-gl';
 import PopupContent from './PopupContent.vue';
+//import * as PopupContent from './PopupContent.vue';
+//const PopupContent = require('./PopupContent.vue');
 
 
 export default {
@@ -641,6 +762,28 @@ export default {
             doubleCheckError: false,
             errorMessageSubmit: false,
             metaPlaceSearch: null,
+            metaLoading: false,
+
+            // VK Variables //
+            vkClicked: false,
+            vkAccessToken: '8533818c8533818c8533818cd28548f057885338533818ce72f847d397ac1962d011695',
+            vkPhotoObject: null,
+            dataObject: null,
+            vkPhotoSearch: null,
+            vkPhotoData: null,
+            markersVK: {},
+            clusterMarkersOnScreenVK: {},
+            clusterMarkersVK: {},
+            markersOnScreenVK: {},
+            featureListVK: [],
+            vkResult: null,
+            showVKDialog: false,
+            vkResultURL: null,
+            vkResultOwnerID: null,
+            vkResultDate: null,
+            vkResultText: null,
+            vkResultID: null,
+            vkLoading: false,
         }
     },
 
@@ -652,6 +795,7 @@ export default {
             })
         },
         initialiseMap: function(map) {
+            map._isVue = true;
             this.map = map;
             const geocoder = new MapboxGeocoder({
                 accessToken: "pk.eyJ1IjoiYmlyZGh1bnQiLCJhIjoiY2t6YThnY2FrMDlncjJ3czZjNTZ5YzBpNSJ9.72hEYWjdoe8avgkItuQBug",
@@ -728,8 +872,190 @@ export default {
                 this.errorMessage = true;
             }
         },
+        render: function(map){
+                if(this.map.getSource('vk-places')){
+                    if (!this.map.isSourceLoaded('vk-places')) return;
+                    this.updateVKMarkers();
+                }
+                if(this.map.getSource('meta-places')){
+                    if (!this.map.isSourceLoaded('meta-places')) return;
+                    this.markers = this.updateMetaMarkers(this.markers);
+                }
+                return
+            ;
+        },
 
-        // Mete Functions //
+        // VK Functions //
+        vkMarkerClicked(map, e){
+            console.log(e.features[0].properties.cluster);
+            if(!e.features[0].properties.cluster){
+                this.showVKResult(e);
+                this.vkResult = e;
+            }
+        },
+        vkMarkerEntered(map, e){
+            if(this.popup){
+                this.popup.remove();
+                this.popup = null;
+            }
+        },
+        showVKResult(e){
+            this.vkResultURL = e.features[0].properties.preview_URL;
+            this.vkResultText = e.features[0].properties.text;
+            this.vkResultDate = new Date(e.features[0].properties.date*1000);
+            this.showVKDialog = true;
+            this.vkResultOwnerID = e.features[0].properties.owner;
+            this.vkResultID = e.features[0].properties.id;
+            //window.open(e.features[0].properties.preview_URL);
+            //this.VKResults
+        },
+        vkResultsClose(){
+            this.vkResult = null;
+            this.vkResultURL = null;
+            this.vkResultText = null;
+            this.vkResultOwnerID = null;
+            this.showVKDialog = false;
+            this.vkResultID = null;
+        },
+        vkClick(){
+            this.vkClicked = true;
+        },
+        vkBack(){
+            this.vkClicked = false;
+        },
+        openVKData(){
+            this.submitVKPhotoSearch();
+            document.getElementById('vk-link').click();
+            //window.open(this.generatedLink, '_system');
+            //https://api.vk.com/method/photos.search?lat=51.481583&long=-3.179090&radius=1&count=1000&offset=0&access_token=8533818c8533818c8533818cd28548f057885338533818ce72f847d397ac1962d011695&v=6.0
+        },
+        saveVKAPIKey(){
+            let route = '../api/vkAPI/store';
+            let payload = {
+                'key': this.VKKey,
+            }
+            this.$http.post(route, payload, {withCredentials: true}).then(res => {
+                console.log(res.data);
+            });
+
+        },
+        submitVKPhotoSearch(){
+            let route = '../api/vkphotosearch/create';
+            let payload = {
+                'lat': this.lat,
+                'lon': this.lon,
+                'url': this.generatedVKLink,
+            }
+            this.$http.post(route, payload, {withCredentials: true}).then(res => {
+                console.log(res.data);
+                this.vkPhotoSearch = res.data;
+            });
+        },
+        submitVKData(){
+            this.errorMessageSubmit = false;
+            this.vkLoading = true;
+            this.dataObject = JSON.parse(this.vkPhotoData);
+            this.vkPhotoObjects = [];
+            if(this.dataObject.response.items){
+                let visualisationData = {};
+                for (var i = 0; i < this.dataObject.response.items.length; i++) {
+                    let vkPhotoObject = this.dataObject.response.items[i];
+                    if(!this.markersVK[(String(vkPhotoObject.id) + String([vkPhotoObject.long, vkPhotoObject.lat]))]){
+                        if(vkPhotoObject.sizes){
+                            vkPhotoObject.preview_URL =  (vkPhotoObject.sizes[vkPhotoObject.sizes.length - 1]).url;
+                            vkPhotoObject.sizes = null;
+                        }
+                        vkPhotoObject.photo_id = vkPhotoObject.id;
+
+
+                        visualisationData = {
+                        // extract required data from the location objects
+                            type: "Feature",
+                            geometry: {
+                                type: "Point",
+                                coordinates: [vkPhotoObject.long, vkPhotoObject.lat]
+                            },
+                            properties: {
+                                owner: vkPhotoObject.owner_id,
+                                date: vkPhotoObject.date,
+                                id: vkPhotoObject.id,
+                                text: vkPhotoObject.text,
+                                has_tags: vkPhotoObject.has_tags,
+                                album_id: vkPhotoObject.album_id,
+                                post_id: vkPhotoObject.post_id,
+                                preview_URL: vkPhotoObject.preview_URL,
+                            }
+                        };
+                        this.featureListVK.push(visualisationData);
+                        this.vkPhotoObjects.push(vkPhotoObject);
+                    }
+                }
+                let route = '../api/vkphoto/create';
+                let payload = {
+                    'VKPhotoObjects': this.vkPhotoObjects,
+                    'VKPhotoSearch': this.vkPhotoSearch,
+                }
+                this.$http.post(route, payload, {withCredentials: true}).then(res => {
+                    this.lastLat = this.lat;
+                    this.lastLon = this.lon;
+                    this.dataPresent = true;
+                    this.loadedCheck = true;
+                    this.addVKMarkersToMap();
+                    this.vkPhotoData = null;
+                    this.close();
+
+                    this.vkBack();
+                });
+            } else {
+                this.errorMessageSubmit = true;
+            }
+            this.vkLoading = false;
+        },
+        googleReverseImageSearch(){
+            let url = 'https://www.google.com/searchbyimage?image_url=' + encodeURIComponent(this.vkResultURL);
+            window.open(url);
+        },
+        yandexReverseImageSearch(){
+            let url = 'https://yandex.com/images/search?rpt=imageview&url=' + encodeURIComponent(this.vkResultURL);
+            window.open(url);
+        },
+        bingReverseImageSearch(){
+            let url = 'https://www.bing.com/images/searchbyimage?cbir=ssbi&pageurl=http%3A%2F%2Fwww.huntintel.io&imgurl=' + encodeURIComponent(this.vkResultURL);
+            window.open(url);
+        },
+        tinyeyeReverseImageSearch(){
+            let url = 'https://tineye.com/search/?url=' + encodeURIComponent(this.vkResultURL);
+            window.open(url);
+        },
+
+        goToVKPhoto(){
+            if(this.vkResultOwnerID < 0){
+                let positive = this.vkResultOwnerID*-1;
+                let id = String(positive);
+                let url = 'https://vk.com/photo-' + id + '_' + this.vkResultID;
+                window.open(url);
+            }
+            else {
+                let id = String(this.vkResultOwnerID);
+                let url = 'https://vk.com/photo' + id + '_' + this.vkResultID;
+                window.open(url);
+            }
+        },
+        goToVKProfile(){
+            if(this.vkResultOwnerID < 0){
+                let positive = this.vkResultOwnerID*-1;
+                let id = String(positive);
+                let url = 'https://vk.com/public' + id;
+                window.open(url);
+            }
+            else {
+                let id = String(this.vkResultOwnerID);
+                let url = 'https://vk.com/id' + id;
+                window.open(url);
+            }
+        },
+
+        // Meta Functions //
         metaClick(){
             this.metaClicked = true;
         },
@@ -754,6 +1080,7 @@ export default {
             });
         },
         submitMetaData(){
+            this.metaLoading = true;
             this.errorMessageSubmit = false;
             this.dataObject = JSON.parse(this.placeData);
             this.placeObjects = [];
@@ -791,25 +1118,150 @@ export default {
                     this.lastLon = this.lon;
                     this.dataPresent = true;
                     this.loadedCheck = true;
-                    this.addMarkersToMap();
+                    this.addMetaMarkersToMap();
                     this.placeData = null;
                     this.close();
+
                 });
             } else {
                 this.errorMessageSubmit = true;
             }
+            this.metaLoading = false;
         },
 
-        // Map Functions //
-        addMarkersToMap: function(){
-            if(this.map.getSource('places')){
+        // VK Map Functions //
+        addVKMarkersToMap: function(){
+            if(this.map.getSource('vk-places')){
+                var data = {
+                    type: "FeatureCollection",
+                    features: this.featureListVK
+                }
+                this.map.getSource('vk-places').setData(data);
+            } else {
+                this.map.addSource("vk-places", {
+                type: "geojson",
+                data: {
+                    type: "FeatureCollection",
+                    features: this.featureListVK
+                },
+                cluster: true,
+                clusterRadius: 30                                //If the data is a collection of point features, setting this to true clusters the points by radius into groups. Cluster groups become new Point features                          // Max zoom to cluster points on
+                });
+            }
+
+
+            if(this.map.getLayer('vk-clusters')){
+                //console.log('exists');
+            } else {
+                this.map.addLayer({
+                id: 'vk-clusters',
+                type: 'circle',
+                source: 'vk-places',
+                'paint': {
+                    'circle-color': 'transparent',
+                    'circle-radius': 30,
+                    'circle-stroke-color': 'transparent'
+                }
+                });
+            }
+
+            if(this.map.getLayer('vk-place-markers')){
+                //console.log('exists');
+            } else {
+                this.map.addLayer({
+                id: "vk-place-markers",
+                type: "circle",
+                source: "vk-places",
+                'paint': {
+                    'circle-color': 'transparent',
+                    'circle-radius': 30,
+                    'circle-stroke-color': 'transparent'
+                }
+                });
+            }
+
+        },
+        updateVKMarkers() {
+            let [newMarkers, newClusterMarkers ] = [ {}, {} ];
+            if(this.map.getSource('vk-places')){
+                const places = this.map.querySourceFeatures('vk-places', 'vk-place-markers');
+                places.forEach( ({geometry, properties}) => {
+                    if(!properties.cluster){                         // if this feature isn't a cluster...
+                    let id = String(properties.id) + String(geometry.coordinates);                    // get the feature's id
+                    if (!this.markersVK[id]) {                                   // if the marker val is falsey (i.e. the marker isn't yet in our local marker object of markers)
+                        const el = document.createElement('div');
+                        el.className = 'vk-marker-place marker-vk';
+                        //console.log(el.className);                        // Create a HTML marker element
+                        this.markersVK[id] = new mapboxgl.Marker({element: el}).setLngLat(geometry.coordinates);         // create the mapbox marker object
+                    }
+                    newMarkers[id] = this.markersVK[id];                                                    // Add the marker to a newMarkers object (why are we doing this if AND if not the marker already exists on the markers object?)
+                    if (!this.markersOnScreenVK[id]){                                           // if the marker isn't already on the map..
+                        this.markersVK[id].addTo(this.map);                                               // add it to the map.
+                    }
+                }
+                })
+
+                for (const id in this.markersOnScreenVK) {
+                if (!newMarkers[id]) {
+                    //let markersToGo = document.querySelectorAll('.id-' + String(id));
+                    //console.log(markersToGo);
+                    //markersToGo[0].parentNode.removeChild(markersToGo[0]);
+                    this.markersOnScreenVK[id].remove();
+                }
+                }
+                this.markersOnScreenVK = newMarkers;
+
+                const placesForCluster = this.map.querySourceFeatures('vk-places', 'vk-clusters');
+                placesForCluster.map( ({geometry, properties}) => {
+                if(properties.cluster){
+                    let cId = properties.cluster_id;
+                    if (!this.clusterMarkersVK[cId]) {
+                        const el = document.createElement('div');
+                        el.className = 'vk-marker-place marker-vk-cluster';
+                        this.clusterMarkersVK[cId] = new mapboxgl.Marker({element: el}).setLngLat(geometry.coordinates);
+                    }
+                    newClusterMarkers[cId] = this.clusterMarkersVK[cId];
+
+                    if (!this.clusterMarkersOnScreenVK[cId]){
+                        this.clusterMarkersVK[cId].addTo(this.map);
+                    }
+                }
+                });
+
+                // for every marker we've added previously, remove those that are no longer visible
+                for (const c_id in this.clusterMarkersOnScreenVK) {
+                    if (!newClusterMarkers[c_id])
+                        this.clusterMarkersOnScreenVK[c_id].remove();
+                }
+                this.clusterMarkersOnScreenVK = newClusterMarkers;
+
+                // for (const feature of features) {
+                //     const coords = feature.geometry.coordinates;
+                //     const props = feature.properties;
+                //     const id = props.id;
+                //     //console.log(markers[id]);
+                //     let marker = markers[id];
+                //     if (!marker) {
+                //         const el = document.createElement('div');
+                //         el.className = 'vk-marker-place marker-vk';
+                //         marker = markers[id] = new mapboxgl.Marker({element: el}).setLngLat(coords);
+                //         marker.addTo(this.map);
+                //     }
+                // }
+
+            }
+        },
+
+        // Meta Map Functions //
+        addMetaMarkersToMap: function(){
+            if(this.map.getSource('meta-places')){
                 var data = {
                     type: "FeatureCollection",
                     features: this.featureList
                 }
-                this.map.getSource('places').setData(data);
+                this.map.getSource('meta-places').setData(data);
             } else {
-                this.map.addSource("places", {
+                this.map.addSource("meta-places", {
                 type: "geojson",
                 data: {
                     type: "FeatureCollection",
@@ -818,13 +1270,13 @@ export default {
                 });
             }
 
-            if(this.map.getLayer('place-markers')){
+            if(this.map.getLayer('meta-place-markers')){
                 console.log('exists');
             } else {
                 this.map.addLayer({
-                id: "place-markers",
+                id: "meta-place-markers",
                 type: "circle",
-                source: "places",
+                source: "meta-places",
                 'paint': {
                     'circle-color': 'transparent',
                     'circle-radius': 40,
@@ -832,22 +1284,11 @@ export default {
                 }
                 });
             }
-
-
-            this.map.on('render', () => {
-                if(this.map.getSource('places')){
-                    if (!this.map.isSourceLoaded('places')) return;
-                    this.markers = this.updateMarkers(this.markers);
-                } else {
-                    return
-                }
-            });
-
         },
-        clearPlaces(){
+        clearMetaPlaces(){
             this.dataPresent = false;
-            this.map.removeLayer('place-markers');
-            let markersToGo = document.querySelectorAll('.marker-place');
+            this.map.removeLayer('meta-place-markers');
+            let markersToGo = document.querySelectorAll('.meta-marker-place');
             for (var i = 0; i < markersToGo.length; i++) {
                 markersToGo[i].parentNode.removeChild(markersToGo[i]) //or images[i].remove()
             }
@@ -861,7 +1302,7 @@ export default {
             this.doubleCheckError = false;
             //this.clearMarkersFromMap();
         },
-        mouseEntered(map, e) {
+        mouseMetaEntered(map, e) {
             if(this.popup){
                 this.popup.remove();
                 this.popup = null;
@@ -878,15 +1319,14 @@ export default {
 
             // Populate the popup and set its coordinates
             // based on the feature found.
-            this.popup = new mapboxgl.Popup({ offset: [0, -30], className: "popupStyle", maxWidth: '300px', closeButton: false }).setLngLat(coordinates).setHTML('<div id="vue-popup-content"></div>').addTo(this.map);
-            this.popup = new PopupContent({propsData: { feature: e}})
-            this.popup.$mount('#vue-popup-content');
-            this.popup._update()
+            this.popup = new mapboxgl.Popup({ offset: [0, -30], className: "popupStyle", maxWidth: '300px', closeButton: false }).setLngLat(coordinates).setHTML('<div id="vue-meta-popup-content"></div>').addTo(map);
+            new PopupContent({propsData: { feature: e },}).$mount('#vue-meta-popup-content');
+            this.popup._update();
         },
-        mouseLeft() {
+        mouseMetaLeft() {
             this.map.getCanvas().style.cursor = '';
         },
-        mouseClicked() {
+        mouseMetaClicked() {
             this.markerClicked = true;
             //let url = 'https://www.instagram.com/explore/locations/' + e.features[0].properties.id;
             //window.open(url, '_blank');
@@ -899,19 +1339,19 @@ export default {
             }
         );
         },
-        updateMarkers(markers) {
-            if(this.map.getSource('places')){
-                const places = this.map.querySourceFeatures('places', 'place-markers');
+        updateMetaMarkers(markers) {
+            if(this.map.getSource('meta-places')){
+                const places = this.map.querySourceFeatures('meta-places', 'meta-place-markers');
                 const features = places;
                 for (const feature of features) {
                     const coords = feature.geometry.coordinates;
                     const props = feature.properties;
                     const id = props.id;
-                    console.log(markers[id]);
+                    //console.log(markers[id]);
                     let marker = markers[id];
                     if (!marker) {
                         const el = document.createElement('div');
-                        el.className = 'marker-place marker-meta';
+                        el.className = 'meta-marker-place marker-meta';
                         marker = markers[id] = new mapboxgl.Marker({element: el}).setLngLat(coords);
                         marker.addTo(this.map);
                     }
@@ -1001,12 +1441,12 @@ export default {
 
         // Map Search Options //
         goToGoogleMaps(){
-            this.url = 'https://www.google.co.uk/maps/@' + this.lat + ',' + this.lon + ',19z';
+            this.url = 'https://www.google.co.uk/maps/@' + this.lat + ',' + this.lon + ',17z';
             this.submitSearch(this.url, 'google_maps');
             window.open(this.url);
         },
         goToBingMaps(){
-            this.url = 'https://www.bing.com/maps?cp=' + this.lat + '~' + this.lon + '&lvl=19';
+            this.url = 'https://www.bing.com/maps?cp=' + this.lat + '~' + this.lon + '&lvl=17';
             this.submitSearch(this.url, 'bing_maps');
             window.open(this.url);
         },
@@ -1025,32 +1465,32 @@ export default {
             var min = today.getMinutes(); // =>  30
             var time =  hh+ ':' + min;
             var date = yyyy + '.' + mm + '.' + dd;
-            this.url = 'https://www.suncalc.org/#/' + this.lat + ',' + this.lon + ',19/' + date + '/' + time + '/8/1';
+            this.url = 'https://www.suncalc.org/#/' + this.lat + ',' + this.lon + ',17/' + date + '/' + time + '/8/1';
             this.submitSearch(this.url, 'sunCalc');
             window.open(this.url);
         },
         goToYandexMaps(){
-            this.url = 'https://yandex.com/maps/?ll=' + this.lon + '%2C' + this.lat + '&z=19';
+            this.url = 'https://yandex.com/maps/?ll=' + this.lon + '%2C' + this.lat + '&z=17';
             this.submitSearch(this.url, 'yandex_maps');
             window.open(this.url);
         },
         goToMapillary(){
-            this.url = 'https://www.mapillary.com/app/?menu=false&lat=' + this.lat + '&lng=' + this.lon + '&z=19&mapStyle=Mapillary+satellite';
+            this.url = 'https://www.mapillary.com/app/?menu=false&lat=' + this.lat + '&lng=' + this.lon + '&z=17&mapStyle=Mapillary+satellite';
             this.submitSearch(this.url, 'mapillary');
             window.open(this.url);
         },
         goToKartaView(){
-            this.url = 'https://kartaview.org/map/@' + this.lat + ',' + this.lon + ',19z';
+            this.url = 'https://kartaview.org/map/@' + this.lat + ',' + this.lon + ',17z';
             this.submitSearch(this.url, 'kartaView');
             window.open(this.url);
         },
         goToSentinelHub(){
-            this.url = 'https://apps.sentinel-hub.com/sentinel-playground/?source=S2L2A&lat=' + this.lat + '&lng=' + this.lon + '&zoom=19';
+            this.url = 'https://apps.sentinel-hub.com/sentinel-playground/?source=S2L2A&lat=' + this.lat + '&lng=' + this.lon + '&zoom=17';
             this.submitSearch(this.url, 'sentinelHub_playground');
             window.open(this.url);
         },
         goToWikiMapia(){
-            this.url = 'https://wikimapia.org/#lang=en&lat=' + this.lat + '&lon=' + this.lon + '&z=19&m=h';
+            this.url = 'https://wikimapia.org/#lang=en&lat=' + this.lat + '&lon=' + this.lon + '&z=17&m=h';
             this.submitSearch(this.url, 'wikiMapia');
             window.open(this.url);
         },
@@ -1060,7 +1500,7 @@ export default {
             window.open(this.url);
         },
         goToSnapMaps(){
-            this.url = 'https://map.snapchat.com/@' + this.lat + ',' + this.lon + ',11.00z';
+            this.url = 'https://map.snapchat.com/@' + this.lat + ',' + this.lon + ',17.00z';
             this.submitSearch(this.url, 'snap_maps');
             window.open(this.url);
         },
@@ -1090,10 +1530,25 @@ export default {
         generatedLink(){
             return 'https://www.instagram.com/location_search/?latitude=' + this.lat + '+&longitude=' + this.lon;
         },
+        generatedVKLink(){
+            return 'https://api.vk.com/method/photos.search?lat=' + this.lat + '&long=' + this.lon + '&radius=800&count=1000&offset=0&sort=0&access_token=' + this.vkAccessToken + '&v=6.0';
+        },
         jsonValidator(){
             if(this.placeData){
                 try {
                     JSON.parse(this.placeData);
+                } catch (e) {
+                    return false;
+                }
+                return true;
+            } else {
+                return false;
+            }
+        },
+        VKJsonValidator(){
+            if(this.vkPhotoData){
+                try {
+                    JSON.parse(this.vkPhotoData);
                 } catch (e) {
                     return false;
                 }
@@ -1143,6 +1598,20 @@ export default {
     background-size: cover;
     width: 45px;
     height: 62px;
+}
+.marker-vk {
+    background-image: url('/vkMarker.png');
+    background-size: cover;
+    width: 45px;
+    height: 62px;
+    cursor: pointer;
+}
+.marker-vk-cluster {
+    background-image: url('/vkMarkerCluster.png');
+    background-size: cover;
+    width: 45px;
+    height: 62px;
+    cursor: pointer;
 }
 .customDialog.v-dialog--fullscreen {
     width: 41.66%;

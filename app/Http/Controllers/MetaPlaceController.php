@@ -24,9 +24,11 @@ class MetaPlaceController extends Controller
         $user = Auth::user();
         $metaPlaceSearch = MetaPlaceSearch::where([['id', ($validatedRequest['metaPlaceSearch']['id'])], ['user_id', $user->id]])->first();
         foreach ($validatedRequest['placeObjects'] as $place){
-            $place['lon'] = $place['lng'];
-            $metaPlace = MetaPlace::create($place);
-            $metaPlace->metaPlaceSearches()->attach($metaPlaceSearch);
+            if(($photo['lng'] ?? null) && ($photo['lat'] ?? null)){
+                $place['lon'] = $place['lng'];
+                $metaPlace = MetaPlace::create($place);
+                $metaPlace->metaPlaceSearches()->attach($metaPlaceSearch);
+            }
         }
 
         return;
