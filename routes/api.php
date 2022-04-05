@@ -9,6 +9,7 @@ use App\Http\Controllers\MetaPlaceSearchController;
 use App\Http\Controllers\MetaPlaceController;
 use App\Http\Controllers\VKPhotoSearchController;
 use App\Http\Controllers\VKPhotoController;
+use App\Http\Controllers\VKKeyController;
 
 
 /*
@@ -48,3 +49,8 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/metaplace/create', [Meta
 // Location VK
 Route::middleware(['auth:sanctum', 'verified'])->post('/vkphotosearch/create', [VKPhotoSearchController::class, 'create'])->name('vkphotosearch.create');
 Route::middleware(['auth:sanctum', 'verified'])->post('/vkphoto/create', [VKPhotoController::class, 'create'])->name('vkphoto.create');
+
+
+// VK Key
+Route::middleware(['auth:sanctum', 'verified'])->post('/vkkey/store', [VKKeyController::class, 'store'])->name('vkkey.store');
+Route::middleware(['auth:sanctum', 'verified'])->get('/vkkey/index', [VKKeyController::class, 'index'])->name('vkkey.index');

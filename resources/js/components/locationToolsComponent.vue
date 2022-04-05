@@ -786,7 +786,9 @@ export default {
             vkLoading: false,
         }
     },
-
+    mounted() {
+        this.getVKKey();
+    },
     methods: {
         loaded: function(map) {
             this.loading = false;
@@ -899,6 +901,12 @@ export default {
                 this.popup = null;
             }
         },
+        getVKKey(){
+            let route = '../api/vkkey/index';
+            this.$http.get(route, {withCredentials: true}).then((res) => {
+                this.vkAccessToken = res.data;
+            })
+        },
         showVKResult(e){
             this.vkResultURL = e.features[0].properties.preview_URL;
             this.vkResultText = e.features[0].properties.text;
@@ -930,9 +938,9 @@ export default {
             //https://api.vk.com/method/photos.search?lat=51.481583&long=-3.179090&radius=1&count=1000&offset=0&access_token=8533818c8533818c8533818cd28548f057885338533818ce72f847d397ac1962d011695&v=6.0
         },
         saveVKAPIKey(){
-            let route = '../api/vkAPI/store';
+            let route = '../api/vkkey/store';
             let payload = {
-                'key': this.VKKey,
+                'key': this.vkAccessToken,
             }
             this.$http.post(route, payload, {withCredentials: true}).then(res => {
                 console.log(res.data);
@@ -1003,7 +1011,6 @@ export default {
                     this.addVKMarkersToMap();
                     this.vkPhotoData = null;
                     this.close();
-
                     this.vkBack();
                 });
             } else {
