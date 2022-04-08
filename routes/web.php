@@ -1,6 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+Use Laravel\Sanctum\HasApiTokens;
+use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,8 +25,13 @@ Route::middleware(['auth:sanctum', 'verified', 'subscribed'])->get('/dashboard',
     return view('dashboard');
 })->name('dashboard');
 
-
 Route::middleware(['auth:sanctum', 'verified'])->get('/profile', function () {
     return view('profile/show');
 })->name('profile');
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/logout', function () {
+    Auth::user()->tokens()->delete();
+    return view('auth/login');
+})->name('logout');
+
 
