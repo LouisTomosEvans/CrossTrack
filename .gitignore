@@ -14,7 +14,6 @@ yarn-error.log
 /.idea
 /.vscode
 vendor/*
-!composer.lock
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
