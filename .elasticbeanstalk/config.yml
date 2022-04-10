@@ -1,4 +1,6 @@
 branch-defaults:
+  Master:
+    environment: HuntIntelLive
   main:
     environment: HuntIntelLive
     group_suffix: null
