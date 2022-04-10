@@ -647,6 +647,7 @@
                     fab
                     dark
                     small
+                    v-if="$vuetify.breakpoint.smAndUp"
                     color="#44d62c"
                     style="box-shadow: 0px 0px 15px #1a1a1a;"
                     @click="addClicked()"

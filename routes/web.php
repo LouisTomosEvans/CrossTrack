@@ -29,8 +29,8 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/profile', function () {
     return view('profile/show');
 })->name('profile');
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/logout', function () {
-    Auth::user()->tokens()->delete();
+Route::get('/logout', function () {
+    auth()->logout();
     return view('auth/login');
 })->name('logout');
 
