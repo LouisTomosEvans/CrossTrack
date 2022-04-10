@@ -18,10 +18,18 @@ use App\Models\User;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('https://huntintel.io/');
 });
 
 Route::middleware(['auth:sanctum', 'verified', 'subscribed'])->get('/dashboard', function () {
+    return view('dashboard');
+})->name('dashboard');
+
+Route::middleware(['auth:sanctum', 'verified', 'subscribed'])->get('/knowledge-base', function () {
+    return view('dashboard');
+})->name('dashboard');
+
+Route::middleware(['auth:sanctum', 'verified', 'subscribed'])->get('/location-tools', function () {
     return view('dashboard');
 })->name('dashboard');
 
