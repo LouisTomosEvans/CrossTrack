@@ -13,6 +13,7 @@
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#44d62c">
     <meta name="msapplication-TileColor" content="#44d62c">
     <meta name="theme-color" content="#ffffff">
+    <title>Dashboard | Hunt Intelligence</title>
     </head>
     <body>
     <div id="app">

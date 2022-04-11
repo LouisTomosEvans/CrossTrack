@@ -323,7 +323,6 @@
                                         elevation="0"
                                         class="col-12 no-padding"
                                         :disabled="!slider"
-                                        outlined
                                         @click="goToTwitterClicked()"
                                         ><span >Search For Tweets</span></v-btn>
                                     <v-alert text dense class="col-12 my-3 text-left" v-if="showRadiusWarning" type="warning">Please choose a radius</v-alert>
@@ -441,7 +440,7 @@
                             <div class="col-12">
                                 <p style="text-align: left; font-size: 0.75rem;"><b>STEP 2:<br>Copy and paste the "Place Data"</b> - Copy the entirety of your place data and paste it into the box below.</p>
                                 <v-textarea style="font-size: 0.75rem;" outlined v-model="placeData"></v-textarea>
-                                <v-btn color="#44d62c" @click="submitMetaData()" :loading="metaLoading" elevation="0" :disabled="!jsonValidator" class="col-12 no-padding" outlined><span >Add Meta Places</span></v-btn>
+                                <v-btn color="#44d62c" @click="submitMetaData()" :loading="metaLoading" elevation="0" :disabled="!jsonValidator" class="col-12 no-padding"><span >Add Meta Places</span></v-btn>
                             </div>
                         </div>
                         <div class="col-12 col-md-10 text-center padding-mobile" v-if="vkClicked">
@@ -461,7 +460,7 @@
                             <div class="col-12">
                                 <p style="text-align: left; font-size: 0.75rem;"><b>STEP 3:<br>Copy and paste the "VK Photo Data"</b> - Copy the entirety of yourvk photo data and paste it into the box below.</p>
                                 <v-textarea style="font-size: 0.75rem;" outlined v-model="vkPhotoData"></v-textarea>
-                                <v-btn color="#44d62c" @click="submitVKData()" :loading="vkLoading" elevation="0" :disabled="!VKJsonValidator" class="col-12 no-padding" outlined><span >Add VK Photos</span></v-btn>
+                                <v-btn color="#44d62c" @click="submitVKData()" :loading="vkLoading" elevation="0" :disabled="!VKJsonValidator" class="col-12 no-padding"><span >Add VK Photos</span></v-btn>
                             </div>
                         </div>
                     </div>
@@ -592,7 +591,7 @@
                         <div class="col-1 hidden-mobile padding-mobile" />
 
                         <div class="col-12 col-md-10 text-center padding-mobile">
-                                <v-card class="cardShadow" style="text-align: right;">
+                                <v-card class="cardShadow" style="text-align: right; border: 2px solid #44d62c">
                                 <img v-if="vkResultURL" :src="vkResultURL" width="100%" style="border-bottom: 2px solid #44d62c" />
                                 <div v-if="vkResultDate" style="text-align: right; padding: 12px">
                                     <p style="color: white; font-size: 0.75rem; opacity: 0.5;">
@@ -603,21 +602,17 @@
                                     <p style="color: white; font-size: 0.75rem;"><b>Caption:</b></p>
                                     <p style="color: white; font-size: 0.75rem;">{{vkResultText}}</p>
                                 </div>
-                                <div style="text-align: left; padding: 12px; width: 100%; padding-top: 0px; font-size: 0.75rem;">
+                                <div style="text-align: left; padding: 12px; width: 100%; padding-top: 0px; margin-bottom: 1rem;  font-size: 0.75rem;">
                                 <p style="color: white; font-size: 0.75rem;"><b>VK Photo Links:</b></p>
-                                <a @click="goToVKProfile()" style="color: #2787F5 !important; text-decoration: underline;">Go To Profile</a>
-                                |
-                                <a @click="goToVKPhoto()" style="color: #2787F5 !important; text-decoration: underline;">Go To Photo</a>
+                                <v-btn @click="goToVKProfile()" color="#2787F525" style="color: #2787F5 !important" elevation='0'>View VK Profile</v-btn>
+                                <v-btn @click="goToVKPhoto()" color="#2787F525" style="color: #2787F5 !important" elevation='0'>View VK Photo</v-btn>
                                 </div>
                                 <div style="text-align: left; padding: 12px; width: 100%; margin-bottom: 1rem; padding-top: 0px; font-size: 0.75rem;">
                                 <p style="color: white; font-size: 0.75rem;"><b>Reverse Image Search Tools:</b></p>
-                                <a @click="googleReverseImageSearch()" style="color: #E94235 !important; text-decoration: underline;">Google Image Search</a>
-                                |
-                                <a @click="bingReverseImageSearch()" style="color: #007E6E !important; text-decoration: underline;">Bing Image Search</a>
-                                |
-                                <a @click="yandexReverseImageSearch()" style="color: #FFCC00 !important; text-decoration: underline;">Yandex Image Search</a>
-                                |
-                                <a @click="tinyeyeReverseImageSearch()" style="color: #2C71A1 !important; text-decoration: underline;">TinyEye Search</a>
+                                <v-btn  @click="googleReverseImageSearch()" color="#E9423525" style="color: #E94235 !important;" elevation='0'>Google</v-btn>
+                                <v-btn @click="bingReverseImageSearch()" color="#007E6E25" style="color: #007E6E !important" elevation='0'>Bing</v-btn>
+                                <v-btn  @click="yandexReverseImageSearch()" color="#FFCC0025" style="color: #FFCC00 !important;" elevation='0'>Yandex</v-btn>
+                                <v-btn @click="tinyeyeReverseImageSearch()" color="#2C71A125" style="color: #2C71A1 !important" elevation='0'>TinyEye</v-btn>
                                 </div>
                                 </v-card>
                         </div>
