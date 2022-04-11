@@ -636,7 +636,7 @@
                     style="box-shadow: 0px 0px 15px #1a1a1a;"
                     @click="searchClicked()"
                 >
-                    <v-icon style="color: #1a1a1a;">mdi-magnify</v-icon>
+                    <v-icon style="color: #FFFFFF;">mdi-magnify</v-icon>
                 </v-btn>
                 <v-btn
                     fab
@@ -647,7 +647,7 @@
                     style="box-shadow: 0px 0px 15px #1a1a1a;"
                     @click="addClicked()"
                 >
-                    <v-icon style="color: #1a1a1a;">mdi-plus</v-icon>
+                    <v-icon style="color: #FFFFFF;">mdi-plus</v-icon>
                 </v-btn>
                 <v-btn
                     fab
@@ -657,7 +657,7 @@
                     style="box-shadow: 0px 0px 15px #1a1a1a;"
                     @click="settingsClicked()"
                 >
-                    <v-icon style="color: #1a1a1a;">mdi-cog</v-icon>
+                    <v-icon style="color: #FFFFFF;">mdi-cog</v-icon>
                 </v-btn>
             </v-speed-dial>
             <v-alert dense id="alert" v-if="errorMessage" type="error"><span class="hidden-mobile">No Location Selected! Please click on the map to s</span><span class="visible-mobile">S</span>elect a location to search for tweets</v-alert>
