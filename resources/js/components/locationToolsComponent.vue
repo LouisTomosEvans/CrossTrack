@@ -663,9 +663,9 @@
             <v-alert dense id="alert" v-if="errorMessage" type="error"><span class="hidden-mobile">No Location Selected! Please click on the map to s</span><span class="visible-mobile">S</span>elect a location to search for tweets</v-alert>
         <div id="map">
             <mapbox
-                access-token="pk.eyJ1IjoiYmlyZGh1bnQiLCJhIjoiY2t6YThnY2FrMDlncjJ3czZjNTZ5YzBpNSJ9.72hEYWjdoe8avgkItuQBug"
+                access-token="pk.eyJ1IjoiaHVudGludGVsIiwiYSI6ImNsMXV4cWx5bjAxZ28zZHFjZGZlY2M0bWoifQ.EmMDeKKW2Jw02ns58gUfKA"
                 :map-options="{
-                    style: 'mapbox://styles/birdhunt/ckzf3vnph000414ny5b52cb18',
+                    style: 'mapbox://styles/huntintel/cl1uxz091000i14p625xx4g5a',
                     center: ['0', '7'],
                     zoom: 1,
                 }"
@@ -762,7 +762,7 @@ export default {
 
             // VK Variables //
             vkClicked: false,
-            vkAccessToken: '8533818c8533818c8533818cd28548f057885338533818ce72f847d397ac1962d011695',
+            vkAccessToken: '',
             vkPhotoObject: null,
             dataObject: null,
             vkPhotoSearch: null,
@@ -796,7 +796,7 @@ export default {
             map._isVue = true;
             this.map = map;
             const geocoder = new MapboxGeocoder({
-                accessToken: "pk.eyJ1IjoiYmlyZGh1bnQiLCJhIjoiY2t6YThnY2FrMDlncjJ3czZjNTZ5YzBpNSJ9.72hEYWjdoe8avgkItuQBug",
+                accessToken: "pk.eyJ1IjoiaHVudGludGVsIiwiYSI6ImNsMXV4cWx5bjAxZ28zZHFjZGZlY2M0bWoifQ.EmMDeKKW2Jw02ns58gUfKA",
                 mapboxgl: Mapbox,
             })
 
@@ -1564,13 +1564,13 @@ export default {
     watch : {
         mapStyle(){
             if(this.mapStyle == 'satellite'){
-                this.map.setStyle('mapbox://styles/birdhunt/ckzf3vnph000414ny5b52cb18');
+                this.map.setStyle('mapbox://styles/huntintel/cl1uxz091000i14p625xx4g5a');
             } else if(this.mapStyle == 'dark') {
-                this.map.setStyle('mapbox://styles/birdhunt/ckza8kmwp002r15pcg5x6pf0c');
+                this.map.setStyle('mapbox://styles/huntintel/cl1uy3epg003f15jqit8j29di');
             } else if(this.mapStyle == 'streets') {
-                this.map.setStyle('mapbox://styles/birdhunt/ckzwour4e000c14kc8bpq9wcc');
+                this.map.setStyle('mapbox://styles/huntintel/cl1uy1067000r14qtkd7pvzjt');
             } else if(this.mapStyle == 'outdoor') {
-                this.map.setStyle('mapbox://styles/birdhunt/ckzwp545b006114ngz3jvasa2');
+                this.map.setStyle('mapbox://styles/huntintel/cl1uy2lmy000a14pstnws91wl');
             }
         },
         disUnit(){
