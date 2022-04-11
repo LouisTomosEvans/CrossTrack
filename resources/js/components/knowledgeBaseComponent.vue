@@ -1,7 +1,7 @@
 <template>
   <v-container class="col-12 mainContainer" style="padding: 24px; padding-top: 12px; justify-content: space-between;">
         <v-row>
-          <div class="col-12" style="padding: 12px;">
+          <div class="col-12" style="padding: 12px; margin-top: 1rem;">
             <v-card class="cardShadow displayCardBackground" style="padding: 12px; text-align: center; overflow-y: hidden;" height="400px">
               <img class="knowledgeBaseHeader" src="https://images.pexels.com/photos/247899/pexels-photo-247899.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260">
               <div class="knowledgeBaseContent">
