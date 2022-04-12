@@ -54,3 +54,6 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/vkphoto/create', [VKPhot
 // VK Key
 Route::middleware(['auth:sanctum', 'verified'])->post('/vkkey/store', [VKKeyController::class, 'store'])->name('vkkey.store');
 Route::middleware(['auth:sanctum', 'verified'])->get('/vkkey/index', [VKKeyController::class, 'index'])->name('vkkey.index');
+
+// AccountFinder
+Route::middleware(['auth:sanctum', 'verified'])->post('/accountsearch', [MapSearchController::class, 'test']);

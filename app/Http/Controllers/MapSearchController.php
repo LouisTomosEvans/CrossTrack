@@ -7,6 +7,9 @@ use App\Models\Website;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+// Test
+use GuzzleHttp\Client;
+
 class MapSearchController extends Controller
 {
     public function index()
@@ -34,5 +37,19 @@ class MapSearchController extends Controller
         } else {
             abort(422);
         }
+    }
+
+    public function test(Request $request)
+    {
+        $validatedRequest = $request->validate([
+            'username' => ['required'],
+        ]);
+
+        $client = new Client([
+            'base_uri' => 'https://www.pinterest.com/', 'http_errors' => false
+        ]);
+        
+        $response = $client->request('GET', $validatedRequest['username']);
+        dd($response->getStatusCode());
     }
 }

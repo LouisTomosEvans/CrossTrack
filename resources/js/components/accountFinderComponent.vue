@@ -18,7 +18,7 @@
               <h4 class="mt-7" style="color: white;"><b>Account Finder</b></h4>
               <p style="color: white; font-size: 0.75rem;">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
               <div class="d-flex justify-content-center">
-                <v-text-field dark clearable hide-details dense color="white" style="font-size: 0.75rem; margin: 0px; padding: 0px; font-color: white; margin-top: 5px; display: inline-block;" label="Search Username" outlined></v-text-field>
+                <v-text-field dark clearable hide-details v-model="username" dense color="white" style="font-size: 0.75rem; margin: 0px; padding: 0px; font-color: white; margin-top: 5px; display: inline-block;" label="Search Username" outlined></v-text-field>
                 <v-btn icon tile @click="searchClicked()" style="display: inline-block; height: 45px; width: 45px; margin-left: 0.5rem; background-color: #44d62c25 !important;"><v-icon style="color: #44d62c !important">mdi-magnify</v-icon></v-btn>
               </div>
               </div>
@@ -32,41 +32,17 @@
   export default {
     data () {
       return {
-        filelist: [], // Store our uploaded files
-        section: "PDF",
+        username: null,
         }
     },
     methods: {
-    onChange() {
-      this.filelist = [...this.$refs.file.files];
-    },
-    remove(i) {
-      this.filelist.splice(i, 1);
-    },
-    dragover(event) {
-      event.preventDefault();
-      // Add some visual fluff to show the user can drop its files
-      if (!event.currentTarget.classList.contains('bg-green-300')) {
-        event.currentTarget.classList.remove('bg-gray-100');
-        event.currentTarget.classList.add('bg-green-300');
-      }
-    },
-    dragleave(event) {
-      // Clean up
-      event.currentTarget.classList.add('bg-gray-100');
-      event.currentTarget.classList.remove('bg-green-300');
-    },
-    drop(event) {
-      event.preventDefault();
-      this.$refs.file.files = event.dataTransfer.files;
-      this.onChange(); // Trigger the onChange event manually
-      // Clean up
-      event.currentTarget.classList.add('bg-gray-100');
-      event.currentTarget.classList.remove('bg-green-300');
-    },
-    addFilesClicked(){
-        document.getElementById("assetsFieldHandle").click();
-    }
+        searchClicked(){
+            let route = '../api/accountsearch/';
+            let payload = {
+                'username': this.username,
+            }
+            this.$http.post(route, payload, {withCredentials: true})
+        }
     }
   }
 </script>

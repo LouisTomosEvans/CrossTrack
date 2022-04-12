@@ -76,7 +76,7 @@
           </div>
         </v-row>
         <v-row class="mb-6">
-          <!-- <div class="col-12 col-lg-6 col-xxl-4" style="padding: 12px;">
+          <div class="col-12 col-lg-6 col-xxl-4" style="padding: 12px;">
             <v-card class="cardShadow displayCardBackground" style="padding: 12px; text-align: center; background-color: #283046;" height="250px">
               <div class="col-10">
               <v-list-item class="displayCard">
@@ -92,7 +92,7 @@
               </div>
               <v-btn class="toolButton" :to="'/account-finder'" tile style="background-color: #44d62c25; color: #44d62c !important;" icon><v-icon style="color: #44d62c !important;">mdi-arrow-right-bold</v-icon></v-btn>
            </v-card>
-          </div> -->
+          </div>
           <div class="col-12 col-lg-6 col-xxl-4" style="padding: 12px;">
             <v-card class="cardShadow displayCardBackground" style="padding: 12px; text-align: center; background-color: #283046;" height="250px">
               <div class="col-10">
