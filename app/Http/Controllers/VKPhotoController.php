@@ -20,7 +20,11 @@ class VKPhotoController extends Controller
         foreach ($validatedRequest['VKPhotoObjects'] as $photo){
             if(($photo['long'] ?? null) && ($photo['lat'] ?? null)){
                 $photo['lon'] = $photo['long'];
-                $vkPhoto = VKPhoto::create($photo);
+                if(VKPhoto::where([['photo_id', ($photo['photo_id'])]])->where([['lat', ($photo['lat'])]])->where([['lon', ($photo['lon'])]])->first()){
+                    $vkPhoto = VKPhoto::where([['photo_id', ($photo['photo_id'])]])->where([['lat', ($photo['lat'])]])->where([['lon', ($photo['lon'])]])->first();
+                } else {
+                    $vkPhoto = VKPhoto::create($photo);
+                }
                 $vkPhoto->vkPhotoSearches()->attach($vkPhotoSearch);
             }
         }

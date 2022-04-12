@@ -2,7 +2,7 @@
   <v-container class="col-12 mainContainer" style="padding: 24px; padding-top: 12px; justify-content: space-between;">
         <v-row>
           <div class="col-12" style="padding: 12px; margin-top: 1rem;">
-            <v-card class="cardShadow displayCardBackground" style="padding: 12px; text-align: center; overflow-y: hidden;" height="400px">
+            <v-card class="cardShadow displayCardBackground" style="padding: 12px; text-align: center; overflow-y: hidden;" height="300px">
               <img class="knowledgeBaseHeader" src="https://images.pexels.com/photos/247899/pexels-photo-247899.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260">
               <div class="knowledgeBaseContent">
               <div style="padding: 12px; background-color: #242424; border-radius: 50%; width: 4rem; height: 4rem; display: flex; align-items: center; justify-content: center; box-shadow: 0px 0px 25px #44d62c25; margin-left: auto; margin-right: auto;"><v-icon style="color: #44d62c !important;">mdi-school</v-icon></div>

@@ -121,7 +121,7 @@
         </v-list-item-group>
     </v-list>
     </v-navigation-drawer>
-    <v-app-bar absolute elevation=0 style="cursor: pointer; background-color: #242424; height: 60px; border-bottom: 2px solid #44d62c;" app>
+    <v-app-bar absolute elevation=0 style="background-color: #242424; height: 60px; border-bottom: 2px solid #44d62c;" app>
         <v-app-bar-nav-icon @click="drawer = true" class="d-flex d-block d-sm-none"></v-app-bar-nav-icon>
         <!-- <v-icon style="color: white;">mdi-magnify</v-icon> -->
         <v-spacer></v-spacer>
@@ -132,18 +132,18 @@
                         </v-list-item-content>
                         <v-menu bottom right>
                         <template v-slot:activator="{ on, attrs }">
-                        <v-list-item-avatar style="margin-left: 12px;"  v-bind="attrs" v-on="on">
+                        <v-list-item-avatar style="cursor: pointer; margin-left: 12px;"  v-bind="attrs" v-on="on">
                             <img :src="'profile.png'">
                         </v-list-item-avatar>
                         </template>
                     <v-list dark width="140px">
-                        <v-list-item href="/profile">
+                        <v-list-item style="border-bottom: solid 2px #1a1a1a;" href="/profile">
                             <v-list-item-title>Profile</v-list-item-title>
                         </v-list-item>
-                        <v-list-item href="/billing">
+                        <v-list-item style="border-bottom: solid 2px #1a1a1a;" href="/billing">
                             <v-list-item-title>Billing</v-list-item-title>
                         </v-list-item>
-                        <v-list-item href="/logout">
+                        <v-list-item style="border-bottom: solid 2px #1a1a1a;" href="/logout">
                             <v-list-item-title>Logout</v-list-item-title>
                         </v-list-item>
                     </v-list>

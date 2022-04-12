@@ -1,8 +1,8 @@
 <template>
     <div>
-        <div id="mainLoading" v-show="this.loading == true" class="background"  style="text-align: center;">
+        <div id="mainLoading" v-show="this.loading == true" class="background"  style="text-align: center; background-color: #1a1a1acc !important;">
             <div class="text-center" style="margin-top:25vh">
-                <img width="150px"  src="HuntIntelLogo.png">
+                <img width="150px"  src="HuntIntelMainLogo.png">
                 <v-progress-linear indeterminate color="#44d62c" style="width: 150px; margin-left: auto; margin-right:auto; margin-top: 1.5rem;" height=3 background-opacity="0"></v-progress-linear>
             </div>
         </div>
@@ -644,9 +644,9 @@
                     color="#44d62c"
                     style="box-shadow: 0px 0px 15px #1a1a1a;"
                     @click="searchClicked()"
-                    title="Search Location" 
+                    title="Location Search" 
                 >
-                    <v-icon style="color: #1A1A1A;">mdi-magnify</v-icon>
+                    <v-icon style="color: #1A1A1A;">mdi-web</v-icon>
                 </v-btn>
                 <v-btn
                     fab
