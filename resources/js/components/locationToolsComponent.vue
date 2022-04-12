@@ -6,6 +6,12 @@
                 <v-progress-linear indeterminate color="#44d62c" style="width: 150px; margin-left: auto; margin-right:auto; margin-top: 1.5rem;" height=3 background-opacity="0"></v-progress-linear>
             </div>
         </div>
+        <div id="mainLoading" v-show="this.vkLoadingScreen == true" class="vkLoadingBackground"  style="text-align: center;">
+            <div class="text-center" style="margin-top:30vh">
+                <v-progress-circular indeterminate color="#FFFFFF" style="width: 150px; margin-left: auto; margin-right:auto; margin-top: 1.5rem; margin-bottom: 1.5rem;" height=3 background-opacity="0"></v-progress-circular>
+                <p style="font-size: 0.75rem; color: white;">Adding VK Photos to Map...</p>
+            </div>
+        </div>
         <!-- Overlay which dims the entire screen -->
             <v-overlay
                 opacity="0.66"
@@ -36,7 +42,7 @@
                             >
                         </v-toolbar-title
                         >
-                        <v-btn icon tile @click="twitterToggle()" v-if="twitterClicked">
+                        <v-btn title="Back" icon tile @click="twitterToggle()" v-if="twitterClicked">
                                 <v-icon style="color: #44d62c;">mdi-arrow-left-bold</v-icon>
                         </v-btn>
                         <v-spacer></v-spacer>
@@ -48,7 +54,7 @@
                         >
                         <v-toolbar-items v-if="!twitterClicked">
                             <!-- close button and icon -->
-                            <v-btn icon @click="searchClose()">
+                            <v-btn icon @click="searchClose()" title="Close">
                                 <v-icon style="color: #44d62c;">mdi-close</v-icon>
                             </v-btn>
                         </v-toolbar-items>
@@ -79,7 +85,7 @@
                                         <h6 style="color: white;">Twitter</h6>
                                         <p style="color: white; font-size: 0.75rem;">Twitter is a free social networking microblogging service that allows registered members to broadcast short posts called tweets. Search these tweets based on your location.</p>
                                 </div>
-                                <v-btn class="toolButton" @click="twitterToggle()" tile style="background-color: #44d62c25; color: #44d62c !important;" icon><v-icon style="color: #44d62c !important;">mdi-arrow-right-bold</v-icon></v-btn>
+                                <v-btn class="toolButton" title="Search Tweets" @click="twitterToggle()" tile style="background-color: #44d62c25; color: #44d62c !important;" icon><v-icon style="color: #44d62c !important;">mdi-arrow-right-bold</v-icon></v-btn>
                                 </v-card>
                             </div>
                             <div class="col-12 col-xl-6" style="padding: 12px; display: inline-block;  vertical-align: top;">
@@ -92,7 +98,7 @@
                                         <h6 style="color: white;">SnapMaps</h6>
                                         <p style="color: white; font-size: 0.75rem;">On Snap Map, you can view Snaps submitted to Snap Map from all across the world — including sporting events, celebrations, breaking news, and more.</p>
                                 </div>
-                                <v-btn class="toolButton" tile @click="goToSnapMaps()" style="background-color: #44d62c25; color: #44d62c !important;" icon><v-icon style="color: #44d62c !important;">mdi-arrow-right-bold</v-icon></v-btn>
+                                <v-btn class="toolButton" tile title="Go To SnapMaps" @click="goToSnapMaps()" style="background-color: #44d62c25; color: #44d62c !important;" icon><v-icon style="color: #44d62c !important;">mdi-arrow-right-bold</v-icon></v-btn>
                                 </v-card>
                             </div>
                             <div class="col-12 col-xl-6" style="padding: 12px; display: inline-block;  vertical-align: top;">
@@ -105,7 +111,7 @@
                                         <h6 style="color: white;">Google Maps</h6>
                                         <p style="color: white; font-size: 0.75rem;">Google Maps is a Web-based service that provides detailed information about geographical regions and sites around the world. Go to your location in Google Maps.</p>
                                 </div>
-                                <v-btn class="toolButton" @click="goToGoogleMaps()" tile style="background-color: #44d62c25; color: #44d62c !important;" icon><v-icon style="color: #44d62c !important;">mdi-arrow-right-bold</v-icon></v-btn>
+                                <v-btn class="toolButton" title="Go To Google Maps" @click="goToGoogleMaps()" tile style="background-color: #44d62c25; color: #44d62c !important;" icon><v-icon style="color: #44d62c !important;">mdi-arrow-right-bold</v-icon></v-btn>
                                 </v-card>
                             </div>
                             <!-- <div class="col-12 col-xxl-6" style="padding: 12px; display: inline-block;  vertical-align: top;">
@@ -131,7 +137,7 @@
                                         <h6 style="color: white;">Bing Maps</h6>
                                         <p style="color: white; font-size: 0.75rem;">Bing Maps is a web mapping service provided as a part of Microsoft's Bing suite of search engines and powered by the Bing Maps for Enterprise framework.</p>
                                 </div>
-                                <v-btn class="toolButton" @click="goToBingMaps()" tile style="background-color: #44d62c25; color: #44d62c !important;" icon><v-icon style="color: #44d62c !important;">mdi-arrow-right-bold</v-icon></v-btn>
+                                <v-btn class="toolButton" title="Go To Bing Maps" @click="goToBingMaps()" tile style="background-color: #44d62c25; color: #44d62c !important;" icon><v-icon style="color: #44d62c !important;">mdi-arrow-right-bold</v-icon></v-btn>
                                 </v-card>
                             </div>
                             <!-- <div class="col-12 col-xxl-6" style="padding: 12px; display: inline-block;  vertical-align: top;">
@@ -157,7 +163,7 @@
                                         <h6 style="color: white;">SunCalc</h6>
                                         <p style="color: white; font-size: 0.75rem;">SunCalc is a little app that shows sun movement and sunlight phases during the given day at the given location. Primarily used for Chronolocation.</p>
                                 </div>
-                                <v-btn class="toolButton" tile @click="goToSunCalc()" style="background-color: #44d62c25; color: #44d62c !important;" icon><v-icon style="color: #44d62c !important;">mdi-arrow-right-bold</v-icon></v-btn>
+                                <v-btn class="toolButton" tile title="Go To SunCalc" @click="goToSunCalc()" style="background-color: #44d62c25; color: #44d62c !important;" icon><v-icon style="color: #44d62c !important;">mdi-arrow-right-bold</v-icon></v-btn>
                                 </v-card>
                             </div>
                             <div class="col-12 col-xl-6" style="padding: 12px; display: inline-block; vertical-align: top;">
@@ -170,7 +176,7 @@
                                         <h6 style="color: white;">Yandex Maps</h6>
                                         <p style="color: white; font-size: 0.75rem;">Yandex.Maps is a Russian web mapping service developed by Yandex. The service provides detailed maps of the whole world. Yandex.Maps is the most popular cartographic service in Russia.</p>
                                 </div>
-                                <v-btn class="toolButton" tile  @click="goToYandexMaps()" style="background-color: #44d62c25; color: #44d62c !important;" icon><v-icon style="color: #44d62c !important;">mdi-arrow-right-bold</v-icon></v-btn>
+                                <v-btn class="toolButton" tile  title="Go To Yandex Maps" @click="goToYandexMaps()" style="background-color: #44d62c25; color: #44d62c !important;" icon><v-icon style="color: #44d62c !important;">mdi-arrow-right-bold</v-icon></v-btn>
                                 </v-card>
                             </div>
                             <div class="col-12 col-xl-6" style="padding: 12px; display: inline-block;  vertical-align: top;">
@@ -183,7 +189,7 @@
                                         <h6 style="color: white;">Mapillary</h6>
                                         <p style="color: white; font-size: 0.75rem;">Mapillary is the street-level imagery platform that scales and automates mapping using collaboration, cameras, and computer vision. Has good global coverage.</p>
                                 </div>
-                                <v-btn class="toolButton" tile @click="goToMapillary()" style="background-color: #44d62c25; color: #44d62c !important;" icon><v-icon style="color: #44d62c !important;">mdi-arrow-right-bold</v-icon></v-btn>
+                                <v-btn class="toolButton" title="Go To Mapillary" tile @click="goToMapillary()" style="background-color: #44d62c25; color: #44d62c !important;" icon><v-icon style="color: #44d62c !important;">mdi-arrow-right-bold</v-icon></v-btn>
                                 </v-card>
                             </div>
                             <div class="col-12 col-xl-6" style="padding: 12px; display: inline-block;  vertical-align: top;">
@@ -196,7 +202,7 @@
                                         <h6 style="color: white;">KartaView</h6>
                                         <p style="color: white; font-size: 0.75rem;">KartaView is a free and open platform for street level imagery. Anyone can contribute images with a smartphone and the open source apps.</p>
                                 </div>
-                                <v-btn class="toolButton" tile @click="goToKartaView()" style="background-color: #44d62c25; color: #44d62c !important;" icon><v-icon style="color: #44d62c !important;">mdi-arrow-right-bold</v-icon></v-btn>
+                                <v-btn class="toolButton" title="Go To KartaView" tile @click="goToKartaView()" style="background-color: #44d62c25; color: #44d62c !important;" icon><v-icon style="color: #44d62c !important;">mdi-arrow-right-bold</v-icon></v-btn>
                                 </v-card>
                             </div>
                             <div class="col-12 col-xl-6" style="padding: 12px; display: inline-block;  vertical-align: top;">
@@ -209,7 +215,7 @@
                                         <h6 style="color: white;">SentinelHub Playground</h6>
                                         <p style="color: white; font-size: 0.75rem;">We make satellite data (Sentinels, Landsat and other providers) easily accessible for you to be browsed or analyzed, within our cloud GIS or within your own browser.</p>
                                 </div>
-                                <v-btn class="toolButton" tile @click="goToSentinelHub()" style="background-color: #44d62c25; color: #44d62c !important;" icon><v-icon style="color: #44d62c !important;">mdi-arrow-right-bold</v-icon></v-btn>
+                                <v-btn class="toolButton" tile title="Go To SentinelHub Playground"  @click="goToSentinelHub()" style="background-color: #44d62c25; color: #44d62c !important;" icon><v-icon style="color: #44d62c !important;">mdi-arrow-right-bold</v-icon></v-btn>
                                 </v-card>
                             </div>
                             <div class="col-12 col-xl-6" style="padding: 12px; display: inline-block;  vertical-align: top;">
@@ -222,7 +228,7 @@
                                         <h6 style="color: white;">WikiMapia</h6>
                                         <p style="color: white; font-size: 0.75rem;">Wikimapia is a geographic online encyclopedia project. It utilizes Google Maps with a geographically-referenced wiki system, with the aim to mark and describe all geographical objects in the world.</p>
                                 </div>
-                                <v-btn class="toolButton" tile @click="goToWikiMapia()" style="background-color: #44d62c25; color: #44d62c !important;" icon><v-icon style="color: #44d62c !important;">mdi-arrow-right-bold</v-icon></v-btn>
+                                <v-btn class="toolButton" title="Go To WikiMapia"  tile @click="goToWikiMapia()" style="background-color: #44d62c25; color: #44d62c !important;" icon><v-icon style="color: #44d62c !important;">mdi-arrow-right-bold</v-icon></v-btn>
                                 </v-card>
                             </div>
                             <div class="col-12 col-xl-6" style="padding: 12px; vertical-align: top;">
@@ -235,7 +241,7 @@
                                         <h6 style="color: white;">PeakVisor</h6>
                                         <p style="color: white; font-size: 0.75rem;">PeakVisor will make you a superhero of outdoor navigation by putting state-of-the-art 3D maps and mountain identification magic wand in your hand.</p>
                                 </div>
-                                <v-btn class="toolButton" tile @click="goToPeakVisor()" style="background-color: #44d62c25; color: #44d62c !important;" icon><v-icon style="color: #44d62c !important;">mdi-arrow-right-bold</v-icon></v-btn>
+                                <v-btn class="toolButton" title="Go To PeakVisor" tile @click="goToPeakVisor()" style="background-color: #44d62c25; color: #44d62c !important;" icon><v-icon style="color: #44d62c !important;">mdi-arrow-right-bold</v-icon></v-btn>
                                 </v-card>
                             </div>
                             </v-row>
@@ -324,6 +330,7 @@
                                         class="col-12 no-padding"
                                         :disabled="!slider"
                                         @click="goToTwitterClicked()"
+                                        title="Search For Tweets" 
                                         ><span >Search For Tweets</span></v-btn>
                                     <v-alert text dense class="col-12 my-3 text-left" v-if="showRadiusWarning" type="warning">Please choose a radius</v-alert>
                                     <!-- adding space to the bottom of the dialog box -->
@@ -358,13 +365,13 @@
                         >
                         <v-toolbar-items v-if="metaClicked">
                             <!-- close button and icon -->
-                            <v-btn icon @click="metaBack()">
+                            <v-btn icon @click="metaBack()" title="Back" >
                                 <v-icon style="color: #44d62c;">mdi-arrow-left-bold</v-icon>
                             </v-btn>
                         </v-toolbar-items>
                         <v-toolbar-items v-if="vkClicked">
                             <!-- close button and icon -->
-                            <v-btn icon @click="vkBack()">
+                            <v-btn icon @click="vkBack()" title="Back" >
                                 <v-icon style="color: #44d62c;">mdi-arrow-left-bold</v-icon>
                             </v-btn>
                         </v-toolbar-items>
@@ -381,7 +388,7 @@
                         </v-toolbar-title>
                         <v-toolbar-items v-if="!metaClicked && !vkClicked">
                             <!-- close button and icon -->
-                            <v-btn icon @click="addClose()">
+                            <v-btn icon @click="addClose()" title="Close" >
                                 <v-icon style="color: #44d62c;">mdi-close</v-icon>
                             </v-btn>
                         </v-toolbar-items>
@@ -409,7 +416,7 @@
                                         <h6 style="color: white;">Meta Places</h6>
                                         <p style="color: white; font-size: 0.75rem;">Twitter is a free social networking microblogging service that allows registered members to broadcast short posts called tweets. Search these tweets based on your location.</p>
                                 </div>
-                                <v-btn @click="metaClick()" class="toolButton" tile style="background-color: #44d62c25; color: #44d62c !important;" icon><v-icon style="color: #44d62c !important;">mdi-arrow-right-bold</v-icon></v-btn>
+                                <v-btn @click="metaClick()" title="Add Meta Places" class="toolButton" tile style="background-color: #44d62c25; color: #44d62c !important;" icon><v-icon style="color: #44d62c !important;">mdi-arrow-right-bold</v-icon></v-btn>
                                 </v-card>
                             </div>
                             <div class="col-12 col-xl-6" style="padding: 12px; display: inline-block; vertical-align: top;">
@@ -422,7 +429,7 @@
                                         <h6 style="color: white;">VKontakte Photos</h6>
                                         <p style="color: white; font-size: 0.75rem;">VK is a Russian online social media and social networking service based in Saint Petersburg. VK is available in multiple languages but it is predominantly used by Russian speakers.</p>
                                 </div>
-                                <v-btn @click="vkClick()" class="toolButton" tile style="background-color: #44d62c25; color: #44d62c !important;" icon><v-icon style="color: #44d62c !important;">mdi-arrow-right-bold</v-icon></v-btn>
+                                <v-btn @click="vkClick()" title="Add VK Photos" class="toolButton" tile style="background-color: #44d62c25; color: #44d62c !important;" icon><v-icon style="color: #44d62c !important;">mdi-arrow-right-bold</v-icon></v-btn>
                                 </v-card>
                             </div>
                             </v-row>
@@ -434,13 +441,13 @@
                             </div>
                             <div class="col-12">
                                 <p style="text-align: left; font-size: 0.75rem;"><b>STEP 1:<br>Click the "Get Meta Place Data" button</b> - After clicking the button, if you are logged out, a new tab will open where you'll be re-directed to the Instagram log in page. Please log in and accept cookies. You'll then be re-directed to your "Place Data".</p>
-                                <v-btn color="#44d62c" elevation="0" @click="openMetaData()" class="col-12 no-padding" outlined><span >Get Meta Place Data</span></v-btn>
+                                <v-btn color="#44d62c" title="Open Meta Place Data" elevation="0" @click="openMetaData()" class="col-12 no-padding" outlined><span >Get Meta Place Data</span></v-btn>
                                 <a id="link" target="_blank" :href="this.generatedLink" download hidden></a>
                             </div>
                             <div class="col-12">
                                 <p style="text-align: left; font-size: 0.75rem;"><b>STEP 2:<br>Copy and paste the "Place Data"</b> - Copy the entirety of your place data and paste it into the box below.</p>
                                 <v-textarea style="font-size: 0.75rem;" outlined v-model="placeData"></v-textarea>
-                                <v-btn color="#44d62c" @click="submitMetaData()" :loading="metaLoading" elevation="0" :disabled="!jsonValidator" class="col-12 no-padding"><span >Add Meta Places</span></v-btn>
+                                <v-btn color="#44d62c" title="Add Meta Places" @click="submitMetaData()" :loading="metaLoading" elevation="0" :disabled="!jsonValidator" class="col-12 no-padding"><span >Add Meta Places</span></v-btn>
                             </div>
                         </div>
                         <div class="col-12 col-md-10 text-center padding-mobile" v-if="vkClicked">
@@ -450,17 +457,18 @@
                             </div>
                             <div class="col-12">
                                 <p style="text-align: left; font-size: 0.75rem;"><b>STEP 1:<br>Click the "Get Meta Place Data" button</b> - After clicking the button, if you are logged out, a new tab will open where you'll be re-directed to the Instagram log in page. Please log in and accept cookies. You'll then be re-directed to your "Place Data".</p>
-                                <v-text-field v-model="vkAccessToken" dark hide-details append-outer-icon="mdi-content-save" @click:append-outer="saveVKAPIKey" dense color="white" placeholder="VK Secret API Key"  style="font-size: 0.75rem; margin: 0px; padding: 0px; font-color: white; margin-bottom: 1rem;" label="VK Secret API Key" outlined></v-text-field>
+                                <v-text-field v-model="vkAccessToken" dark hide-details append-outer-icon="mdi-content-save" @click:append-outer="saveVKAPIKey" dense color="white" placeholder="VK Service Token"  style="font-size: 0.75rem; margin: 0px; padding: 0px; font-color: white; margin-bottom: 1rem;" label="VK Service Token" outlined></v-text-field>
+                                <p v-if="keySaved" style="text-align: right; font-size: 0.75rem; color: #44d62c">Saved.</p>
                             </div>
                             <div class="col-12">
                                 <p style="text-align: left; font-size: 0.75rem;"><b>STEP 2:<br>Click the "Get VK Photo Data" button</b> - After clicking the button, if you are logged out, a new tab will open where you'll be re-directed to the Instagram log in page. Please log in and accept cookies. You'll then be re-directed to your "VK Photo Data".</p>
-                                <v-btn color="#44d62c" elevation="0" @click="openVKData()" class="col-12 no-padding" outlined><span >Get VK Photo Data</span></v-btn>
+                                <v-btn color="#44d62c" title="Get VK Photo Data" elevation="0" @click="openVKData()" class="col-12 no-padding" outlined><span >Get VK Photo Data</span></v-btn>
                                 <a id="vk-link" target="_blank" :href="this.generatedVKLink" download hidden></a>
                             </div>
                             <div class="col-12">
                                 <p style="text-align: left; font-size: 0.75rem;"><b>STEP 3:<br>Copy and paste the "VK Photo Data"</b> - Copy the entirety of yourvk photo data and paste it into the box below.</p>
                                 <v-textarea style="font-size: 0.75rem;" outlined v-model="vkPhotoData"></v-textarea>
-                                <v-btn color="#44d62c" @click="submitVKData()" :loading="vkLoading" elevation="0" :disabled="!VKJsonValidator" class="col-12 no-padding"><span >Add VK Photos</span></v-btn>
+                                <v-btn color="#44d62c" title="Add VK Photos" @click="submitVKData()" :loading="vkLoading" elevation="0" :disabled="!VKJsonValidator" class="col-12 no-padding"><span >Add VK Photos</span></v-btn>
                             </div>
                         </div>
                     </div>
@@ -491,7 +499,7 @@
                         <v-spacer></v-spacer>
                         <v-toolbar-items>
                             <!-- close button and icon -->
-                            <v-btn icon @click="settingsClose()">
+                            <v-btn icon @click="settingsClose()" title="Close">
                                 <v-icon style="color: #44d62c;">mdi-close</v-icon>
                             </v-btn>
                         </v-toolbar-items>
@@ -509,7 +517,7 @@
                                     <v-expansion-panel-header><b style="font-size: 0.75rem;">Map Settings</b></v-expansion-panel-header>
                                     <v-expansion-panel-content>
                                         <p style="text-align: left; color: white; font-size: 0.75rem;"><b>Choose your map style</b> - Satellite is useful for precisely placing your marker on the map</p>
-                                        <v-row class="my-6" justify="space-around">
+                                        <v-row v-if="!this.dataPresent" class="my-6" justify="space-around">
                                             <v-chip-group v-model="mapStyle" mandatory color="#44d62c">
                                                 <v-chip value="satellite">
                                                     Satellite
@@ -524,6 +532,11 @@
                                                     Outdoor
                                                 </v-chip>
                                             </v-chip-group>
+                                        </v-row>
+                                        <v-row v-if="this.dataPresent" class="my-6">
+                                            <v-chip class="col-10 ml-2">
+                                                Only selectable when the map is cleared
+                                            </v-chip>
                                         </v-row>
                                         <p style="text-align: left; color: white; font-size: 0.75rem;"><b>Choose your unit of distance</b> - Select the unit your are most familiar with</p>
                                         <v-row class="my-6" justify="space-around">
@@ -540,11 +553,6 @@
                                 </v-expansion-panel>
                                 <v-expansion-panel style="border: 1px solid #44d62c10;" flat>
                                     <v-expansion-panel-header><b style="font-size: 0.75rem;">How to use our location tools</b></v-expansion-panel-header>
-                                    <v-expansion-panel-content>
-                                    </v-expansion-panel-content>
-                                </v-expansion-panel>
-                                <v-expansion-panel style="border: 1px solid #44444410;" flat>
-                                    <v-expansion-panel-header><b style="font-size: 0.75rem;">About our location tools</b></v-expansion-panel-header>
                                     <v-expansion-panel-content>
                                     </v-expansion-panel-content>
                                 </v-expansion-panel>
@@ -578,7 +586,7 @@
                         <v-spacer></v-spacer>
                         <v-toolbar-items>
                             <!-- close button and icon -->
-                            <v-btn icon @click="vkResultsClose()">
+                            <v-btn icon @click="vkResultsClose()" title="Close">
                                 <v-icon style="color: #44d62c;">mdi-close</v-icon>
                             </v-btn>
                         </v-toolbar-items>
@@ -604,15 +612,15 @@
                                 </div>
                                 <div style="text-align: left; padding: 12px; width: 100%; padding-top: 0px; margin-bottom: 1rem;  font-size: 0.75rem;">
                                 <p style="color: white; font-size: 0.75rem;"><b>VK Photo Links:</b></p>
-                                <v-btn @click="goToVKProfile()" color="#2787F525" style="color: #2787F5 !important" elevation='0'>View VK Profile</v-btn>
-                                <v-btn @click="goToVKPhoto()" color="#2787F525" style="color: #2787F5 !important" elevation='0'>View VK Photo</v-btn>
+                                <v-btn @click="goToVKProfile()" color="#2787F525" style="color: #2787F5 !important" title="View VK Profile" elevation='0'>View VK Profile</v-btn>
+                                <v-btn @click="goToVKPhoto()" color="#2787F525" style="color: #2787F5 !important" title="View Vk Photo" elevation='0'>View VK Photo</v-btn>
                                 </div>
                                 <div style="text-align: left; padding: 12px; width: 100%; margin-bottom: 1rem; padding-top: 0px; font-size: 0.75rem;">
                                 <p style="color: white; font-size: 0.75rem;"><b>Reverse Image Search Tools:</b></p>
-                                <v-btn  @click="googleReverseImageSearch()" color="#E9423525" style="color: #E94235 !important;" elevation='0'>Google</v-btn>
-                                <v-btn @click="bingReverseImageSearch()" color="#007E6E25" style="color: #007E6E !important" elevation='0'>Bing</v-btn>
-                                <v-btn  @click="yandexReverseImageSearch()" color="#FFCC0025" style="color: #FFCC00 !important;" elevation='0'>Yandex</v-btn>
-                                <v-btn @click="tinyeyeReverseImageSearch()" color="#2C71A125" style="color: #2C71A1 !important" elevation='0'>TinyEye</v-btn>
+                                <v-btn  @click="googleReverseImageSearch()" color="#E9423525" style="color: #E94235 !important;" title="Google Reverse Image Search"  elevation='0'>Google</v-btn>
+                                <v-btn @click="bingReverseImageSearch()" color="#007E6E25" style="color: #007E6E !important" title="Bing Reverse Image Search" elevation='0'>Bing</v-btn>
+                                <v-btn  @click="yandexReverseImageSearch()" color="#FFCC0025" style="color: #FFCC00 !important;" title="Yandex Reverse Image Search" elevation='0'>Yandex</v-btn>
+                                <v-btn @click="tinyeyeReverseImageSearch()" color="#2C71A125" style="color: #2C71A1 !important" title="Tinyeye Reverse Image Search" elevation='0'>TinyEye</v-btn>
                                 </div>
                                 </v-card>
                         </div>
@@ -620,13 +628,14 @@
                 </v-card>
             </v-dialog>
 
+            <div id="topContainer">
             <v-speed-dial
                 direction="bottom"
                 transition="slide-y-reverse-transition"
                 id="actionsBtn"
             >
                 <template v-slot:activator>
-                    <v-btn fab color="#44d62c" icon tile elevation="0" class="no-padding"><span><v-icon style="color: #1A1A1A !important;">mdi-menu</v-icon> </span></v-btn>
+                    <v-btn title="Map Menu" fab color="#44d62c" icon tile elevation="0" class="no-padding"><span><v-icon style="color: #1A1A1A !important;">mdi-menu</v-icon> </span></v-btn>
                 </template>
                 <v-btn
                     fab
@@ -635,8 +644,9 @@
                     color="#44d62c"
                     style="box-shadow: 0px 0px 15px #1a1a1a;"
                     @click="searchClicked()"
+                    title="Search Location" 
                 >
-                    <v-icon style="color: #FFFFFF;">mdi-magnify</v-icon>
+                    <v-icon style="color: #1A1A1A;">mdi-magnify</v-icon>
                 </v-btn>
                 <v-btn
                     fab
@@ -646,8 +656,9 @@
                     color="#44d62c"
                     style="box-shadow: 0px 0px 15px #1a1a1a;"
                     @click="addClicked()"
+                    title="Add Places" 
                 >
-                    <v-icon style="color: #FFFFFF;">mdi-plus</v-icon>
+                    <v-icon style="color: #1A1A1A;">mdi-plus</v-icon>
                 </v-btn>
                 <v-btn
                     fab
@@ -656,11 +667,14 @@
                     color="#44d62c"
                     style="box-shadow: 0px 0px 15px #1a1a1a;"
                     @click="settingsClicked()"
+                    title="Map Settings" 
                 >
-                    <v-icon style="color: #FFFFFF;">mdi-cog</v-icon>
+                    <v-icon style="color: #1A1A1A;">mdi-cog</v-icon>
                 </v-btn>
             </v-speed-dial>
-            <v-alert dense id="alert" v-if="errorMessage" type="error"><span class="hidden-mobile">No Location Selected! Please click on the map to s</span><span class="visible-mobile">S</span>elect a location to search for tweets</v-alert>
+            <v-btn id="clearBtn" fab v-if="dataPresent" title="Clear Map" icon tile color="#DC3545" elevation="0" class="no-padding" @click="clearPlaces()"><span><v-icon style="color: #1A1A1A !important;">mdi-delete</v-icon></span></v-btn>
+            <v-alert dense id="alert" class="col-7 col-xl-8" v-if="errorMessage" type="error"><span v-if="!doubleCheckError"><span class="hidden-mobile">No Location Selected! Please click on the map to s</span><span class="visible-mobile">S</span>elect a location</span><span v-if="doubleCheckError">Same Location Selected! Please click on the map to select a location</span></v-alert>
+            </div>
         <div id="map">
             <mapbox
                 access-token="pk.eyJ1IjoiaHVudGludGVsIiwiYSI6ImNsMXV4cWx5bjAxZ28zZHFjZGZlY2M0bWoifQ.EmMDeKKW2Jw02ns58gUfKA"
@@ -780,6 +794,8 @@ export default {
             vkResultText: null,
             vkResultID: null,
             vkLoading: false,
+            keySaved: false,
+            vkLoadingScreen: false,
         }
     },
     mounted() {
@@ -798,6 +814,8 @@ export default {
             const geocoder = new MapboxGeocoder({
                 accessToken: "pk.eyJ1IjoiaHVudGludGVsIiwiYSI6ImNsMXV4cWx5bjAxZ28zZHFjZGZlY2M0bWoifQ.EmMDeKKW2Jw02ns58gUfKA",
                 mapboxgl: Mapbox,
+                localGeocoder: coordinatesGeocoder,
+                placeholder: 'Search Places',
             })
 
             this.map.addControl(
@@ -934,12 +952,13 @@ export default {
             //https://api.vk.com/method/photos.search?lat=51.481583&long=-3.179090&radius=1&count=1000&offset=0&access_token=8533818c8533818c8533818cd28548f057885338533818ce72f847d397ac1962d011695&v=6.0
         },
         saveVKAPIKey(){
+            this.keySaved = false;
             let route = '../api/vkkey/store';
             let payload = {
                 'key': this.vkAccessToken,
             }
             this.$http.post(route, payload, {withCredentials: true}).then(res => {
-                console.log(res.data);
+                this.keySaved = true;
             });
 
         },
@@ -951,7 +970,6 @@ export default {
                 'url': this.generatedVKLink,
             }
             this.$http.post(route, payload, {withCredentials: true}).then(res => {
-                console.log(res.data);
                 this.vkPhotoSearch = res.data;
             });
         },
@@ -1004,15 +1022,17 @@ export default {
                     this.lastLon = this.lon;
                     this.dataPresent = true;
                     this.loadedCheck = true;
-                    this.addVKMarkersToMap();
+                    this.vkLoadingScreen = true;
                     this.vkPhotoData = null;
                     this.close();
                     this.vkBack();
+                    this.addVKMarkersToMap();
+                    this.vkLoading = false;
+                    this.vkLoadingScreen = false;
                 });
             } else {
                 this.errorMessageSubmit = true;
             }
-            this.vkLoading = false;
         },
         googleReverseImageSearch(){
             let url = 'https://www.google.com/searchbyimage?image_url=' + encodeURIComponent(this.vkResultURL);
@@ -1124,12 +1144,11 @@ export default {
                     this.addMetaMarkersToMap();
                     this.placeData = null;
                     this.close();
-
+                    this.metaLoading = false;
                 });
             } else {
                 this.errorMessageSubmit = true;
             }
-            this.metaLoading = false;
         },
 
         // VK Map Functions //
@@ -1288,15 +1307,27 @@ export default {
                 });
             }
         },
-        clearMetaPlaces(){
+        clearPlaces(){
             this.dataPresent = false;
             this.map.removeLayer('meta-place-markers');
-            let markersToGo = document.querySelectorAll('.meta-marker-place');
-            for (var i = 0; i < markersToGo.length; i++) {
-                markersToGo[i].parentNode.removeChild(markersToGo[i]) //or images[i].remove()
+            this.map.removeLayer('vk-place-markers');
+            this.map.removeLayer('vk-clusters');
+            let metaMarkersToGo = document.querySelectorAll('.meta-marker-place');
+            for (var i = 0; i < metaMarkersToGo.length; i++) {
+                metaMarkersToGo[i].parentNode.removeChild(metaMarkersToGo[i]) //or images[i].remove()
+            }
+            let vkMarkersToGo = document.querySelectorAll('.vk-marker-place');
+            for (var i = 0; i < vkMarkersToGo.length; i++) {
+                vkMarkersToGo[i].parentNode.removeChild(vkMarkersToGo[i]) //or images[i].remove()
             }
             this.markers = [];
             this.featureList = [];
+            this.markersVK = {};
+            this.clusterMarkersOnScreenVK = {};
+            this.clusterMarkersVK = {};
+            this.markersOnScreenVK = {};
+            this.featureListVK = [];
+
             if(this.popup){
                 this.popup.remove();
                 this.popup = null;
@@ -1583,11 +1614,64 @@ export default {
         }
     }
 }
+
+
+const coordinatesGeocoder = function (query) {
+// Match anything which looks like
+// decimal degrees coordinate pair.
+const matches = query.match(
+/^[ ]*(?:Lat: )?(-?\d+\.?\d*)[, ]+(?:Lng: )?(-?\d+\.?\d*)[ ]*$/i
+);
+if (!matches) {
+return null;
+}
+
+function coordinateFeature(lng, lat) {
+return {
+center: [lng, lat],
+geometry: {
+type: 'Point',
+coordinates: [lng, lat]
+},
+place_name: 'Lat: ' + lat + ' Lng: ' + lng,
+place_type: ['coordinate'],
+properties: {},
+type: 'Feature'
+};
+}
+
+const coord1 = Number(matches[1]);
+const coord2 = Number(matches[2]);
+const geocodes = [];
+
+if (coord1 < -90 || coord1 > 90) {
+// must be lng, lat
+geocodes.push(coordinateFeature(coord1, coord2));
+}
+
+if (coord2 < -90 || coord2 > 90) {
+// must be lat, lng
+geocodes.push(coordinateFeature(coord2, coord1));
+}
+
+if (geocodes.length === 0) {
+// else could be either lng, lat or lat, lng
+geocodes.push(coordinateFeature(coord1, coord2));
+geocodes.push(coordinateFeature(coord2, coord1));
+}
+
+return geocodes;
+};
 </script>
 
 <style>
 #mainLoading { z-index: 4; position: absolute; width: 100%;  height: 100% !important; overflow-y: hidden !important;}
 #map { z-index: 0 !important; position: absolute !important; width: 100% !important; height: 100% !important; border-width: unset !important; border-style: unset !important; border-color: unset !important; overflow-y: hidden !important;}
+#vkLoadingScreen { z-index: 4; position: absolute; width: 100%;  height: 100% !important; overflow-y: hidden !important;}
+.vkLoadingBackground{
+    background-color: #242424ee;
+}
+
 
 .marker {
     background-image: url('/BirdHuntPin.png');
@@ -1632,11 +1716,16 @@ export default {
 .theme--dark.v-expansion-panels .v-expansion-panel {
     background-color: #242424 !important;
 }
-#actionsBtn{z-index: 3 !important; position: absolute !important; margin-top: 10px; margin-left: 10px; background-color: #44d62c !important;}
-#alert{z-index: 3 !important; position: absolute !important; margin-bottom: 30px; width: calc(100% - 580px); margin-top:10px; margin-right: calc(10px + 240px + 10px); margin-left: calc(310px + 10px); height: 36px;}
+#actionsBtn{z-index: 3 !important; position: absolute !important; margin-left: 10px; background-color: #44d62c !important;}
+#clearBtn{margin-left: 78px; background-color: #DC3545 !important;}
+#alert{margin-left: 78px; min-width: calc(100% - 78px);}
+#topContainer{z-index: 3 !important; position: absolute !important; margin-top: 10px; display: flex;  width: calc(100% - (10px + 240px + 10px));}
 
 @media (min-width: 767px) and (max-width: 1140px) {
-    #alert{z-index: 3 !important; position: absolute !important; margin-bottom: 30px; width: calc(100% - 550px); margin-top:10px; margin-right: calc(10px + 240px + 10px); margin-left: calc(280px + 10px); height: 36px;}
+    #alert{z-index: 3 !important; position: fixed !important; bottom: 10px; min-width: calc(100% - 20px) !important; max-width: calc(100% - 20px); margin-top: unset; margin-right: 10px; margin-left: 10px;}
+    .hidden-mobile {
+            display: none;
+    }
 }
 
 @media (max-width: 767px) {
@@ -1654,13 +1743,13 @@ export default {
             border-radius: 0px;
         }
         #map{ z-index: 0 !important; position: fixed !important; width: 100vw !important; height: 100vh !important; border-width: unset !important; border-style: unset !important; border-color: unset !important; overflow-y: hidden !important;}
-        #alert{z-index: 3 !important; position: fixed !important; bottom: 30px; width: 100vw !important; max-width: calc(100vw - 20px); margin-top:unset; margin-right: 10px; margin-left: 10px; height: unset;}
+        #alert{z-index: 3 !important; position: fixed !important; bottom: 10px; min-width: calc(100% - 20px) !important; max-width: calc(100% - 20px); margin-top: unset; margin-right: 10px; margin-left: 10px;}
         .noScroll{
             position: fixed;
         }
 }
 
-@media (min-width: 767px) {
+@media (min-width: 1140px) {
     .visible-mobile{
         display: none;
     }
