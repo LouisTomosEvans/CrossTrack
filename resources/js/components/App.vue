@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-navigation-drawer v-model="drawer" elevation=0 app class="background d-sm-block" absolute style="height: 100%;" :temporary="$vuetify.breakpoint.xsOnly" :permanent="$vuetify.breakpoint.smAndUp" >
+    <v-navigation-drawer v-model="drawer" elevation=0 app class="background d-sm-block" absolute style="height: 100%;" :temporary="$vuetify.breakpoint.smOnly" :permanent="$vuetify.breakpoint.mdAndUp" >
     <v-list-item class="home">
         <v-list-item-content class="header">
             <img src="/HuntIntelLogo.png" style="width: 50% !important;" />
@@ -122,7 +122,7 @@
     </v-list>
     </v-navigation-drawer>
     <v-app-bar absolute elevation=0 style="background-color: #242424; height: 60px; border-bottom: 2px solid #44d62c;" app>
-        <v-app-bar-nav-icon @click="drawer = true" class="d-flex d-block d-sm-none"></v-app-bar-nav-icon>
+        <v-app-bar-nav-icon @click="drawer = true" class="d-flex d-block d-md-none"></v-app-bar-nav-icon>
         <!-- <v-icon style="color: white;">mdi-magnify</v-icon> -->
         <v-spacer></v-spacer>
                 <v-list-item class="navbar" style="padding-right: 0px !important;">
