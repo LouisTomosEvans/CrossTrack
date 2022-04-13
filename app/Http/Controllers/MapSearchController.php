@@ -30,7 +30,6 @@ class MapSearchController extends Controller
             $validatedRequest['website_id'] = $website->id;
             $validatedRequest['user_id'] = $user->id;
             $mapSearch = MapSearch::create($validatedRequest);
-            return $mapSearch;
         } else {
             abort(422);
         }
