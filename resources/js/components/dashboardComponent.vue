@@ -2,7 +2,7 @@
   <v-container fluid class="col-12 mainContainer" style="padding: 24px; padding-top: 12px; justify-content: space-between;">
         <v-row style=" margin-top: 1rem;">
             <div v-if="showTrialBanner">
-                <v-alert dense type="warning" class="col-12" style="font-size: 0.75rem;">You are currently within your free trial period. Your trial will expire on <b>{{ this.endDate }}</b>.</v-alert>
+                <v-alert text dense type="warning" class="col-12" style="font-size: 0.75rem;">You are currently within your free trial period. Your trial will expire on <b>{{ this.endDate }}</b>.</v-alert>
             </div>
           <div class="col-12 col-lg-12" style="padding: 12px;">
             <v-card class="cardShadow displayCardBackground" style="padding: 12px; text-align: center; overflow: hidden;" height="300px">
