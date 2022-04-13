@@ -252,5 +252,9 @@ export default {
       background-color: #000000 !important;
     }
 
+    .v-navigation-drawer {
+        z-index: 999999 !important;
+    }
+
 
 </style>

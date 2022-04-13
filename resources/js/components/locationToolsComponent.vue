@@ -1722,7 +1722,7 @@ return geocodes;
 #topContainer{z-index: 3 !important; position: absolute !important; margin-top: 10px; display: flex;  width: calc(100% - (10px + 240px + 10px));}
 
 @media (min-width: 767px) and (max-width: 1140px) {
-    #alert{z-index: 3 !important; position: fixed !important; bottom: 10px; min-width: calc(100% - 20px) !important; max-width: calc(100% - 20px); margin-top: unset; margin-right: 10px; margin-left: 10px;}
+    #alert{z-index: 3 !important; position: fixed !important; bottom: 5px; min-width: calc(100% - 20px) !important; max-width: calc(100% - 20px); margin-top: unset; margin-right: 10px; margin-left: 10px;}
     .hidden-mobile {
             display: none;
     }
@@ -1743,7 +1743,7 @@ return geocodes;
             border-radius: 0px;
         }
         #map{ z-index: 0 !important; position: fixed !important; width: 100vw !important; height: 100vh !important; border-width: unset !important; border-style: unset !important; border-color: unset !important; overflow-y: hidden !important;}
-        #alert{z-index: 3 !important; position: fixed !important; bottom: 10px; min-width: calc(100% - 20px) !important; max-width: calc(100% - 20px); margin-top: unset; margin-right: 10px; margin-left: 10px;}
+        #alert{z-index: 3 !important; position: fixed !important; bottom: 5px; min-width: calc(100% - 20px) !important; max-width: calc(100% - 20px); margin-top: unset; margin-right: 10px; margin-left: 10px;}
         .noScroll{
             position: fixed;
         }
