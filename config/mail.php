@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('MAIL_MAILER', 'smtp'),
+    'default' => env('MAIL_MAILER', 'ses'),
 
     /*
     |--------------------------------------------------------------------------
@@ -92,7 +92,7 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'info@huntintel.io'),
+        'address' => env('MAIL_FROM_ADDRESS', 'huntintelligence@gmail.com'),
         'name' => env('MAIL_FROM_NAME', 'Louis Tomos Evans'),
     ],
 
