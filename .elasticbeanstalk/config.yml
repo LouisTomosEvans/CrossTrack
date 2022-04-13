@@ -1,11 +1,11 @@
 branch-defaults:
   Master:
-    environment: HuntIntelLive
+    environment: HuntIntelEnv
   main:
-    environment: HuntIntelLive
+    environment: HuntIntelEnv
     group_suffix: null
 global:
-  application_name: HuntIntelligence
+  application_name: HuntIntel
   branch: null
   default_ec2_keyname: aws-eb
   default_platform: PHP 8.0 running on 64bit Amazon Linux 2
@@ -14,7 +14,7 @@ global:
   instance_profile: null
   platform_name: null
   platform_version: null
-  profile: eb-cli
+  profile: eb-cli2
   repository: null
   sc: git
   workspace_type: Application
