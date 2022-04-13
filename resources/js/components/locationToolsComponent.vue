@@ -409,7 +409,7 @@
                             <div class="col-12 col-xl-6" style="padding: 12px; display: inline-block; vertical-align: top;">
                                 <v-card class="cardShadow displayCardBackground" style="padding: 12px; text-align: center;" height="400px">
                                 <div class="articleHeader" style="background-color: #0082FF">
-                                    <div style="height: 100%; padding: 12px; background-color: transparent; border-radius: 50%; width: 12rem; display: flex; align-items: center; justify-content: center; margin-left: auto; margin-right: auto;"><img class="pinLogo" src="metaLogo.png"></div>
+                                    <div style="height: 100%; padding: 12px; background-color: transparent; border-radius: 50%; width: 12rem; display: flex; align-items: center; justify-content: center; margin-left: auto; margin-right: auto;"><img class="pinLogo" src="MetaLogo.png"></div>
                                 </div>
 
                                 <div style="text-align: left; margin-top: 200px; padding: 12px">
