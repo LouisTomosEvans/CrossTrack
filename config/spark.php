@@ -76,7 +76,7 @@ return [
         // Features::billingAddressCollection(),
         // Features::mustAcceptTerms(),
         // Features::euVatCollection(['home-country' => 'BE']),
-        // Features::receiptEmails(['custom-addresses' => true]),
+        Features::receiptEmails(['custom-addresses' => true]),
         Features::paymentNotificationEmails(),
     ],
 
@@ -94,7 +94,7 @@ return [
 
     'receipt_data' => [
         'vendor' => 'Hunt Intelligence',
-        'product' => 'Hunt Intelligence Platform',
+        'product' => 'Hunt Intelligence Software',
         'street' => '35 Clos Halket',
         'location' => 'Cardiff, Wales',
         'phone' => '07935911537',
@@ -126,7 +126,7 @@ return [
             'plans' => [
                 [
                     'name' => '🥈 Silver',
-                    'short_description' => 'Get started using hunt intelligence via the Silver Plan',
+                    'short_description' => 'Get started using Hunt Intelligence via the Silver Plan',
                     'monthly_id' => 'price_1KfvgeD5fy9Yqy8V2MSuiHYa',
                     'yearly_id' => 'price_1KfvgeD5fy9Yqy8VfKiFQEaM',
                     'yearly_incentive' => 'Get 2 Months Free',
@@ -134,7 +134,7 @@ return [
                         'Locate Facebook and Instagram Places',
                         'Locate VKontakte Photos (Russian Social Media)',
                         'Find Tweets by Location',
-                        'and many more features...',
+                        'and many more GEOINT features...',
                     ],
 
                 ],
