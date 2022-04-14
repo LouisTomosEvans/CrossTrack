@@ -922,12 +922,18 @@ export default {
             })
         },
         showVKResult(e){
-            this.vkResultURL = e.features[0].properties.preview_URL;
-            this.vkResultText = e.features[0].properties.text;
-            this.vkResultDate = new Date(e.features[0].properties.date*1000);
-            this.showVKDialog = true;
-            this.vkResultOwnerID = e.features[0].properties.owner;
-            this.vkResultID = e.features[0].properties.id;
+            this.vkResultLoading = true;
+            let route = '../api/vkphoto/' + e.features[0].properties.id;
+            this.$http.get(route, {withCredentials: true}).then((res) => {
+                this.vkResultsData = res.data;
+                this.vkResultURL = this.vkResultsData.preview_URL;
+                this.vkResultText = this.vkResultsData.text;
+                this.vkResultDate = new Date(this.vkResultsData.date*1000);
+                this.showVKDialog = true;
+                this.vkResultOwnerID = this.vkResultsData.owner_id;
+                this.vkResultID = this.vkResultsData.photo_id;
+                this.vkResultLoading = false;
+            })
             //window.open(e.features[0].properties.preview_URL);
             //this.VKResults
         },
@@ -977,41 +983,9 @@ export default {
             this.errorMessageSubmit = false;
             this.vkLoading = true;
             this.dataObject = JSON.parse(this.vkPhotoData);
-            this.vkPhotoObjects = [];
+            this.vkPhotoObjects = this.dataObject.response.items;
             if(this.dataObject.response.items){
                 let visualisationData = {};
-                for (var i = 0; i < this.dataObject.response.items.length; i++) {
-                    let vkPhotoObject = this.dataObject.response.items[i];
-                    if(!this.markersVK[(String(vkPhotoObject.id) + String([vkPhotoObject.long, vkPhotoObject.lat]))]){
-                        if(vkPhotoObject.sizes){
-                            vkPhotoObject.preview_URL =  (vkPhotoObject.sizes[vkPhotoObject.sizes.length - 1]).url;
-                            vkPhotoObject.sizes = null;
-                        }
-                        vkPhotoObject.photo_id = vkPhotoObject.id;
-
-
-                        visualisationData = {
-                        // extract required data from the location objects
-                            type: "Feature",
-                            geometry: {
-                                type: "Point",
-                                coordinates: [vkPhotoObject.long, vkPhotoObject.lat]
-                            },
-                            properties: {
-                                owner: vkPhotoObject.owner_id,
-                                date: vkPhotoObject.date,
-                                id: vkPhotoObject.id,
-                                text: vkPhotoObject.text,
-                                has_tags: vkPhotoObject.has_tags,
-                                album_id: vkPhotoObject.album_id,
-                                post_id: vkPhotoObject.post_id,
-                                preview_URL: vkPhotoObject.preview_URL,
-                            }
-                        };
-                        this.featureListVK.push(visualisationData);
-                        this.vkPhotoObjects.push(vkPhotoObject);
-                    }
-                }
                 let route = '../api/vkphoto/create';
                 let payload = {
                     'VKPhotoObjects': this.vkPhotoObjects,
@@ -1024,9 +998,42 @@ export default {
                     this.loadedCheck = true;
                     this.vkLoadingScreen = true;
                     this.vkPhotoData = null;
+                    this.dataObject = res.data
+                    for (var i = 0; i < this.dataObject.length; i++) {
+                        let vkPhotoObject = this.dataObject[i];
+                        if(!this.markersVK[(String(vkPhotoObject.id))]){
+                        //if(vkPhotoObject.sizes){
+                            //vkPhotoObject.preview_URL =  (vkPhotoObject.sizes[vkPhotoObject.sizes.length - 1]).url;
+                            //vkPhotoObject.sizes = null;
+                        //}
+                        //vkPhotoObject.photo_id = vkPhotoObject.id;
+
+
+                        visualisationData = {
+                        // extract required data from the location objects
+                            type: "Feature",
+                            geometry: {
+                                type: "Point",
+                                coordinates: [vkPhotoObject.lon, vkPhotoObject.lat]
+                            },
+                            properties: {
+                                //owner: vkPhotoObject.owner_id,
+                                //date: vkPhotoObject.date,
+                                id: vkPhotoObject.id,
+                                //text: vkPhotoObject.text,
+                                //has_tags: vkPhotoObject.has_tags,
+                                //album_id: vkPhotoObject.album_id,
+                                //post_id: vkPhotoObject.post_id,
+                                //preview_URL: vkPhotoObject.preview_URL,
+                            }
+                        };
+                        this.featureListVK.push(visualisationData);
+                        //this.vkPhotoObjects.push(vkPhotoObject);
+                        }
+                    }
+                    this.addVKMarkersToMap();
                     this.close();
                     this.vkBack();
-                    this.addVKMarkersToMap();
                     this.vkLoading = false;
                     this.vkLoadingScreen = false;
                 });
@@ -1209,7 +1216,7 @@ export default {
                 const places = this.map.querySourceFeatures('vk-places', 'vk-place-markers');
                 places.forEach( ({geometry, properties}) => {
                     if(!properties.cluster){                         // if this feature isn't a cluster...
-                    let id = String(properties.id) + String(geometry.coordinates);                    // get the feature's id
+                    let id = String(properties.id);                    // get the feature's id
                     if (!this.markersVK[id]) {                                   // if the marker val is falsey (i.e. the marker isn't yet in our local marker object of markers)
                         const el = document.createElement('div');
                         el.className = 'vk-marker-place marker-vk';

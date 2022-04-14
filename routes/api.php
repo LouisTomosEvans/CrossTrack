@@ -49,6 +49,7 @@ Route::middleware(['auth:sanctum', 'verified'])->post('/metaplace/create', [Meta
 // Location VK
 Route::middleware(['auth:sanctum', 'verified'])->post('/vkphotosearch/create', [VKPhotoSearchController::class, 'create'])->name('vkphotosearch.create');
 Route::middleware(['auth:sanctum', 'verified'])->post('/vkphoto/create', [VKPhotoController::class, 'create'])->name('vkphoto.create');
+Route::middleware(['auth:sanctum', 'verified'])->get('/vkphoto/{id}', [VKPhotoController::class, 'index'])->name('vkphoto.index');
 
 
 // VK Key
