@@ -34,6 +34,7 @@ class AppController extends Controller
         $plan = null;
         if($user->subscribed()){
             $plan = $user->sparkPlan()->name;
+            $endDate = null;
         }
         if ($plan == null) {
             $plan = 'Free Trial';
