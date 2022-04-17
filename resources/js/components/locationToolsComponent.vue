@@ -456,7 +456,7 @@
                             <v-divider class="my-6"></v-divider>
                             </div>
                             <div class="col-12">
-                                <p style="text-align: left; font-size: 0.75rem;"><b>STEP 1:<br>Paste your "VK Service Token" below</b> - Follow the instructions here to get your VK application service token and paste it into the text field below. For more help on adding VK Photos to the map click here.</p>
+                                <p style="text-align: left; font-size: 0.75rem;"><b>STEP 1:<br>Paste your "VK Service Token" below</b> - <a style="text-decoration: underline; color: #44d62c" @click="vkTokenInstructionsLink()">Click here</a> to follow our instructions on how to get your VK application service token and paste it into the text field below. For more help on adding VK Photos to the map <a style="text-decoration: underline; color: #44d62c" @click="vkInstructionsLink()">click here</a>.</p>
                                 <v-text-field v-model="vkAccessToken" dark hide-details append-outer-icon="mdi-content-save" @click:append-outer="saveVKAPIKey" dense color="white" placeholder="VK Service Token"  style="font-size: 0.75rem; margin: 0px; padding: 0px; font-color: white; margin-bottom: 1rem;" label="VK Service Token" outlined></v-text-field>
                                 <p v-if="keySaved" style="text-align: right; font-size: 0.75rem; color: #44d62c">Saved.</p>
                             </div>
@@ -512,7 +512,7 @@
                         <div class="col-1 hidden-mobile padding-mobile" />
 
                         <div class="col-12 col-md-10 text-center padding-mobile">
-                            <v-expansion-panels style="border: 1px solid #44d62c10; color: #242424;" flat accordion>
+                            <v-expansion-panels style="border: 1px solid #44d62c10; color: #242424;" flat accordion multiple v-model="panel">
                                 <v-expansion-panel style="border: 1px solid #44d62c10;" flat>
                                     <v-expansion-panel-header><b style="font-size: 0.75rem;">Map Settings</b></v-expansion-panel-header>
                                     <v-expansion-panel-content>
@@ -571,7 +571,7 @@
                                 </v-expansion-panel>
                                 <v-expansion-panel style="border: 1px solid #44d62c10;" flat>
                                     <v-expansion-panel-header><b style="font-size: 0.75rem;">How to add VK Photos</b></v-expansion-panel-header>
-                                    <v-expansion-panel-content>
+                                    <v-expansion-panel-content >
                                         <p style="text-align: left; color: #FFFFFF; font-size: 0.75rem"><b>VK Photos shows you VKontakte photos (Russian Social Media)</b> surrounding the chosen geographic location</p>
                                         <p style="text-align: left; color: #FFFFFF; font-size: 0.75rem"><b>Note: </b>There is a limit to how many places you can add at any one time. Currently this set to a max of 1000 most recent photos.</p>
 
@@ -846,6 +846,7 @@ export default {
             vkLoading: false,
             keySaved: false,
             vkLoadingScreen: false,
+            panel: [],
         }
     },
     mounted() {
@@ -1094,6 +1095,18 @@ export default {
             } else {
                 this.errorMessageSubmit = true;
             }
+        },
+        vkTokenInstructionsLink() {
+            this.close();
+            this.vkBack();
+            this.settingsDialog = true;
+            this.panel = [3];
+        },
+        vkInstructionsLink() {
+            this.close();
+            this.vkBack();
+            this.settingsDialog = true;
+            this.panel = [2];
         },
         googleReverseImageSearch(){
             let url = 'https://www.google.com/searchbyimage?image_url=' + encodeURIComponent(this.vkResultURL);
