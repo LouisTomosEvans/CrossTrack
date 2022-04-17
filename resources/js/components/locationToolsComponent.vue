@@ -330,7 +330,7 @@
                                         class="col-12 no-padding"
                                         :disabled="!slider"
                                         @click="goToTwitterClicked()"
-                                        title="Search For Tweets" 
+                                        title="Search For Tweets"
                                         ><span >Search For Tweets</span></v-btn>
                                     <v-alert text dense class="col-12 my-3 text-left" v-if="showRadiusWarning" type="warning">Please choose a radius</v-alert>
                                     <!-- adding space to the bottom of the dialog box -->
@@ -552,9 +552,62 @@
                                     </v-expansion-panel-content>
                                 </v-expansion-panel>
                                 <v-expansion-panel style="border: 1px solid #44d62c10;" flat>
-                                    <v-expansion-panel-header><b style="font-size: 0.75rem;">How to use our location tools</b></v-expansion-panel-header>
+                                    <v-expansion-panel-header><b style="font-size: 0.75rem;">How to add Meta Places</b></v-expansion-panel-header>
                                     <v-expansion-panel-content>
-                                    </v-expansion-panel-content>
+                                        <p style="text-align: left; color: #FFFFFF; font-size: 0.75rem"><b>Meta places shows you Instagram and Facebook places and posts</b> surrounding the chosen geographic location</p>
+                                        <p style="text-align: left; color: #FFFFFF; font-size: 0.75rem"><b>Note: </b>There is a limit to how many places you can add at any one time. Currently this set to 29 places. Due to this, to get a comprehensive view of an area I recommended that you do multiple searches by changing your desired location slighlty and re-adding more meta.</p>
+
+                                        <img class="mt-12 mb-6 col-12" style="padding: 0px; border: 2px solid #44d62c;" src="/Meta1.png"/>
+                                        <p class="my-6" style="text-align: left; color: #FFFFFF; font-size: 0.75rem"><b>1. Choose the location</b> that you want to find meta places near. This is done by clicking the map to add a marker at your desired location. Click the "Menu <v-icon>mdi-menu</v-icon>" button, next click the "Plus <v-icon>mdi-plus</v-icon>" button and finally click on the "Meta Places" tab.</p>
+                                        <img class="mt-12 mb-6 col-12" style="padding: 0px;  border: 2px solid #44d62c;" src="/Meta2.png"/>
+                                        <p class="my-6" style="text-align: left; color: #FFFFFF; font-size: 0.75rem"><b>2. Click the "Get Meta Place Data" button </b>- After clicking the button, if you are logged out, a new tab will open where you'll be re-directed to the Instagram log in page. Please log in and accept cookies. You'll then be re-directed to your "Place Data". </p>
+                                        <img class="mt-12 mb-6 col-12" style="padding: 0px; border: 2px solid #44d62c;" src="/Meta3.png"/>
+                                        <p class="my-6" style="text-align: left; color: #FFFFFF; font-size: 0.75rem"><b>3. Copy "Place Data" </b>- Copy all of the text on the new window that appears</p>
+                                        <img class="mt-12 mb-6 col-12" style="padding: 0px; border: 2px solid #44d62c;" src="/Meta4.png"/>
+                                        <p class="my-6 mb-12" style="text-align: left; color: #FFFFFF; font-size: 0.75rem"><b>4. Paste the "Place Data" in to the text-box.</b> - Once you have copied all the data, paste it into the text box at the bottom of the screen.</p>
+                                        <img class="mt-12 mb-6 col-12" style="padding: 0px; border: 2px solid #44d62c;" src="/Meta5.png"/>
+                                        <p class="my-6 mb-12" style="text-align: left; color: #FFFFFF; font-size: 0.75rem"><b>5. Click the "Add Meta Places" button.</b> Once you have clicked the button your places will be added to the map. You can hover over them and click the Facebook or Instagram buttons to see the posts tagged to that location.</p>
+                                        </v-expansion-panel-content>
+                                </v-expansion-panel>
+                                <v-expansion-panel style="border: 1px solid #44d62c10;" flat>
+                                    <v-expansion-panel-header><b style="font-size: 0.75rem;">How to add VK Photos</b></v-expansion-panel-header>
+                                    <v-expansion-panel-content>
+                                        <p style="text-align: left; color: #FFFFFF; font-size: 0.75rem"><b>VK Photos shows you VKontakte photos (Russian Social Media)</b> surrounding the chosen geographic location</p>
+                                        <p style="text-align: left; color: #FFFFFF; font-size: 0.75rem"><b>Note: </b>There is a limit to how many places you can add at any one time. Currently this set to a max of 1000 most recent photos.</p>
+
+                                        <img class="mt-12 mb-6 col-12" style="padding: 0px; border: 2px solid #44d62c;" src="/VK1.png"/>
+                                        <p class="my-6" style="text-align: left; color: #FFFFFF; font-size: 0.75rem"><b>1. Choose the location</b> that you want to find VK Photos near. This is done by clicking the map to add a marker at your desired location. Click the "Menu <v-icon>mdi-menu</v-icon>" button, next click the "Plus <v-icon>mdi-plus</v-icon>" button and finally click on the "VK Photos" tab.</p>
+                                        <img class="mt-12 mb-6 col-12" style="padding: 0px;  border: 2px solid #44d62c;" src="/VK2.png"/>
+                                        <p class="my-6" style="text-align: left; color: #FFFFFF; font-size: 0.75rem"><b>2. Add your "VK Service Token" </b>- Add your VK service token to the text field. Optionally you can save this token so you don't have to re-fill it each time. To find out where to get your "VK service token" click here.</p>
+                                        <img class="mt-12 mb-6 col-12" style="padding: 0px; border: 2px solid #44d62c;" src="/VK3.png"/>
+                                        <p class="my-6" style="text-align: left; color: #FFFFFF; font-size: 0.75rem"><b>3. Click the "Get VK Photo Data" button </b>- After clicking the button, if you are logged out, a new tab will open where you'll be re-directed to the VK log in page. Please log in and accept cookies. You'll then be re-directed to your "Photo Data". </p>
+                                        <img class="mt-12 mb-6 col-12" style="padding: 0px; border: 2px solid #44d62c;" src="/VK4.png"/>
+                                        <p class="my-6" style="text-align: left; color: #FFFFFF; font-size: 0.75rem"><b>4. Copy your "Photo Data" </b>- Copy all of the text on the new window that appears</p>
+                                        <img class="mt-12 mb-6 col-12" style="padding: 0px; border: 2px solid #44d62c;" src="/VK5.png"/>
+                                        <p class="my-6 mb-12" style="text-align: left; color: #FFFFFF; font-size: 0.75rem"><b>5. Paste the "Photo Data" in to the text-box.</b> - Once you have copied all the data, paste it into the text box at the bottom of the screen.</p>
+                                        <img class="mt-12 mb-6 col-12" style="padding: 0px; border: 2px solid #44d62c;" src="/VK6.png"/>
+                                        <p class="my-6 mb-12" style="text-align: left; color: #FFFFFF; font-size: 0.75rem"><b>6. Click the "Add VK Photo" button.</b> Once you have clicked the button your places will be added to the map. You can click on individual markers to see the photos and view the users profile, the original photo on VK and perform reverse image searches on Google, Bing, Yandex and TinyEye.</p>
+                                        </v-expansion-panel-content>
+                                </v-expansion-panel>
+                                <v-expansion-panel style="border: 1px solid #44d62c10;" flat>
+                                    <v-expansion-panel-header><b style="font-size: 0.75rem;">How to get a VK Service Token</b></v-expansion-panel-header>
+                                    <v-expansion-panel-content>
+                                        <p style="text-align: left; color: #FFFFFF; font-size: 0.75rem"><b>VK Photos shows you VKontakte photos (Russian Social Media)</b> surrounding the chosen geographic location</p>
+                                        <p style="text-align: left; color: #FFFFFF; font-size: 0.75rem"><b>Note: </b>There is a limit to how many places you can add at any one time. Currently this set to a max of 1000 most recent photos.</p>
+
+                                        <img class="mt-12 mb-6 col-12" style="padding: 0px; border: 2px solid #44d62c;" />
+                                        <p class="my-6" style="text-align: left; color: #FFFFFF; font-size: 0.75rem"><b>1. Choose the location</b> that you want to find VK Photos near. This is done by clicking the map to add a marker at your desired location. Click the "Menu <v-icon>mdi-menu</v-icon>" button, next click the "Plus <v-icon>mdi-plus</v-icon>" button and finally click on the "VK Photos" tab.</p>
+                                        <img class="mt-12 mb-6 col-12" style="padding: 0px;  border: 2px solid #44d62c;" />
+                                        <p class="my-6" style="text-align: left; color: #FFFFFF; font-size: 0.75rem"><b>2. Add your "VK Service Token" </b>- Add your VK service token to the text field. Optionally you can save this token so you don't have to re-fill it each time. To find out where to get your "VK service token" click here.</p>
+                                        <img class="mt-12 mb-6 col-12" style="padding: 0px; border: 2px solid #44d62c;" />
+                                        <p class="my-6" style="text-align: left; color: #FFFFFF; font-size: 0.75rem"><b>3. Click the "Get VK Photo Data" button </b>- After clicking the button, if you are logged out, a new tab will open where you'll be re-directed to the VK log in page. Please log in and accept cookies. You'll then be re-directed to your "Photo Data". </p>
+                                        <img class="mt-12 mb-6 col-12" style="padding: 0px; border: 2px solid #44d62c;" />
+                                        <p class="my-6" style="text-align: left; color: #FFFFFF; font-size: 0.75rem"><b>3. Copy your "Photo Data" </b>- Copy all of the text on the new window that appears</p>
+                                        <img class="mt-12 mb-6 col-12" style="padding: 0px; border: 2px solid #44d62c;" />
+                                        <p class="my-6 mb-12" style="text-align: left; color: #FFFFFF; font-size: 0.75rem"><b>4. Paste the "Photo Data" in to the text-box.</b> - Once you have copied all the data, paste it into the text box at the bottom of the screen.</p>
+                                        <img class="mt-12 mb-6 col-12" style="padding: 0px; border: 2px solid #44d62c;" />
+                                        <p class="my-6 mb-12" style="text-align: left; color: #FFFFFF; font-size: 0.75rem"><b>5. Click the "Add VK Photo" button.</b> Once you have clicked the button your places will be added to the map. You can click on individual markers to see the photos and view the users profile, the original photo on VK and perform reverse image searches on Google, Bing, Yandex and TinyEye.</p>
+                                        </v-expansion-panel-content>
                                 </v-expansion-panel>
                             </v-expansion-panels>
                         </div>
@@ -644,7 +697,7 @@
                     color="#44d62c"
                     style="box-shadow: 0px 0px 15px #1a1a1a;"
                     @click="searchClicked()"
-                    title="Location Search" 
+                    title="Location Search"
                 >
                     <v-icon style="color: #1A1A1A;">mdi-web</v-icon>
                 </v-btn>
@@ -656,7 +709,7 @@
                     color="#44d62c"
                     style="box-shadow: 0px 0px 15px #1a1a1a;"
                     @click="addClicked()"
-                    title="Add Places" 
+                    title="Add Places"
                 >
                     <v-icon style="color: #1A1A1A;">mdi-plus</v-icon>
                 </v-btn>
@@ -667,7 +720,7 @@
                     color="#44d62c"
                     style="box-shadow: 0px 0px 15px #1a1a1a;"
                     @click="settingsClicked()"
-                    title="Map Settings" 
+                    title="Map Settings"
                 >
                     <v-icon style="color: #1A1A1A;">mdi-cog</v-icon>
                 </v-btn>
@@ -950,6 +1003,10 @@ export default {
         },
         vkBack(){
             this.vkClicked = false;
+            this.vkPhotoData = null;
+            this.vkLoading = false;
+            this.vkLoadingScreen = false;
+            this.vkPhotoSearch = null;
         },
         openVKData(){
             this.submitVKPhotoSearch();
@@ -1091,6 +1148,9 @@ export default {
         },
         metaBack(){
             this.metaClicked = false;
+            this.metaPlaceSearch = null;
+            this.metaLoading = false;
+            this.placeData = null;
         },
         openMetaData(){
             this.submitMetaPlaceSearch();
@@ -1575,7 +1635,7 @@ export default {
             return 'https://api.vk.com/method/photos.search?lat=' + this.lat + '&long=' + this.lon + '&radius=800&count=1000&offset=0&sort=0&access_token=' + this.vkAccessToken + '&v=6.0';
         },
         jsonValidator(){
-            if(this.placeData){
+            if(this.placeData && this.metaPlaceSearch){
                 try {
                     JSON.parse(this.placeData);
                 } catch (e) {
@@ -1587,7 +1647,7 @@ export default {
             }
         },
         VKJsonValidator(){
-            if(this.vkPhotoData){
+            if(this.vkPhotoData && this.vkPhotoSearch){
                 try {
                     JSON.parse(this.vkPhotoData);
                 } catch (e) {
@@ -1705,7 +1765,6 @@ return geocodes;
     background-size: cover;
     width: 45px;
     height: 62px;
-    cursor: pointer;
 }
 .customDialog.v-dialog--fullscreen {
     width: 41.66%;
