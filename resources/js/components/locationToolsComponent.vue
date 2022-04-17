@@ -452,21 +452,21 @@
                         </div>
                         <div class="col-12 col-md-10 text-center padding-mobile" v-if="vkClicked">
                             <div class="col-12">
-                            <p style="text-align: left; font-size: 0.75rem;"><b>VK Photos requires you to have a VK account</b> - You will need to be logged in to VK and get an application API key to find photos.</p>
+                            <p style="text-align: left; font-size: 0.75rem;"><b>VK Photos requires you to have a VK account</b> - You will need to be logged in to VK and get an application service token to find photos.</p>
                             <v-divider class="my-6"></v-divider>
                             </div>
                             <div class="col-12">
-                                <p style="text-align: left; font-size: 0.75rem;"><b>STEP 1:<br>Click the "Get Meta Place Data" button</b> - After clicking the button, if you are logged out, a new tab will open where you'll be re-directed to the Instagram log in page. Please log in and accept cookies. You'll then be re-directed to your "Place Data".</p>
+                                <p style="text-align: left; font-size: 0.75rem;"><b>STEP 1:<br>Paste your "VK Service Token" below</b> - Follow the instructions here to get your VK application service token and paste it into the text field below. For more help on adding VK Photos to the map click here.</p>
                                 <v-text-field v-model="vkAccessToken" dark hide-details append-outer-icon="mdi-content-save" @click:append-outer="saveVKAPIKey" dense color="white" placeholder="VK Service Token"  style="font-size: 0.75rem; margin: 0px; padding: 0px; font-color: white; margin-bottom: 1rem;" label="VK Service Token" outlined></v-text-field>
                                 <p v-if="keySaved" style="text-align: right; font-size: 0.75rem; color: #44d62c">Saved.</p>
                             </div>
                             <div class="col-12">
-                                <p style="text-align: left; font-size: 0.75rem;"><b>STEP 2:<br>Click the "Get VK Photo Data" button</b> - After clicking the button, if you are logged out, a new tab will open where you'll be re-directed to the Instagram log in page. Please log in and accept cookies. You'll then be re-directed to your "VK Photo Data".</p>
+                                <p style="text-align: left; font-size: 0.75rem;"><b>STEP 2:<br>Click the "Get VK Photo Data" button</b> - After clicking the button, if you are logged out, a new tab will open where you'll be re-directed to the VK log in page. Please log in and accept cookies. You'll then be re-directed to your "VK Photo Data". If you aren't redirected click the "Get VK Photo Data" button again to go to your "VK Photo Data".</p>
                                 <v-btn color="#44d62c" title="Get VK Photo Data" elevation="0" @click="openVKData()" class="col-12 no-padding" outlined><span >Get VK Photo Data</span></v-btn>
                                 <a id="vk-link" target="_blank" :href="this.generatedVKLink" download hidden></a>
                             </div>
                             <div class="col-12">
-                                <p style="text-align: left; font-size: 0.75rem;"><b>STEP 3:<br>Copy and paste the "VK Photo Data"</b> - Copy the entirety of yourvk photo data and paste it into the box below.</p>
+                                <p style="text-align: left; font-size: 0.75rem;"><b>STEP 3:<br>Copy and paste the "VK Photo Data"</b> - Copy the entirety of your VK photo data and paste it into the box below and then click the "Add VK Photos" button.</p>
                                 <v-textarea style="font-size: 0.75rem;" outlined v-model="vkPhotoData"></v-textarea>
                                 <v-btn color="#44d62c" title="Add VK Photos" @click="submitVKData()" :loading="vkLoading" elevation="0" :disabled="!VKJsonValidator" class="col-12 no-padding"><span >Add VK Photos</span></v-btn>
                             </div>
@@ -592,22 +592,19 @@
                                 <v-expansion-panel style="border: 1px solid #44d62c10;" flat>
                                     <v-expansion-panel-header><b style="font-size: 0.75rem;">How to get a VK Service Token</b></v-expansion-panel-header>
                                     <v-expansion-panel-content>
-                                        <p style="text-align: left; color: #FFFFFF; font-size: 0.75rem"><b>VK Photos shows you VKontakte photos (Russian Social Media)</b> surrounding the chosen geographic location</p>
-                                        <p style="text-align: left; color: #FFFFFF; font-size: 0.75rem"><b>Note: </b>There is a limit to how many places you can add at any one time. Currently this set to a max of 1000 most recent photos.</p>
+                                        <p style="text-align: left; color: #FFFFFF; font-size: 0.75rem"><b>VK Photos shows you VKontakte photos (Russian Social Media)</b> surrounding the chosen geographic location - to use this feature you need to have a VK Service token. Below is a guide on how to do this.</p>
 
-                                        <img class="mt-12 mb-6 col-12" style="padding: 0px; border: 2px solid #44d62c;" />
-                                        <p class="my-6" style="text-align: left; color: #FFFFFF; font-size: 0.75rem"><b>1. Choose the location</b> that you want to find VK Photos near. This is done by clicking the map to add a marker at your desired location. Click the "Menu <v-icon>mdi-menu</v-icon>" button, next click the "Plus <v-icon>mdi-plus</v-icon>" button and finally click on the "VK Photos" tab.</p>
-                                        <img class="mt-12 mb-6 col-12" style="padding: 0px;  border: 2px solid #44d62c;" />
-                                        <p class="my-6" style="text-align: left; color: #FFFFFF; font-size: 0.75rem"><b>2. Add your "VK Service Token" </b>- Add your VK service token to the text field. Optionally you can save this token so you don't have to re-fill it each time. To find out where to get your "VK service token" click here.</p>
-                                        <img class="mt-12 mb-6 col-12" style="padding: 0px; border: 2px solid #44d62c;" />
-                                        <p class="my-6" style="text-align: left; color: #FFFFFF; font-size: 0.75rem"><b>3. Click the "Get VK Photo Data" button </b>- After clicking the button, if you are logged out, a new tab will open where you'll be re-directed to the VK log in page. Please log in and accept cookies. You'll then be re-directed to your "Photo Data". </p>
-                                        <img class="mt-12 mb-6 col-12" style="padding: 0px; border: 2px solid #44d62c;" />
-                                        <p class="my-6" style="text-align: left; color: #FFFFFF; font-size: 0.75rem"><b>3. Copy your "Photo Data" </b>- Copy all of the text on the new window that appears</p>
-                                        <img class="mt-12 mb-6 col-12" style="padding: 0px; border: 2px solid #44d62c;" />
-                                        <p class="my-6 mb-12" style="text-align: left; color: #FFFFFF; font-size: 0.75rem"><b>4. Paste the "Photo Data" in to the text-box.</b> - Once you have copied all the data, paste it into the text box at the bottom of the screen.</p>
-                                        <img class="mt-12 mb-6 col-12" style="padding: 0px; border: 2px solid #44d62c;" />
-                                        <p class="my-6 mb-12" style="text-align: left; color: #FFFFFF; font-size: 0.75rem"><b>5. Click the "Add VK Photo" button.</b> Once you have clicked the button your places will be added to the map. You can click on individual markers to see the photos and view the users profile, the original photo on VK and perform reverse image searches on Google, Bing, Yandex and TinyEye.</p>
-                                        </v-expansion-panel-content>
+                                        <img class="mt-12 mb-6 col-12" style="padding: 0px; border: 2px solid #44d62c;"  src="/VKTOKEN1.png"/>
+                                        <p class="my-6" style="text-align: left; color: #FFFFFF; font-size: 0.75rem"><b>1. Create a VK account</b> - <a href="https://vk.com/?lang=en" style="color: #44d62c; text-decoration: underline;">Click here to sign up for a new VK account.</a> You don't have to use your personal details, however it does require a mobile phone number.</p>
+                                        <img class="mt-12 mb-6 col-12" style="padding: 0px;  border: 2px solid #44d62c;"  src="/VKTOKEN2.png" />
+                                        <p class="my-6" style="text-align: left; color: #FFFFFF; font-size: 0.75rem"><b>2. Create a VK App </b>- Once you have signed up, <a href="https://vk.com/editapp?act=create" style="color: #44d62c; text-decoration: underline;">click here to create a VK app.</a> Give your app a title (this can be anything you want). Select "Standalone App". Then click the "Connect App" button.</p>
+                                        <img class="mt-12 mb-6 col-12" style="padding: 0px; border: 2px solid #44d62c;"  src="/VKTOKEN3.png"/>
+                                        <p class="my-6" style="text-align: left; color: #FFFFFF; font-size: 0.75rem"><b>3. Click the "Settings" tab in the side menu </b>- After creating your app you want to click the settings tab in the side navigation bar. </p>
+                                        <img class="mt-12 mb-6 col-12" style="padding: 0px; border: 2px solid #44d62c;"  src="/VKTOKEN4.png"/>
+                                        <p class="my-6" style="text-align: left; color: #FFFFFF; font-size: 0.75rem"><b>4. View your "Service Token" </b>- Click the service token input field to view your service token. (You may need to use a verification code sent to your phone to complete this step.)</p>
+                                        <img class="mt-12 mb-6 col-12" style="padding: 0px; border: 2px solid #44d62c;"  src="/VKTOKEN5.png"/>
+                                        <p class="my-6 mb-12" style="text-align: left; color: #FFFFFF; font-size: 0.75rem"><b>5. Paste the "Service Token" in to the text-box on the VK photo tab.</b> - Once you have copied all the data, paste it into the text box at the top of the VK photo tab screen. You can click the "save" icon to add it to your account.</p>
+                                    </v-expansion-panel-content>
                                 </v-expansion-panel>
                             </v-expansion-panels>
                         </div>
