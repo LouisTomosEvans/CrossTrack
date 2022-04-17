@@ -1483,6 +1483,7 @@ export default {
         // Twitter Functions //
         twitterToggle(){
             this.twitterClicked = !this.twitterClicked;
+            this.resetOptions();
         },
         goToTwitterClicked(){
             this.url = 'https://twitter.com/search?q=' + this.searchQuery + ' geocode%3A' + this.lat + '%2C' + this.lon + '%2C'
@@ -1548,6 +1549,7 @@ export default {
             this.question = false;
             this.minLikes = null;
             this.minRetweets = null;
+            this.slider = null;
         },
 
         // Map Search Options //
