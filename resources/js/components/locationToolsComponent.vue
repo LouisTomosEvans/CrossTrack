@@ -358,7 +358,7 @@
                         <div class="col-1 hidden-mobile padding-mobile" />
 
                         <!-- title of dialog box -->
-                        <v-toolbar-title v-if="!metaClicked && !vkClicked"
+                        <v-toolbar-title v-if="!metaClicked && !vkClicked && !ipClicked"
                             ><strong style="color: white;"
                                 >ADD DATA<span style="color: #44d62c">.</span></strong
                             ></v-toolbar-title
@@ -375,6 +375,12 @@
                                 <v-icon style="color: #44d62c;">mdi-arrow-left-bold</v-icon>
                             </v-btn>
                         </v-toolbar-items>
+                        <v-toolbar-items v-if="ipClicked">
+                            <!-- close button and icon -->
+                            <v-btn icon @click="ipBack()" title="Back" >
+                                <v-icon style="color: #44d62c;">mdi-arrow-left-bold</v-icon>
+                            </v-btn>
+                        </v-toolbar-items>
                         <v-spacer></v-spacer>
                         <v-toolbar-title v-if="metaClicked">
                             <strong style="color: white;"
@@ -386,7 +392,12 @@
                                 >FIND VK PHOTOS<span style="color: #44d62c">.</span>
                             </strong>
                         </v-toolbar-title>
-                        <v-toolbar-items v-if="!metaClicked && !vkClicked">
+                        <v-toolbar-title v-if="ipClicked">
+                            <strong style="color: white;"
+                                >FIND IP ADDRESSES<span style="color: #44d62c">.</span>
+                            </strong>
+                        </v-toolbar-title>
+                        <v-toolbar-items v-if="!metaClicked && !vkClicked && !ipClicked">
                             <!-- close button and icon -->
                             <v-btn icon @click="addClose()" title="Close" >
                                 <v-icon style="color: #44d62c;">mdi-close</v-icon>
@@ -397,7 +408,7 @@
                     <div class="row m-0 p-2">
                         <!-- spacer for the dialog content -->
                         <div class="col-1 hidden-mobile padding-mobile" />
-                        <div class="col-12 col-md-10 text-center padding-mobile" v-if="!metaClicked && !vkClicked">
+                        <div class="col-12 col-md-10 text-center padding-mobile" v-if="!metaClicked && !vkClicked && !ipClicked">
                             <div class="col-12">
                             <p style="text-align: left; font-size: 0.75rem;"><b>Below is a list of data that can be added to the Hunt Intelligence Map.</b> Clicking on one of these tools will direct you to instructions on how to add that data to your map.</p>
                             <v-divider class="my-6"></v-divider>
@@ -430,6 +441,19 @@
                                         <p style="color: white; font-size: 0.75rem;">VK is a Russian online social media and social networking service based in Saint Petersburg. VK is available in multiple languages but it is predominantly used by Russian speakers.</p>
                                 </div>
                                 <v-btn @click="vkClick()" title="Add VK Photos" class="toolButton" tile style="background-color: #44d62c25; color: #44d62c !important;" icon><v-icon style="color: #44d62c !important;">mdi-arrow-right-bold</v-icon></v-btn>
+                                </v-card>
+                            </div>
+                            <div class="col-12 col-xl-6" style="padding: 12px; display: inline-block; vertical-align: top;">
+                                <v-card class="cardShadow displayCardBackground" style="padding: 12px; text-align: center;" height="400px">
+                                <div class="articleHeader" style="background-color: #FC4040">
+                                    <div style="height: 100%; padding: 12px; background-color: transparent; border-radius: 50%; width: 12rem; display: flex; align-items: center; justify-content: center; margin-left: auto; margin-right: auto;"><v-icon style="color: white !important; font-size: 3rem;">mdi-ip</v-icon></div>
+                                </div>
+
+                                <div style="text-align: left; margin-top: 200px; padding: 12px">
+                                        <h6 style="color: white;">IP Addresses</h6>
+                                        <p style="color: white; font-size: 0.75rem;">An IP address, or Internet Protocol address, is a series of numbers that identifies any device on a network. Computers use IP addresses to communicate with each other both over the internet as well as on other networks.</p>
+                                </div>
+                                <v-btn @click="ipClick()" title="Add IP Addresses" class="toolButton" tile style="background-color: #44d62c25; color: #44d62c !important;" icon><v-icon style="color: #44d62c !important;">mdi-arrow-right-bold</v-icon></v-btn>
                                 </v-card>
                             </div>
                             </v-row>
@@ -469,6 +493,18 @@
                                 <p style="text-align: left; font-size: 0.75rem;"><b>STEP 3:<br>Copy and paste the "VK Photo Data"</b> - Copy the entirety of your VK photo data and paste it into the box below and then click the "Add VK Photos" button.</p>
                                 <v-textarea style="font-size: 0.75rem;" outlined v-model="vkPhotoData"></v-textarea>
                                 <v-btn color="#44d62c" title="Add VK Photos" @click="submitVKData()" :loading="vkLoading" elevation="0" :disabled="!VKJsonValidator" class="col-12 no-padding"><span >Add VK Photos</span></v-btn>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-10 text-center padding-mobile" v-if="ipClicked">
+                            <div class="col-12">
+                            <p style="text-align: left; font-size: 0.75rem;"><b>VK Photos requires you to have a VK account</b> - You will need to be logged in to VK and get an application service token to find photos.</p>
+                            <v-divider class="my-6"></v-divider>
+                            </div>
+                            <div class="col-12">
+                                <p style="text-align: left; font-size: 0.75rem;"><b>Copy and paste the "VK Photo Data"</b> - Copy the entirety of your VK photo data and paste it into the box below and then click the "Add IP Addresses" button.</p>
+                                <v-textarea style="font-size: 0.75rem;" outlined v-model="ipData"></v-textarea>
+                                <!-- Add a Validator -->
+                                <v-btn color="#44d62c" title="Add IP Addresses" @click="submitIPData()" :loading="ipLoading" elevation="0" class="col-12 no-padding"><span >Add IP Addresses</span></v-btn>
                             </div>
                         </div>
                     </div>
@@ -847,6 +883,11 @@ export default {
             keySaved: false,
             vkLoadingScreen: false,
             panel: [],
+
+            // IP Variables //
+            ipClicked: false,
+            ipData: null,
+            ipLoading: false,
         }
     },
     mounted() {
@@ -1226,6 +1267,62 @@ export default {
             } else {
                 this.errorMessageSubmit = true;
             }
+        },
+
+        // IP Functions //
+        ipClick(){
+            this.ipClicked = true;
+        },
+        ipBack(){
+            this.ipClicked = false;
+            this.ipData = null;
+            this.ipLoading = false;
+        },
+        submitIPData(){
+            this.errorMessageSubmit = false;
+            this.ipLoading = true;
+            let route = '../api/ipaddress/create';
+            let ipDataSplit = this.ipData.split(',');
+            let payload = {
+                'IPAddresses': ipDataSplit,
+            }
+            this.$http.post(route, payload, {withCredentials: true}).then(res => {
+                this.lastLat = this.lat;
+                this.lastLon = this.lon;
+                this.dataPresent = true;
+                this.loadedCheck = true;
+                this.ipData = null;
+                this.dataObject = res.data
+                for (var i = 0; i < this.dataObject.length; i++) {
+                    let ipObject = this.dataObject[i];
+                    if(!this.markersIP[(String(ipObject.id))]){
+                        visualisationData = {
+                        // extract required data from the location objects
+                            type: "Feature",
+                            geometry: {
+                                type: "Point",
+                                coordinates: [ipObject.lon, ipObject.lat]
+                            },
+                            properties: {
+                                //owner: vkPhotoObject.owner_id,
+                                //date: vkPhotoObject.date,
+                                id: ipObject.id,
+                                //text: vkPhotoObject.text,
+                                //has_tags: vkPhotoObject.has_tags,
+                                //album_id: vkPhotoObject.album_id,
+                                //post_id: vkPhotoObject.post_id,
+                                //preview_URL: vkPhotoObject.preview_URL,
+                            }
+                        };
+                        this.featureListIP.push(visualisationData);
+                        //this.vkPhotoObjects.push(vkPhotoObject);
+                        }
+                    }
+                    this.addIPMarkersToMap();
+                    this.close();
+                    this.ipBack();
+                    this.ipLoading = false;
+            });
         },
 
         // VK Map Functions //

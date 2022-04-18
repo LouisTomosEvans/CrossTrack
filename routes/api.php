@@ -10,6 +10,7 @@ use App\Http\Controllers\MetaPlaceController;
 use App\Http\Controllers\VKPhotoSearchController;
 use App\Http\Controllers\VKPhotoController;
 use App\Http\Controllers\VKKeyController;
+use App\Http\Controllers\IPAddressController;
 
 
 /*
@@ -55,3 +56,6 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/vkphoto/{id}', [VKPhotoCo
 // VK Key
 Route::middleware(['auth:sanctum', 'verified'])->post('/vkkey/store', [VKKeyController::class, 'store'])->name('vkkey.store');
 Route::middleware(['auth:sanctum', 'verified'])->get('/vkkey/index', [VKKeyController::class, 'index'])->name('vkkey.index');
+
+// IP Addresses
+Route::middleware(['auth:sanctum', 'verified'])->post('/ipaddress/create', [IPAddressController::class, 'create'])->name('ipaddress.create');
