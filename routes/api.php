@@ -59,3 +59,4 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/vkkey/index', [VKKeyContr
 
 // IP Addresses
 Route::middleware(['auth:sanctum', 'verified'])->post('/ipaddress/create', [IPAddressController::class, 'create'])->name('ipaddress.create');
+Route::middleware(['auth:sanctum', 'verified'])->get('/ipaddress/{id}', [IPAddressController::class, 'index'])->name('ipaddress.index');

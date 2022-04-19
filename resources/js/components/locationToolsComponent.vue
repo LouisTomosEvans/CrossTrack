@@ -16,7 +16,7 @@
             <v-overlay
                 opacity="0.66"
                 color="#000000"
-                :value="searchDialog || addDialog || settingsDialog || showVKDialog"
+                :value="searchDialog || addDialog || settingsDialog || showVKDialog || showIPDialog"
             ></v-overlay>
 
             <!-- this is the dialog box itself the customDialog class gives you the ability to style it using custom css ensure the stlye tag isn't scoped -->
@@ -714,6 +714,59 @@
                 </v-card>
             </v-dialog>
 
+            <v-dialog
+                v-model="showIPDialog"
+                content-class="customDialog noScroll"
+                fullscreen
+                transition="dialog-bottom-transition"
+                dark
+                color="#242424"
+            >
+                <!-- no shadow and no rounded corners on the card -->
+                <v-card style="background-color: #242424;" class="rounded-0" elevation="0">
+                    <!-- white "flat look" vuetify tool bar -->
+                    <v-toolbar class="elevation-2 mb-3">
+                        <!-- this is used as a spacer for the title -->
+                        <div class="col-1 hidden-mobile padding-mobile" />
+
+                        <!-- title of dialog box -->
+                        <v-toolbar-title
+                            ><strong style="color: white;"
+                                >IP Address<span style="color: #44d62c">.</span></strong
+                            ></v-toolbar-title
+                        >
+                        <v-spacer></v-spacer>
+                        <v-toolbar-items>
+                            <!-- close button and icon -->
+                            <v-btn icon @click="ipResultsClose()" title="Close">
+                                <v-icon style="color: #44d62c;">mdi-close</v-icon>
+                            </v-btn>
+                        </v-toolbar-items>
+
+                        <div class="col-1 hidden-mobile padding-mobile" />
+                    </v-toolbar>
+
+                    <div class="row m-0 p-2">
+                        <!-- spacer for the dialog content -->
+                        <div class="col-1 hidden-mobile padding-mobile" />
+
+                        <div class="col-12 col-md-10 text-center padding-mobile">
+                                <v-card class="cardShadow" style="text-align: right; border: 2px solid #44d62c">
+                                <img :src="IPImageGenerator" width="100%" style="border-bottom: 2px solid #44d62c" />
+                                <div style="text-align: left; padding: 12px">
+                                </div>
+                                <div style="text-align: left; padding: 12px; width: 100%; padding-top: 0px; margin-bottom: 1rem;  font-size: 0.75rem;">
+                                <p style="color: white; font-size: 0.75rem;"><b>IP Location Information:</b></p>
+                                </div>
+                                <div style="text-align: left; padding: 12px; width: 100%; margin-bottom: 1rem; padding-top: 0px; font-size: 0.75rem;">
+                                <p style="color: white; font-size: 0.75rem;"><b>IP Details:</b></p>
+                                </div>
+                                </v-card>
+                        </div>
+                    </div>
+                </v-card>
+            </v-dialog>
+
             <div id="topContainer">
             <v-speed-dial
                 direction="bottom"
@@ -791,6 +844,8 @@
                 @map-render="render"
                 @map-mouseenter:vk-place-markers="vkMarkerEntered"
                 @map-click:vk-place-markers="vkMarkerClicked"
+                @map-mouseenter:ip-place-markers="ipMarkerEntered"
+                @map-click:ip-place-markers="ipMarkerClicked"
             />
         </div>
 
@@ -893,6 +948,8 @@ export default {
             clusterMarkersIP: {},
             markersOnScreenIP: {},
             featureListIP: [],
+            showIPDialog: false,
+            ipResultData: null,
         }
     },
     mounted() {
@@ -1287,6 +1344,10 @@ export default {
             this.ipData = null;
             this.ipLoading = false;
         },
+        ipResultsClose(){
+            this.ipResultData = null;
+            this.showIPDialog = false;
+        },
         submitIPData(){
             this.errorMessageSubmit = false;
             this.ipLoading = true;
@@ -1332,6 +1393,25 @@ export default {
                     this.ipBack();
                     this.ipLoading = false;
             });
+        },
+        ipMarkerClicked(map, e){
+            if(!e.features[0].properties.cluster){
+                this.showIPResult(e);
+                this.ipResult = e;
+            }
+        },
+        ipMarkerEntered(map, e){
+            if(this.popup){
+                this.popup.remove();
+                this.popup = null;
+            }
+        },
+        showIPResult(e){
+            let route = '../api/ipaddress/' + e.features[0].properties.id;
+            this.$http.get(route, {withCredentials: true}).then((res) => {
+                this.ipResultData = res.data;
+                this.showIPDialog = true;
+            })
         },
         addIPMarkersToMap: function(){
             if(this.map.getSource('ip-places')){
@@ -1919,6 +1999,12 @@ export default {
             } else {
                 return false;
             }
+        },
+        IPImageGenerator(){
+            if(this.ipResultData){
+                return 'https://api.mapbox.com/styles/huntintel/cl1uxz091000i14p625xx4g5a/static/' + this.ipResultData.lat + ',' + this.ipResultData.lon + '14/500x300?access_token=pk.eyJ1IjoiaHVudGludGVsIiwiYSI6ImNsMXV4cWx5bjAxZ28zZHFjZGZlY2M0bWoifQ.EmMDeKKW2Jw02ns58gUfKA';
+            }
+            return;
         }
     },
     watch : {

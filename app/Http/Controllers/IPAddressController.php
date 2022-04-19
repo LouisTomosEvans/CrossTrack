@@ -8,6 +8,10 @@ use App\Models\IPAddress;
 
 class IPAddressController extends Controller
 {
+    public function index($id){
+        $user = Auth::user();
+        return json_encode(IPAddress::where([['id', $id], ['user_id', $user->id]])->first());
+    }
     public function create(Request $request)
     {
         $validatedRequest = $request->validate([

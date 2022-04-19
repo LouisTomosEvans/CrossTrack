@@ -15,7 +15,6 @@ class CreateIPAddressesTable extends Migration
     {
         Schema::create('i_p_addresses', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
             $table->foreignId('user_id');
             $table->string('status');
             $table->string('country');
@@ -32,6 +31,7 @@ class CreateIPAddressesTable extends Migration
             $table->boolean('proxy');
             $table->boolean('hosting');
             $table->string('query');
+            $table->timestamps();
         });
     }
 
