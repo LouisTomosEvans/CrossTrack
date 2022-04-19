@@ -258,8 +258,8 @@
                                     <span><strong style="color: #44d62c">{{ value }}{{ unit }}</strong></span>
                                 </template>
                             </v-slider>
-                            <p class="mb-6 mt-0" @click="resetOptions" style="text-align: right; text-decoration: none; cursor: pointer; color: #44d62c; font-size: 0.75rem;"><span v-if="!showOptions">Show</span><span v-else>Close</span> Advanced Options</p>
-                            <div v-if="showOptions">
+                            <p class="mb-6 mt-0" @click="showOptions = !showOptions" style="text-align: right; text-decoration: none; cursor: pointer; color: #44d62c; font-size: 0.75rem;"><span v-if="showOptions == false">Show</span><span v-else>Close</span> Advanced Options</p>
+                            <div v-if="showOptions == true">
                             <v-expansion-panels multiple style="border: 1px solid #44d62c10; color: #242424;" flat>
                                 <v-expansion-panel style="border: 1px solid #44d62c10;" flat>
                                 <v-expansion-panel-header><b style="font-size: 0.75rem;">Search Queries</b>
@@ -425,7 +425,7 @@
 
                                 <div style="text-align: left; margin-top: 200px; padding: 12px">
                                         <h6 style="color: white;">Meta Places</h6>
-                                        <p style="color: white; font-size: 0.75rem;">Twitter is a free social networking microblogging service that allows registered members to broadcast short posts called tweets. Search these tweets based on your location.</p>
+                                        <p style="color: white; font-size: 0.75rem;">Meta Places shows you Instagram and Facebook places and posts surrounding the chosen location. You can use this tool to find top and recent posts of your selected location.</p>
                                 </div>
                                 <v-btn @click="metaClick()" title="Add Meta Places" class="toolButton" tile style="background-color: #44d62c25; color: #44d62c !important;" icon><v-icon style="color: #44d62c !important;">mdi-arrow-right-bold</v-icon></v-btn>
                                 </v-card>
@@ -839,7 +839,7 @@ export default {
             filter: null,
             question: false,
             minLikes: null,
-            minRetweets:null,
+            minRetweets: null,
             unit: 'KM',
             disMult: 1,
             disUnit: 'KM',
@@ -1724,6 +1724,9 @@ export default {
             this.resetOptions();
         },
         goToTwitterClicked(){
+            if(this.searchQuery == null){
+                this.searchQuery = '';
+            }
             this.url = 'https://twitter.com/search?q=' + this.searchQuery + ' geocode%3A' + this.lat + '%2C' + this.lon + '%2C'
             if(this.disUnit == 'miles'){
                 this.url = this.url + (Math.round((this.slider * 1.609344)* 100)/100) + 'km'
@@ -1752,6 +1755,12 @@ export default {
                 this.sliderSub = (Math.round((this.slider * 1.609344)* 100)/100);
             } else {
                 this.sliderSub = this.slider;
+            }
+            if(this.minLikes == null){
+                this.minLikes = 0;
+            }
+            if(this.minRetweets == null){
+                this.minRetweets = 0;
             }
             let payload = {
                 'lat': this.lat,
@@ -1782,12 +1791,15 @@ export default {
         },
         resetOptions(){
             this.searchQuery = '';
-            this.showOptions = !this.showOptions;
+            this.showOptions = false;
             this.filter = null;
             this.question = false;
             this.minLikes = null;
             this.minRetweets = null;
             this.slider = null;
+        },
+        clearClicked(){
+            this.searchQuery = '';
         },
 
         // Map Search Options //
@@ -1841,7 +1853,7 @@ export default {
             window.open(this.url);
         },
         goToWikiMapia(){
-            this.url = 'https://wikimapia.org/#lang=en&lat=' + this.lat + '&lon=' + this.lon + '&z=17&m=h';
+            this.url = 'http://wikimapia.org/#lang=en&lat=' + this.lat + '&lon=' + this.lon + '&z=17&m=h';
             this.submitSearch(this.url, 'wikiMapia');
             window.open(this.url);
         },
@@ -1973,8 +1985,8 @@ geocodes.push(coordinateFeature(coord2, coord1));
 
 if (geocodes.length === 0) {
 // else could be either lng, lat or lat, lng
-geocodes.push(coordinateFeature(coord1, coord2));
 geocodes.push(coordinateFeature(coord2, coord1));
+geocodes.push(coordinateFeature(coord1, coord2));
 }
 
 return geocodes;
