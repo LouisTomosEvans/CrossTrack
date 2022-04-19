@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-navigation-drawer v-model="drawer" elevation=0 app class="background d-sm-block" absolute style="height: 100%;" :temporary="$vuetify.breakpoint.smOnly" :permanent="$vuetify.breakpoint.mdAndUp" >
-    <v-list-item class="home">
+    <v-list-item class="home"  :to="'/dashboard'">
         <v-list-item-content class="header">
             <img src="/HuntIntelLogo.png" style="width: 50% !important;" />
         </v-list-item-content>

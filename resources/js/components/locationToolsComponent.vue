@@ -1615,7 +1615,7 @@ export default {
             window.open(this.url);
         },
         goToWikiMapia(){
-            this.url = 'https://wikimapia.org/#lang=en&lat=' + this.lat + '&lon=' + this.lon + '&z=17&m=h';
+            this.url = 'http://wikimapia.org/#lang=en&lat=' + this.lat + '&lon=' + this.lon + '&z=17&m=h';
             this.submitSearch(this.url, 'wikiMapia');
             window.open(this.url);
         },
