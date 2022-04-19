@@ -1747,8 +1747,8 @@ geocodes.push(coordinateFeature(coord2, coord1));
 
 if (geocodes.length === 0) {
 // else could be either lng, lat or lat, lng
-geocodes.push(coordinateFeature(coord1, coord2));
 geocodes.push(coordinateFeature(coord2, coord1));
+geocodes.push(coordinateFeature(coord1, coord2));
 }
 
 return geocodes;
