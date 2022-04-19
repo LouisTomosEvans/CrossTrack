@@ -888,6 +888,11 @@ export default {
             ipClicked: false,
             ipData: null,
             ipLoading: false,
+            markersIP: {},
+            clusterMarkersOnScreenIP: {},
+            clusterMarkersIP: {},
+            markersOnScreenIP: {},
+            featureListIP: [],
         }
     },
     mounted() {
@@ -988,6 +993,10 @@ export default {
                 if(this.map.getSource('meta-places')){
                     if (!this.map.isSourceLoaded('meta-places')) return;
                     this.markers = this.updateMetaMarkers(this.markers);
+                }
+                if(this.map.getSource('ip-places')){
+                    if (!this.map.isSourceLoaded('ip-places')) return;
+                    this.updateIPMarkers();
                 }
                 return
             ;
@@ -1296,7 +1305,7 @@ export default {
                 for (var i = 0; i < this.dataObject.length; i++) {
                     let ipObject = this.dataObject[i];
                     if(!this.markersIP[(String(ipObject.id))]){
-                        visualisationData = {
+                        let visualisationData = {
                         // extract required data from the location objects
                             type: "Feature",
                             geometry: {
@@ -1323,6 +1332,127 @@ export default {
                     this.ipBack();
                     this.ipLoading = false;
             });
+        },
+        addIPMarkersToMap: function(){
+            if(this.map.getSource('ip-places')){
+                var data = {
+                    type: "FeatureCollection",
+                    features: this.featureListIP
+                }
+                this.map.getSource('ip-places').setData(data);
+            } else {
+                this.map.addSource("ip-places", {
+                type: "geojson",
+                data: {
+                    type: "FeatureCollection",
+                    features: this.featureListIP
+                },
+                cluster: true,
+                clusterRadius: 30                                //If the data is a collection of point features, setting this to true clusters the points by radius into groups. Cluster groups become new Point features                          // Max zoom to cluster points on
+                });
+            }
+
+
+            if(this.map.getLayer('ip-clusters')){
+                //console.log('exists');
+            } else {
+                this.map.addLayer({
+                id: 'ip-clusters',
+                type: 'circle',
+                source: 'ip-places',
+                'paint': {
+                    'circle-color': 'transparent',
+                    'circle-radius': 30,
+                    'circle-stroke-color': 'transparent'
+                }
+                });
+            }
+
+            if(this.map.getLayer('ip-place-markers')){
+                //console.log('exists');
+            } else {
+                this.map.addLayer({
+                id: "ip-place-markers",
+                type: "circle",
+                source: "ip-places",
+                'paint': {
+                    'circle-color': 'transparent',
+                    'circle-radius': 30,
+                    'circle-stroke-color': 'transparent'
+                }
+                });
+            }
+
+        },
+        updateIPMarkers() {
+            let [newMarkers, newClusterMarkers ] = [ {}, {} ];
+            if(this.map.getSource('ip-places')){
+                const places = this.map.querySourceFeatures('ip-places', 'ip-place-markers');
+                places.forEach( ({geometry, properties}) => {
+                    if(!properties.cluster){                         // if this feature isn't a cluster...
+                    let id = String(properties.id);                    // get the feature's id
+                    if (!this.markersIP[id]) {                                   // if the marker val is falsey (i.e. the marker isn't yet in our local marker object of markers)
+                        const el = document.createElement('div');
+                        el.className = 'ip-marker-place marker-ip';
+                        //console.log(el.className);                        // Create a HTML marker element
+                        this.markersIP[id] = new mapboxgl.Marker({element: el}).setLngLat(geometry.coordinates);         // create the mapbox marker object
+                    }
+                    newMarkers[id] = this.markersIP[id];                                                    // Add the marker to a newMarkers object (why are we doing this if AND if not the marker already exists on the markers object?)
+                    if (!this.markersOnScreenIP[id]){                                           // if the marker isn't already on the map..
+                        this.markersIP[id].addTo(this.map);                                               // add it to the map.
+                    }
+                }
+                })
+
+                for (const id in this.markersOnScreenIP) {
+                if (!newMarkers[id]) {
+                    //let markersToGo = document.querySelectorAll('.id-' + String(id));
+                    //console.log(markersToGo);
+                    //markersToGo[0].parentNode.removeChild(markersToGo[0]);
+                    this.markersOnScreenIP[id].remove();
+                }
+                }
+                this.markersOnScreenIP = newMarkers;
+
+                const placesForCluster = this.map.querySourceFeatures('ip-places', 'ip-clusters');
+                placesForCluster.map( ({geometry, properties}) => {
+                if(properties.cluster){
+                    let cId = properties.cluster_id;
+                    if (!this.clusterMarkersIP[cId]) {
+                        const el = document.createElement('div');
+                        el.className = 'ip-marker-place marker-ip-cluster';
+                        this.clusterMarkersIP[cId] = new mapboxgl.Marker({element: el}).setLngLat(geometry.coordinates);
+                    }
+                    newClusterMarkers[cId] = this.clusterMarkersIP[cId];
+
+                    if (!this.clusterMarkersOnScreenIP[cId]){
+                        this.clusterMarkersIP[cId].addTo(this.map);
+                    }
+                }
+                });
+
+                // for every marker we've added previously, remove those that are no longer visible
+                for (const c_id in this.clusterMarkersOnScreenIP) {
+                    if (!newClusterMarkers[c_id])
+                        this.clusterMarkersOnScreenIP[c_id].remove();
+                }
+                this.clusterMarkersOnScreenIP = newClusterMarkers;
+
+                // for (const feature of features) {
+                //     const coords = feature.geometry.coordinates;
+                //     const props = feature.properties;
+                //     const id = props.id;
+                //     //console.log(markers[id]);
+                //     let marker = markers[id];
+                //     if (!marker) {
+                //         const el = document.createElement('div');
+                //         el.className = 'vk-marker-place marker-vk';
+                //         marker = markers[id] = new mapboxgl.Marker({element: el}).setLngLat(coords);
+                //         marker.addTo(this.map);
+                //     }
+                // }
+
+            }
         },
 
         // VK Map Functions //
@@ -1486,6 +1616,8 @@ export default {
             this.map.removeLayer('meta-place-markers');
             this.map.removeLayer('vk-place-markers');
             this.map.removeLayer('vk-clusters');
+            this.map.removeLayer('ip-place-markers');
+            this.map.removeLayer('ip-clusters');
             let metaMarkersToGo = document.querySelectorAll('.meta-marker-place');
             for (var i = 0; i < metaMarkersToGo.length; i++) {
                 metaMarkersToGo[i].parentNode.removeChild(metaMarkersToGo[i]) //or images[i].remove()
@@ -1494,6 +1626,10 @@ export default {
             for (var i = 0; i < vkMarkersToGo.length; i++) {
                 vkMarkersToGo[i].parentNode.removeChild(vkMarkersToGo[i]) //or images[i].remove()
             }
+            let ipMarkersToGo = document.querySelectorAll('.ip-marker-place');
+            for (var i = 0; i < ipMarkersToGo.length; i++) {
+                ipMarkersToGo[i].parentNode.removeChild(ipMarkersToGo[i]) //or images[i].remove()
+            }
             this.markers = [];
             this.featureList = [];
             this.markersVK = {};
@@ -1501,6 +1637,11 @@ export default {
             this.clusterMarkersVK = {};
             this.markersOnScreenVK = {};
             this.featureListVK = [];
+            this.markersIP = {};
+            this.clusterMarkersOnScreenIP = {};
+            this.clusterMarkersIP = {};
+            this.markersOnScreenVK = {};
+            this.featureListIP = [];
 
             if(this.popup){
                 this.popup.remove();
@@ -1871,6 +2012,19 @@ return geocodes;
 }
 .marker-vk-cluster {
     background-image: url('/vkMarkerCluster.png');
+    background-size: cover;
+    width: 45px;
+    height: 62px;
+}
+.marker-ip {
+    background-image: url('/ipMarker.png');
+    background-size: cover;
+    width: 45px;
+    height: 62px;
+    cursor: pointer;
+}
+.marker-ip-cluster {
+    background-image: url('/ipMarkerCluster.png');
     background-size: cover;
     width: 45px;
     height: 62px;

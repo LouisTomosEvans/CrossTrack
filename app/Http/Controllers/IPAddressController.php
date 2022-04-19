@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Auth;
+use App\Models\IPAddress;
 
 class IPAddressController extends Controller
 {
@@ -13,11 +13,28 @@ class IPAddressController extends Controller
         $validatedRequest = $request->validate([
             'IPAddresses' => ['required'],
         ]);
+        $endpoint = 'http://ip-api.com/batch?fields=17035263';
+        $options = [
+            'http' => [
+                'method' => 'POST',
+                'header' => 'Content-Type: application/json',
+                'content' => json_encode($validatedRequest['IPAddresses'])
+            ]
+        ];
+        $response = file_get_contents($endpoint, false, stream_context_create($options));
+        $response = json_decode($response);
         $user = Auth::user();
-        $client = new Client(['base_uri' => 'http://ip-api.com/batch', 'Content-Type:' => 'application/json']);
-        $data = $validatedRequest['IPAddresses'];
-        $response = $client->request('POST', json_encode($data));
-        dd($response->getBody()->getContents());
-        return;
+        $dataReturn = [];
+        foreach($response as $IPResult){
+            $IPResult->user_id = $user->id;
+            $IPObject = IPAddress::create((array) $IPResult);
+            $IPObjectData = (object)[];
+            $IPObjectData->lat = $IPObject['lat'];
+            $IPObjectData->lon = $IPObject['lon'];
+            $IPObjectData->id = $IPObject['id'];
+            $dataReturn[] = $IPObjectData;
+        }
+        return json_encode($dataReturn);
+
     }
 }
