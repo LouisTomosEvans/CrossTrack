@@ -753,13 +753,45 @@
                         <div class="col-12 col-md-10 text-center padding-mobile">
                                 <v-card class="cardShadow" style="text-align: right; border: 2px solid #44d62c">
                                 <img :src="IPImageGenerator" width="100%" style="border-bottom: 2px solid #44d62c" />
-                                <div style="text-align: left; padding: 12px">
+                                <div style="text-align: left; padding: 12px; margin-bottom: 0.5rem; margin-top: 0.5rem" v-if="this.ipResultData">
+                                    <v-tooltip bottom color="#44d62c" content-class='custom-tooltip'>
+                                    <template v-slot:activator="{ on, attrs }">
+                                    <v-chip v-bind="attrs" v-on="on" style="font-size: 0.75rem;" outlined :color="chipColor(ipResultData.mobile)">
+                                            Mobile
+                                    </v-chip>
+                                    </template>
+                                    <span style="color: #242424;">The IP Address <b>is<span v-if="!ipResultData.mobile">n't</span></b> a Mobile (Cellular) Connection</span>
+                                    </v-tooltip>
+                                    <v-tooltip bottom color="#44d62c" content-class='custom-tooltip'>
+                                    <template v-slot:activator="{ on, attrs }">
+                                    <v-chip v-bind="attrs" v-on="on" style="font-size: 0.75rem;" outlined :color="chipColor(ipResultData.proxy)">
+                                            Proxy
+                                    </v-chip>
+                                    </template>
+                                    <span style="color: #242424;">The IP Address <b>is<span v-if="!ipResultData.proxy">n't</span></b> a Proxy, VPN or Tor exit address</span>
+                                    </v-tooltip>
+                                    <v-tooltip bottom color="#44d62c" content-class='custom-tooltip'>
+                                    <template v-slot:activator="{ on, attrs }">
+                                    <v-chip v-bind="attrs" v-on="on" style="font-size: 0.75rem;" outlined :color="chipColor(ipResultData.hosting)">
+                                            Hosting
+                                    </v-chip>
+                                    </template>
+                                    <span style="color: #242424;">The IP Address <b>is<span v-if="!ipResultData.hosting">n't</span></b> Hosting, Co-Located or a Data Center</span>
+                                    </v-tooltip>
                                 </div>
-                                <div style="text-align: left; padding: 12px; width: 100%; padding-top: 0px; margin-bottom: 1rem;  font-size: 0.75rem;">
-                                <p style="color: white; font-size: 0.75rem;"><b>IP Location Information:</b></p>
+                                <div v-if="this.ipResultData" style="text-align: left; padding: 12px; width: 100%; padding-top: 0px; margin-bottom: 0.5rem;  font-size: 0.75rem;">
+                                <p style="color: white; font-size: 0.75rem; width: 100%;"><b>IP Location Information:</b><br>
+                                <span style="opacity: 0.75; width: 50% !important; display:inline-block">Co-Ordinates (Lat, Lon):</span> <span style="text-align: right; width: 49% !important; display:inline-block">{{this.ipResultData.lat}}, {{this.ipResultData.lon}}</span><br>
+                                <span style="opacity: 0.75; width: 50% !important; display:inline-block">City:</span> <span style="text-align: right; width: 49% !important; display:inline-block">{{this.ipResultData.city}}</span><br>
+                                <span style="opacity: 0.75; width: 50% !important; display:inline-block">Zip/Postal Code:</span> <span style="text-align: right; width: 49% !important; display:inline-block">{{this.ipResultData.zip}}</span><br>
+                                <span style="opacity: 0.75; width: 50% !important; display:inline-block">Region / Region Code:</span> <span style="text-align: right; width: 49% !important; display:inline-block">{{this.ipResultData.region}}, {{this.ipResultData.regionName}}</span><br>
+                                <span style="opacity: 0.75; width: 50% !important; display:inline-block">Country / Country Code:</span> <span style="text-align: right; width: 49% !important; display:inline-block">{{this.ipResultData.country}}, {{this.ipResultData.countryCode}}</span></p>
                                 </div>
-                                <div style="text-align: left; padding: 12px; width: 100%; margin-bottom: 1rem; padding-top: 0px; font-size: 0.75rem;">
-                                <p style="color: white; font-size: 0.75rem;"><b>IP Details:</b></p>
+                                <div v-if="this.ipResultData" style="text-align: left; padding: 12px; width: 100%; margin-bottom: 0.5rem; padding-top: 0px; font-size: 0.75rem;">
+                                <p style="color: white; font-size: 0.75rem; width: 100%;"><b>IP Details:</b><br>
+                                <span style="opacity: 0.75; width: 50% !important; display:inline-block">IP Address:</span> <span style="text-align: right; width: 49% !important; display:inline-block">{{this.ipResultData.query}}</span><br>
+                                <span style="opacity: 0.75; width: 50% !important; display:inline-block">Internet Service Provider:</span> <span style="text-align: right; width: 49% !important; display:inline-block">{{this.ipResultData.isp}}</span><br>
+                                <span style="opacity: 0.75; width: 50% !important; display:inline-block">Organisation:</span> <span style="text-align: right; width: 49% !important; display:inline-block">{{this.ipResultData.org}}</span></p>
                                 </div>
                                 </v-card>
                         </div>
@@ -1413,6 +1445,13 @@ export default {
                 this.showIPDialog = true;
             })
         },
+        chipColor(value){
+            if(value == true){
+                return '#4CAF50'
+            } else {
+                return '#FF5252'
+            }
+        },
         addIPMarkersToMap: function(){
             if(this.map.getSource('ip-places')){
                 var data = {
@@ -2002,7 +2041,7 @@ export default {
         },
         IPImageGenerator(){
             if(this.ipResultData){
-                return 'https://api.mapbox.com/styles/huntintel/cl1uxz091000i14p625xx4g5a/static/' + this.ipResultData.lat + ',' + this.ipResultData.lon + '14/500x300?access_token=pk.eyJ1IjoiaHVudGludGVsIiwiYSI6ImNsMXV4cWx5bjAxZ28zZHFjZGZlY2M0bWoifQ.EmMDeKKW2Jw02ns58gUfKA';
+                return 'https://api.mapbox.com/styles/v1/huntintel/cl1uxz091000i14p625xx4g5a/static/' + this.ipResultData.lon + ',' + this.ipResultData.lat + ',16/600x400?access_token=pk.eyJ1IjoiaHVudGludGVsIiwiYSI6ImNsMXV4cWx5bjAxZ28zZHFjZGZlY2M0bWoifQ.EmMDeKKW2Jw02ns58gUfKA';
             }
             return;
         }
@@ -2181,6 +2220,10 @@ return geocodes;
         display: none;
     }
 
+}
+
+.custom-tooltip {
+    opacity: 1!important;
 }
 
 </style>
