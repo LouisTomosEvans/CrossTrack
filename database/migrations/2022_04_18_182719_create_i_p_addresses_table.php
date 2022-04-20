@@ -15,21 +15,21 @@ class CreateIPAddressesTable extends Migration
     {
         Schema::create('i_p_addresses', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
-            $table->string('status');
-            $table->string('country');
-            $table->string('countryCode');
-            $table->string('region');
-            $table->string('regionName');
-            $table->string('city');
-            $table->string('zip');
-            $table->double('lat');
-            $table->double('lon');
-            $table->string('isp');
-            $table->string('org');
-            $table->boolean('mobile');
-            $table->boolean('proxy');
-            $table->boolean('hosting');
+            $table->foreignId('user_id')->nullable();
+            $table->string('status')->nullable();
+            $table->string('country')->nullable();
+            $table->string('countryCode')->nullable();
+            $table->string('region')->nullable();
+            $table->string('regionName')->nullable();
+            $table->string('city')->nullable();
+            $table->string('zip')->nullable();
+            $table->double('lat')->nullable();
+            $table->double('lon')->nullable();
+            $table->string('isp')->nullable();
+            $table->string('org')->nullable();
+            $table->boolean('mobile')->nullable();
+            $table->boolean('proxy')->nullable();
+            $table->boolean('hosting')->nullable();
             $table->string('query');
             $table->timestamps();
         });
