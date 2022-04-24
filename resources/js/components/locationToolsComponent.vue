@@ -1050,6 +1050,7 @@ export default {
             this.vkLoading = true;
             this.dataObject = JSON.parse(this.vkPhotoData);
             this.vkPhotoObjects = this.dataObject.response.items;
+            this.closeSplitScreenPeakVisorFunc();
             if(this.dataObject.response.items){
                 let visualisationData = {};
                 let route = '../api/vkphoto/create';
@@ -1195,6 +1196,7 @@ export default {
             this.errorMessageSubmit = false;
             this.dataObject = JSON.parse(this.placeData);
             this.placeObjects = [];
+            this.closeSplitScreenPeakVisorFunc();
             if(this.dataObject.venues){
                 let visualisationData = {};
                 for (var i = 0; i < this.dataObject.venues.length; i++) {
@@ -1289,7 +1291,6 @@ export default {
                 }
                 });
             }
-
         },
         updateVKMarkers() {
             let [newMarkers, newClusterMarkers ] = [ {}, {} ];
