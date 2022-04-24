@@ -241,6 +241,8 @@
                                         <h6 style="color: white;">PeakVisor</h6>
                                         <p style="color: white; font-size: 0.75rem;">PeakVisor will make you a superhero of outdoor navigation by putting state-of-the-art 3D maps and mountain identification magic wand in your hand.</p>
                                 </div>
+                                <v-btn class="toolButton2 hidden-mobile" title="Split Screen PeakVisor" tile @click="splitScreenPeakVisorFunc()" v-if="!splitScreenPeakVisor" style="background-color: #EA545525; color: #EA5455 !important;" icon><v-icon style="color: #EA5455 !important;">mdi-Arrow-split-horizontal</v-icon></v-btn>
+                                <v-btn class="toolButton2 hidden-mobile" title="Close Split Screen PeakVisor" tile @click="closeSplitScreenPeakVisorFunc()" v-if="splitScreenPeakVisor" style="background-color: #EA545525; color: #EA5455 !important;" icon><v-icon style="color: #EA5455 !important;">mdi-close</v-icon></v-btn>
                                 <v-btn class="toolButton" title="Go To PeakVisor" tile @click="goToPeakVisor()" style="background-color: #44d62c25; color: #44d62c !important;" icon><v-icon style="color: #44d62c !important;">mdi-arrow-right-bold</v-icon></v-btn>
                                 </v-card>
                             </div>
@@ -757,7 +759,8 @@
                 @map-click:vk-place-markers="vkMarkerClicked"
             />
         </div>
-
+        <v-btn id="closeSplitScreenBtn" fab v-show="splitScreenPeakVisor" title="Close Split Screen" icon tile style="background-color: #1a1a1a" elevation="0" class="no-padding" @click="closeSplitScreenPeakVisorFunc()"><span><v-icon style="color: #44d62c !important;">mdi-close</v-icon></span></v-btn>
+        <iframe v-if="splitScreenPeakVisor" id="peakVisorFrame" :src="getPeakVisorURL" width="100%" height="50%" style='border-top: 1px solid #44d62c; position: absolute; top: 50%; overflow-y: hidden;'></iframe>
     </div>
 </template>
 
@@ -847,6 +850,9 @@ export default {
             keySaved: false,
             vkLoadingScreen: false,
             panel: [],
+
+            //peakVisor Split
+            splitScreenPeakVisor: false,
         }
     },
     mounted() {
@@ -908,6 +914,11 @@ export default {
                 if(this.popup){
                     this.popup.remove();
                     this.popup = null;
+                }
+                this.lat = this.marker._lngLat.lat;
+                this.lon = this.marker._lngLat.lng;
+                if (this.lastLat != this.lat && this.lastLon != this.lon){
+                    this.refreshIFrame();
                 }
                 this.metaPlaceSearch = null;
             }
@@ -1039,6 +1050,7 @@ export default {
             this.vkLoading = true;
             this.dataObject = JSON.parse(this.vkPhotoData);
             this.vkPhotoObjects = this.dataObject.response.items;
+            this.closeSplitScreenPeakVisorFunc();
             if(this.dataObject.response.items){
                 let visualisationData = {};
                 let route = '../api/vkphoto/create';
@@ -1184,6 +1196,7 @@ export default {
             this.errorMessageSubmit = false;
             this.dataObject = JSON.parse(this.placeData);
             this.placeObjects = [];
+            this.closeSplitScreenPeakVisorFunc();
             if(this.dataObject.venues){
                 let visualisationData = {};
                 for (var i = 0; i < this.dataObject.venues.length; i++) {
@@ -1278,7 +1291,6 @@ export default {
                 }
                 });
             }
-
         },
         updateVKMarkers() {
             let [newMarkers, newClusterMarkers ] = [ {}, {} ];
@@ -1624,6 +1636,25 @@ export default {
             this.submitSearch(this.url, 'peakVisor');
             window.open(this.url);
         },
+        splitScreenPeakVisorFunc(){
+            var element = document.getElementById("map");
+            element.classList.add("halfMap");
+            this.splitScreenPeakVisor = true;
+            this.map.resize();
+            this.searchClose();
+        },
+        closeSplitScreenPeakVisorFunc(){
+            var element = document.getElementById("map");
+            element.classList.remove("halfMap");
+            this.splitScreenPeakVisor = false;
+            this.map.resize();
+        },
+        refreshIFrame(){
+            if(this.splitScreenPeakVisor){
+                var iframe = document.getElementById('peakVisorFrame');
+                iframe.src = this.getPeakVisorURL;
+            }
+        },
         goToSnapMaps(){
             this.url = 'https://map.snapchat.com/@' + this.lat + ',' + this.lon + ',17.00z';
             this.submitSearch(this.url, 'snap_maps');
@@ -1657,6 +1688,10 @@ export default {
         },
         generatedVKLink(){
             return 'https://api.vk.com/method/photos.search?lat=' + this.lat + '&long=' + this.lon + '&radius=800&count=1000&offset=0&sort=0&access_token=' + this.vkAccessToken + '&v=6.0';
+        },
+        getPeakVisorURL(){
+            let url = 'https://peakvisor.com/embed?lat=' + this.lat + '&lng=' + this.lon + '&alt=0&yaw=127.12&pitch=0hfov=120';
+            return url;
         },
         jsonValidator(){
             if(this.placeData && this.metaPlaceSearch){
@@ -1703,7 +1738,7 @@ export default {
             }
 
         }
-    }
+    },
 }
 
 
@@ -1757,7 +1792,7 @@ return geocodes;
 
 <style>
 #mainLoading { z-index: 4; position: absolute; width: 100%;  height: 100% !important; overflow-y: hidden !important;}
-#map { z-index: 0 !important; position: absolute !important; width: 100% !important; height: 100% !important; border-width: unset !important; border-style: unset !important; border-color: unset !important; overflow-y: hidden !important;}
+#map { z-index: 0 !important; position: absolute !important; width: 100% !important; height: 100%; border-width: unset !important; border-style: unset !important; border-color: unset !important; overflow-y: hidden !important;}
 #vkLoadingScreen { z-index: 4; position: absolute; width: 100%;  height: 100% !important; overflow-y: hidden !important;}
 .vkLoadingBackground{
     background-color: #242424ee;
@@ -1795,6 +1830,15 @@ return geocodes;
     right: 0px;
     left: unset;
     border-radius: 0px;
+}
+.toolButton2{
+    position: absolute !important;
+    right: 70px;
+    bottom: 24px;
+}
+
+.halfMap{
+    height: 50% !important;
 }
 .buttonSpacer {
     margin-top: 20vh;
@@ -1844,6 +1888,13 @@ return geocodes;
         display: none;
     }
 
+}
+
+#closeSplitScreenBtn{
+    position: absolute;
+    top: calc(50% + 10px);
+    right: 10px;
+    z-index: 1;
 }
 
 </style>
