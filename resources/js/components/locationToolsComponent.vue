@@ -241,8 +241,8 @@
                                         <h6 style="color: white;">PeakVisor</h6>
                                         <p style="color: white; font-size: 0.75rem;">PeakVisor will make you a superhero of outdoor navigation by putting state-of-the-art 3D maps and mountain identification magic wand in your hand.</p>
                                 </div>
-                                <v-btn class="toolButton2 hidden-mobile" title="Split Screen PeakVisor" tile @click="splitScreenPeakVisorFunc()" v-if="!splitScreenPeakVisor" style="background-color: #EA545525; color: #EA5455 !important;" icon><v-icon style="color: #EA5455 !important;">mdi-Arrow-split-horizontal</v-icon></v-btn>
-                                <v-btn class="toolButton2 hidden-mobile" title="Close Split Screen PeakVisor" tile @click="closeSplitScreenPeakVisorFunc()" v-if="splitScreenPeakVisor" style="background-color: #EA545525; color: #EA5455 !important;" icon><v-icon style="color: #EA5455 !important;">mdi-close</v-icon></v-btn>
+                                <!-- <v-btn class="toolButton2 hidden-mobile" title="Split Screen PeakVisor" tile @click="splitScreenPeakVisorFunc()" v-if="!splitScreenPeakVisor" style="background-color: #EA545525; color: #EA5455 !important;" icon><v-icon style="color: #EA5455 !important;">mdi-Arrow-split-horizontal</v-icon></v-btn> -->
+                                <!-- <v-btn class="toolButton2 hidden-mobile" title="Close Split Screen PeakVisor" tile @click="closeSplitScreenPeakVisorFunc()" v-if="splitScreenPeakVisor" style="background-color: #EA545525; color: #EA5455 !important;" icon><v-icon style="color: #EA5455 !important;">mdi-close</v-icon></v-btn> -->
                                 <v-btn class="toolButton" title="Go To PeakVisor" tile @click="goToPeakVisor()" style="background-color: #44d62c25; color: #44d62c !important;" icon><v-icon style="color: #44d62c !important;">mdi-arrow-right-bold</v-icon></v-btn>
                                 </v-card>
                             </div>
