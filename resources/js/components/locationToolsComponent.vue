@@ -1690,7 +1690,7 @@ export default {
             return 'https://api.vk.com/method/photos.search?lat=' + this.lat + '&long=' + this.lon + '&radius=800&count=1000&offset=0&sort=0&access_token=' + this.vkAccessToken + '&v=6.0';
         },
         getPeakVisorURL(){
-            let url = 'https://peakvisor.com/embed?lat=' + this.lat + '&lng=' + this.lon + '&alt=0&yaw=127.12&pitch=0hfov=120';
+            let url = 'https://peakvisor.com/embed?lat=' + this.lat + '&lng=' + this.lon + '&alt=0&yaw=127.12&pitch=0hfov=120/';
             return url;
         },
         jsonValidator(){
