@@ -27,15 +27,15 @@
           </v-list-item-content>
         </v-list-item>
 
-        <!-- <v-list-item :to="'/records'" v-ripple="false" class="p-1 pl-5" style="text-decoration: none; color: inherit;" >
+        <v-list-item :to="'/records'" v-ripple="false" class="p-1 pl-5" style="text-decoration: none; color: inherit;" >
           <v-list-item-icon>
-            <v-icon style="color: white;">mdi-content-save</v-icon>
+            <v-icon style="color: white;">mdi-archive</v-icon>
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title style="color: white;" class="sidebarText">My Records</v-list-item-title>
+            <v-list-item-title style="color: white;" class="sidebarText">Archive</v-list-item-title>
           </v-list-item-content>
-        </v-list-item> -->
+        </v-list-item>
 
         <v-list-item :to="'/knowledge-base'" v-ripple="false" class="p-1 pl-5" style="text-decoration: none; color: inherit;" >
           <v-list-item-icon>
