@@ -4,7 +4,7 @@
           <div class="col-12" style="padding: 12px;">
             <h5 style="color:white;">
               <b>
-              <v-icon style="color: white; font-size: 1.2rem; margin-bottom: 0.3rem;">mdi-content-save</v-icon> MY RECORDS<span style="color: #44d62c;">.</span>
+              <v-icon style="color: white; font-size: 1.2rem; margin-bottom: 0.2rem;">mdi-archive</v-icon> Archive<span style="color: #44d62c;">.</span>
               </b>
             </h5>
           </div>
@@ -12,6 +12,7 @@
         <v-row class="mb-6">
           <div class="col-12" style="padding: 12px;">
             <v-card class="cardShadow displayCardBackground" style="padding: 12px; text-align: center; background-color: #283046;">
+            <div v-if="telegramAuthenticated">
               <div class="col-12 d-flex pb-0 mt-0 mb-0">
                 <div class="col-6 d-flex">
 
@@ -60,9 +61,18 @@
                                 Location Tool
                             </span>
                         </div>
+                        <div v-if="item.type == 'Telegram'">
+                            <span style="background-color:  #1A8AD525; color:  #1A8AD5; padding: 4px; border-radius: 25px; padding-left: 10px; padding-right: 10px;">
+                                Telegram
+                            </span>
+                        </div>
                     </template>
                     </v-data-table>
               </div>
+            </div>
+            <div v-else>
+                <vue-telegram-login mode="callback" telegram-login="HuntIntelTestBot" @callback="telegramCallback" />
+            </div>
             </v-card>
           </div>
         </v-row>
@@ -70,10 +80,14 @@
 </template>
 
 <script>
-  export default {
+import {vueTelegramLogin} from 'vue-telegram-login';
+
+export default {
+    components: {vueTelegramLogin},
     data () {
       return {
         filterValue: "",
+        telegramAuthenticated: false,
         items: [ 'Person Finder', 'Account Finder', 'Location Tool', 'Image Analysis', 'Text Analysis' ],
         headers: [
           { text: 'RECORD TITLE', value: 'title', sortable: false },
@@ -235,6 +249,12 @@
 
             this.params.status = this.filterValue;
         },
+        telegramCallback(user) {
+            // gets user as an input
+            // id, first_name, last_name, username,
+            // photo_url, auth_date and hash
+        console.log(user)
+    }
     }
   }
 </script>
