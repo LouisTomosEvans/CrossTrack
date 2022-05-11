@@ -8,6 +8,7 @@ import 'vuetify/dist/vuetify.min.css';
 import App from './components/App.vue';
 import VueRouter from 'vue-router';
 import Alpine from 'alpinejs';
+import ApexCharts from 'apexcharts';
 
 window.Alpine = Alpine;
 
@@ -28,8 +29,16 @@ Vue.use(VueAxios, axios);
 import dashboardComponent from './components/dashboardComponent.vue'
 Vue.component('dashboard-component', dashboardComponent);
 
+import reportComponent from './components/reportComponent.vue'
+Vue.component('report-component', reportComponent);
+
+import insightComponent from './components/insightComponent.vue'
+Vue.component('insight-component', insightComponent);
+
 const routes = [
     { path: '/', component: dashboardComponent },
+    { path: '/reports', component: reportComponent },
+    { path: '/insights', component: insightComponent },
     {path: '/:catchAll(.*)', component: dashboardComponent }
 ]
 

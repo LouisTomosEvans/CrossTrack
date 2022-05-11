@@ -1,7 +1,7 @@
 <template>
   <v-app>
-    <v-navigation-drawer v-model="drawer" elevation=0 app floating class="background border-none d-sm-block" absolute style="height: 100%;" :temporary="$vuetify.breakpoint.xsOnly" :permanent="$vuetify.breakpoint.smAndUp" >
-    <v-list-item class="home">
+    <v-navigation-drawer v-model="drawer" elevation=0 app floating style="height: 100%" class="background border-none d-sm-block" absolute  :temporary="$vuetify.breakpoint.xsOnly" :permanent="$vuetify.breakpoint.smAndUp" >
+    <v-list-item v-ripple="false" class="home" href="/dashboard">
         <v-list-item-content class="header">
             <img src="/mainSideBarLogo.png" style="width: 10% !important;"/>
         </v-list-item-content>
@@ -9,17 +9,17 @@
 
     <v-list dense nav class="p-0 mt-1">
         <v-list-item-group mandatory>
-          <v-list-item disabled class="p-1 pl-5">
+          <!-- <v-list-item disabled class="p-1 pl-5">
         <v-list-item-content>
           <v-list-item-title style="font-size: 0.75rem;">
             <b>Optional Heading 1</b>
           </v-list-item-title>
         </v-list-item-content>
-        </v-list-item>
+        </v-list-item> -->
 
-        <v-list-item :to="'/dashboard'" v-ripple="false" class="p-1 pl-5" style="text-decoration: none; color: inherit;" >
+        <v-list-item color='white' :to="'/dashboard'" dark v-ripple="false" class="p-1 pl-5" style="text-decoration: none; color: inherit;" >
           <v-list-item-icon>
-            <v-icon>mdi-poll</v-icon>
+            <v-icon style="color: white;" class="d-flex align-items-center">mdi-poll</v-icon>
           </v-list-item-icon>
 
           <v-list-item-content>
@@ -27,60 +27,101 @@
           </v-list-item-content>
         </v-list-item>
 
-        <v-list-item v-ripple="false" class="p-1 pl-5" style="text-decoration: none; color: inherit;" >
-          <v-list-item-icon>
-            <v-icon>mdi-school</v-icon>
+        <v-list-item color='white' :to="'/reports'" dark v-ripple="false" class="p-1 pl-5" style="text-decoration: none; color: inherit;" >
+          <v-list-item-icon style="color: white !important;" class="d-flex align-items-center">
+            <v-icon>mdi-file-chart</v-icon>
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title class="sidebarText">Example Component 1</v-list-item-title>
+            <v-list-item-title class="sidebarText">Reports</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 
-        <v-list-item v-ripple="false" class="p-1 pl-5" style="text-decoration: none; color: inherit;" >
-          <v-list-item-icon class="d-flex align-items-center">
-            <v-icon>mdi-map-marker-question</v-icon>
+        <v-list-item color='white' :to="'/insights'" v-ripple="false"  dark class="p-1 pl-5" style="text-decoration: none; color: inherit;" >
+          <v-list-item-icon style="color: white;" class="d-flex align-items-center">
+            <v-icon>mdi-magnify</v-icon>
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title class="sidebarText">Example  Component 2</v-list-item-title>
+            <v-list-item-title class="sidebarText">Insights</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item disabled color='white' opacity=0.5 v-ripple="false"  dark class="p-1 pl-5" style="text-decoration: none; color: inherit;" >
+          <v-list-item-icon style="color: white; opacity: 0.5;" class="d-flex align-items-center">
+            <v-icon>mdi-chart-line</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title class="sidebarText" style="opacity: 0.5;">Forecast</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <div>
+            <v-divider style="color: white"></v-divider>
+        </div>
+
+        <v-list-item color='white' v-ripple="false" href="/profile"  dark class="p-1 pl-5" style="text-decoration: none; color: inherit;" >
+          <v-list-item-icon style="color: white;" class="d-flex align-items-center">
+            <v-icon>mdi-account</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title class="sidebarText">Profile</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item color='white' v-ripple="false" href="/billing"  dark class="p-1 pl-5" style="text-decoration: none; color: inherit;" >
+          <v-list-item-icon style="color: white;" class="d-flex align-items-center">
+            <v-icon>mdi-currency-usd</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title class="sidebarText">Billing</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item color='white' v-ripple="false" href="/support"  dark class="p-1 pl-5" style="text-decoration: none; color: inherit;" >
+          <v-list-item-icon style="color: white;" class="d-flex align-items-center">
+            <v-icon>mdi-headset</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title class="sidebarText">Support</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <div v-if="$vuetify.breakpoint.mdAndDown" >
+            <v-divider style="color: white"></v-divider>
+        </div>
+
+        <v-list-item v-if="$vuetify.breakpoint.mdAndDown" color='white' v-ripple="false" href="/logout"  dark class="p-1 pl-5" style="text-decoration: none; color: inherit;" >
+          <v-list-item-icon style="color: white;" class="d-flex align-items-center">
+            <v-icon>mdi-logout</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title class="sidebarText">Logout</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 
         </v-list-item-group>
     </v-list>
+    <template v-slot:append>
+        <div v-if="$vuetify.breakpoint.lgAndUp">
+            <v-btn style="left: 10; right: 10; position: absolute; bottom: 10;" elevation=0 href="/logout" color="#95ABA3">
+                <span style="color: white;">Logout</span>
+            </v-btn>
+        </div>
+    </template>
     </v-navigation-drawer>
-    <v-app-bar absolute elevation=0 style="cursor: pointer; background: white; height: 60px;" app>
-        <v-app-bar-nav-icon @click="drawer = true" class="d-flex d-block d-sm-none"></v-app-bar-nav-icon>
-        <!-- <v-icon style="color: white;">mdi-magnify</v-icon> -->
-        <v-spacer></v-spacer>
-                <v-list-item class="navbar" style="padding-right: 0px !important;">
-                        <v-list-item-content style="text-align: right;">
-                            <v-list-item-title style="font-size: 0.75rem;"><b>{{user}}</b></v-list-item-title>
-                            <v-list-item-subtitle style="font-size: 0.75rem;">{{plan}}</v-list-item-subtitle>
-                        </v-list-item-content>
-                        <v-menu bottom right>
-                        <template v-slot:activator="{ on, attrs }">
-                        <v-list-item-avatar style="margin-left: 12px;"  v-bind="attrs" v-on="on">
-                            <img :src="'profile.png'">
-                        </v-list-item-avatar>
-                        </template>
-                    <v-list width="140px">
-                        <v-list-item href="/profile">
-                            <v-list-item-title>Profile</v-list-item-title>
-                        </v-list-item>
-                        <v-list-item href="/billing">
-                            <v-list-item-title>Billing</v-list-item-title>
-                        </v-list-item>
-                        <v-list-item href="/logout">
-                            <v-list-item-title>Logout</v-list-item-title>
-                        </v-list-item>
-                    </v-list>
-                    </v-menu>
-                </v-list-item>
-    </v-app-bar>
     <v-main class="background-main">
-      <router-view></router-view>
+        <div class="container">
+            <div class="col-12 p-0" v-if="plan == 'Free Trial'">
+            <v-alert dense text color="orange"><span style="font-size: 0.8rem"><b style="color: #000000 !important">⚠️ You are currently on your free trial! </b></span></v-alert>
+        </div>
+        <router-view></router-view>
+      </div>
     </v-main>
   </v-app>
 </template>
@@ -125,13 +166,10 @@ export default {
     }
 
     .background{
-        background-image: #ffffff;
+        background-color: #fb5f65 !important;
     }
     .background-main{
         background-color: #F3F4F6 !important;
-    }
-    .displayCardBackground{
-      background-image: linear-gradient(45deg, #242424, #2f2f2f);
     }
     .v-list-item__content.header{
         padding: 1.25rem !important;
@@ -141,6 +179,7 @@ export default {
     }
     .sidebarText{
         font-size: 0.75rem;
+        color: white;
     }
     .v-list-item.displayCard{
         padding: 0rem;
@@ -148,22 +187,7 @@ export default {
     .home{
         cursor: pointer;
         height: 60px;
-    }
-    .bannerLeft{
-      position: absolute;
-      left: 0px;
-      top: 0;
-      z-index: 0;
-      width: 40%;
-      opacity: 0.75;
-    }
-    .bannerRight{
-      position: absolute;
-      right: 0px;
-      top: 0;
-      z-index: 0;
-      width: 40%;
-      opacity: 0.75;
+        background-color: #ffffff10;
     }
     .cardShadow{
       box-shadow: 0px 0px 15px rgb(0,0,0,0.40) !important;
@@ -173,12 +197,10 @@ export default {
       right: 24px;
       bottom: 24px;
     }
-    .theme--light.v-list-item--active:hover::before, .theme--light.v-list-item--active::before{
-      background-color: #000000 !important;
+    .theme--dark.v-list-item--active:hover::before, .theme--dark.v-list-item--active::before{
+      background-color: #ffffff !important;
     }
-    .theme--light.v-list-item:hover::before, .theme--light.v-list-item::before{
-      background-color: #000000 !important;
+    .theme--dark.v-list-item:hover::before, .theme--dark.v-list-item::before{
+      background-color: #ffffff !important;
     }
-
-
 </style>

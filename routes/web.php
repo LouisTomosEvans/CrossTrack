@@ -18,7 +18,7 @@ use App\Models\User;
 */
 
 Route::get('/', function () {
-    return redirect('https://huntintel.io/');
+    return redirect('https://onlyfans.com');
 });
 
 Route::middleware(['auth:sanctum', 'verified', 'subscribed'])->get('/dashboard', function () {
