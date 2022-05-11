@@ -55,7 +55,7 @@ class Plan implements Arrayable, JsonSerializable
     /**
      * The plan's price.
      *
-     * @var integer
+     * @var int
      */
     public $rawPrice;
 

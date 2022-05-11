@@ -156,9 +156,7 @@ class SparkServiceProvider extends ServiceProvider
                 config('cashier.currency_locale'), NumberFormatter::CURRENCY
             );
 
-            $numberFormatter->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS,
-                fmod($amount / 100, 1) === 0.0 ? 0 : 6
-            );
+            $numberFormatter->setAttribute(NumberFormatter::MIN_FRACTION_DIGITS, 0);
 
             $moneyFormatter = new IntlMoneyFormatter($numberFormatter, new ISOCurrencies());
 

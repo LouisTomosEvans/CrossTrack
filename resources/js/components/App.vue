@@ -1,134 +1,63 @@
 <template>
   <v-app>
-    <v-navigation-drawer v-model="drawer" elevation=0 app class="background d-sm-block" absolute style="height: 100%;" :temporary="$vuetify.breakpoint.xsOnly" :permanent="$vuetify.breakpoint.smAndUp" >
+    <v-navigation-drawer v-model="drawer" elevation=0 app floating class="background border-none d-sm-block" absolute style="height: 100%;" :temporary="$vuetify.breakpoint.xsOnly" :permanent="$vuetify.breakpoint.smAndUp" >
     <v-list-item class="home">
         <v-list-item-content class="header">
-            <img src="/HuntIntelLogo.png" style="width: 50% !important;" />
+            <img src="/mainSideBarLogo.png" style="width: 10% !important;"/>
         </v-list-item-content>
     </v-list-item>
 
     <v-list dense nav class="p-0 mt-1">
-        <v-list-item-group mandatory color="#ffffff">
+        <v-list-item-group mandatory>
           <v-list-item disabled class="p-1 pl-5">
         <v-list-item-content>
-          <v-list-item-title style="color: white; font-size: 0.75rem;">
-            <b>MY INTEL<span style="color: #44d62c;">.</span></b>
+          <v-list-item-title style="font-size: 0.75rem;">
+            <b>Optional Heading 1</b>
           </v-list-item-title>
         </v-list-item-content>
         </v-list-item>
 
         <v-list-item :to="'/dashboard'" v-ripple="false" class="p-1 pl-5" style="text-decoration: none; color: inherit;" >
           <v-list-item-icon>
-            <v-icon style="color: white;">mdi-poll</v-icon>
+            <v-icon>mdi-poll</v-icon>
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title style="color: white;" class="sidebarText">Dashboard</v-list-item-title>
+            <v-list-item-title class="sidebarText">Dashboard</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 
-        <!-- <v-list-item :to="'/records'" v-ripple="false" class="p-1 pl-5" style="text-decoration: none; color: inherit;" >
+        <v-list-item v-ripple="false" class="p-1 pl-5" style="text-decoration: none; color: inherit;" >
           <v-list-item-icon>
-            <v-icon style="color: white;">mdi-content-save</v-icon>
+            <v-icon>mdi-school</v-icon>
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title style="color: white;" class="sidebarText">My Records</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item> -->
-
-        <v-list-item :to="'/knowledge-base'" v-ripple="false" class="p-1 pl-5" style="text-decoration: none; color: inherit;" >
-          <v-list-item-icon>
-            <v-icon style="color: white;">mdi-school</v-icon>
-          </v-list-item-icon>
-
-          <v-list-item-content>
-            <v-list-item-title style="color: white;" class="sidebarText">Knowledge Base</v-list-item-title>
+            <v-list-item-title class="sidebarText">Example Component 1</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 
-        <v-divider class="my-3"></v-divider>
-        <v-list-item v-ripple="false" disabled class="p-1 pl-5">
-        <v-list-item-content>
-          <v-list-item-title style="color: white; font-size: 0.75rem;">
-            <b>OSINT TOOLKIT<span style="color: #44d62c;">.</span></b>
-          </v-list-item-title>
-        </v-list-item-content>
-        </v-list-item>
-
-
-        <!-- <v-list-item :to="'/account-finder'" v-ripple="false" class="p-1 pl-5" style="text-decoration: none; color: inherit;" >
-          <v-list-item-icon>
-            <v-icon style="color: white;">mdi-account-search</v-icon>
-          </v-list-item-icon>
-
-          <v-list-item-content>
-            <v-list-item-title style="color: white;" class="sidebarText">Account Finder</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item> -->
-
-        <v-list-item :to="'/location-tools'" v-ripple="false" class="p-1 pl-5" style="text-decoration: none; color: inherit;" >
+        <v-list-item v-ripple="false" class="p-1 pl-5" style="text-decoration: none; color: inherit;" >
           <v-list-item-icon class="d-flex align-items-center">
-            <v-icon style="color: white;">mdi-map-marker-question</v-icon>
+            <v-icon>mdi-map-marker-question</v-icon>
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title style="color: white;" class="sidebarText">Location Tools</v-list-item-title>
+            <v-list-item-title class="sidebarText">Example  Component 2</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-
-        <!-- <v-list-item :to="'/person-finder'" v-ripple="false" class="p-1 pl-5" style="text-decoration: none; color: inherit;" >
-          <v-list-item-icon>
-            <v-icon style="color: white;">mdi-account-tie</v-icon>
-          </v-list-item-icon>
-
-          <v-list-item-content>
-            <v-list-item-title style="color: white;" class="sidebarText">Person Finder</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item> -->
-
-        <!-- <v-list-item :to="'/text-analyser'" v-ripple="false" class="p-1 pl-5" style="text-decoration: none; color: inherit;" >
-          <v-list-item-icon>
-            <v-icon style="color: white;">mdi-text-box-search</v-icon>
-          </v-list-item-icon>
-
-          <v-list-item-content>
-            <v-list-item-title style="color: white;" class="sidebarText">Text Analyser</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item> -->
-
-        <!-- <v-list-item :to="'/image-analyser'" v-ripple="false" class="p-1 pl-5" style="text-decoration: none; color: inherit;" >
-          <v-list-item-icon>
-            <v-icon style="color: white;">mdi-image</v-icon>
-          </v-list-item-icon>
-
-          <v-list-item-content>
-            <v-list-item-title style="color: white;" class="sidebarText">Image Analyser</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item> -->
-
-
-        <!-- <v-list-item :to="'/leak-finder'" v-ripple="false" class="p-1 pl-5" style="text-decoration: none; color: inherit;" >
-          <v-list-item-icon>
-            <v-icon style="color: white;">mdi-water-outline</v-icon>
-          </v-list-item-icon>
-
-          <v-list-item-content>
-            <v-list-item-title style="color: white;" class="sidebarText">Leak Finder</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item> -->
 
         </v-list-item-group>
     </v-list>
     </v-navigation-drawer>
-    <v-app-bar absolute elevation=0 style="cursor: pointer; background-color: #242424; height: 60px; border-bottom: 2px solid #44d62c;" app>
+    <v-app-bar absolute elevation=0 style="cursor: pointer; background: white; height: 60px;" app>
         <v-app-bar-nav-icon @click="drawer = true" class="d-flex d-block d-sm-none"></v-app-bar-nav-icon>
         <!-- <v-icon style="color: white;">mdi-magnify</v-icon> -->
         <v-spacer></v-spacer>
                 <v-list-item class="navbar" style="padding-right: 0px !important;">
                         <v-list-item-content style="text-align: right;">
-                            <v-list-item-title style="color: white; font-size: 0.75rem;"><b>{{user}}</b></v-list-item-title>
-                            <v-list-item-subtitle style="color: white; font-size: 0.75rem;">{{plan}}</v-list-item-subtitle>
+                            <v-list-item-title style="font-size: 0.75rem;"><b>{{user}}</b></v-list-item-title>
+                            <v-list-item-subtitle style="font-size: 0.75rem;">{{plan}}</v-list-item-subtitle>
                         </v-list-item-content>
                         <v-menu bottom right>
                         <template v-slot:activator="{ on, attrs }">
@@ -136,7 +65,7 @@
                             <img :src="'profile.png'">
                         </v-list-item-avatar>
                         </template>
-                    <v-list dark width="140px">
+                    <v-list width="140px">
                         <v-list-item href="/profile">
                             <v-list-item-title>Profile</v-list-item-title>
                         </v-list-item>
@@ -196,10 +125,10 @@ export default {
     }
 
     .background{
-        background-image: #242424;
+        background-image: #ffffff;
     }
     .background-main{
-        background-color: #1A1A1A !important;
+        background-color: #F3F4F6 !important;
     }
     .displayCardBackground{
       background-image: linear-gradient(45deg, #242424, #2f2f2f);
@@ -217,7 +146,6 @@ export default {
         padding: 0rem;
     }
     .home{
-        background-color: rgb(0,0,0,0.12);
         cursor: pointer;
         height: 60px;
     }

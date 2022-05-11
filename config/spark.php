@@ -44,8 +44,8 @@ return [
     */
 
     'brand' =>  [
-         'logo' => realpath(__DIR__.'/../public/HuntSVG.svg'),
-         'color' => '#44d62c',
+         'logo' => realpath(__DIR__.'/../public/.svg'),
+         'color' => '#000000',
     ],
 
     /*
@@ -93,11 +93,11 @@ return [
     */
 
     'receipt_data' => [
-        'vendor' => 'Hunt Intelligence',
-        'product' => 'Hunt Intelligence Platform',
-        'street' => '35 Clos Halket',
-        'location' => 'Cardiff, Wales',
-        'phone' => '07935911537',
+        'vendor' => 'app',
+        'product' => 'prod',
+        'street' => 'street',
+        'location' => 'Newport, Wales',
+        'phone' => '99',
     ],
 
     /*

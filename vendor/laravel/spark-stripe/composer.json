@@ -10,7 +10,7 @@
         }
     ],
     "require": {
-        "php": "^7.3|^8.0",
+        "php": "^7.3|^8.0|^8.1",
         "ext-json": "*",
         "inertiajs/inertia-laravel": "^0.5.1",
         "laravel/cashier": "^12.0",

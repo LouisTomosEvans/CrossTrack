@@ -25,42 +25,11 @@ Vue.config.productionTip = false;
 
 Vue.use(VueAxios, axios);
 
-import PopupContent from './components/PopupContent.vue'
-Vue.component('PopupContent', PopupContent);
-
 import dashboardComponent from './components/dashboardComponent.vue'
 Vue.component('dashboard-component', dashboardComponent);
 
-import myRecordsComponent from './components/myRecordsComponent.vue'
-Vue.component('my-records-component', myRecordsComponent);
-
-import knowledgeBaseComponent from './components/knowledgeBaseComponent.vue'
-Vue.component('knowledge-base-component', knowledgeBaseComponent);
-
-import locationToolsComponent from './components/locationToolsComponent'
-Vue.component('location-tools-component', locationToolsComponent);
-
-import imageAnalyserComponent from './components/imageAnalyserComponent'
-Vue.component('image-analyser-component', imageAnalyserComponent);
-
-import textAnalyserComponent from './components/textAnalyserComponent'
-Vue.component('text-analyser-component', textAnalyserComponent);
-
-import accountFinderComponent from './components/accountFinderComponent'
-Vue.component('account-finder-component', accountFinderComponent);
-
-import leakFinderComponent from './components/leakFinderComponent'
-Vue.component('leak-finder-component', leakFinderComponent);
-
 const routes = [
     { path: '/', component: dashboardComponent },
-    { path: '/records', component: myRecordsComponent },
-    { path: '/knowledge-base', component: knowledgeBaseComponent },
-    { path: '/location-tools', component: locationToolsComponent},
-    { path: '/image-analyser', component: imageAnalyserComponent},
-    { path: '/text-analyser', component: textAnalyserComponent},
-    { path: '/account-finder', component: accountFinderComponent},
-    { path: '/leak-finder', component: leakFinderComponent},
     {path: '/:catchAll(.*)', component: dashboardComponent }
 ]
 

@@ -8,7 +8,7 @@
     </x-slot>
 
     <x-slot name="content">
-        <div class="max-w-xl text-sm text-white">
+        <div class="max-w-xl text-sm text-black">
             {{ __('If necessary, you may log out of all of your other browser sessions across all of your devices. Some of your recent sessions are listed below; however, this list may not be exhaustive. If you feel your account has been compromised, you should also update your password.') }}
         </div>
 
@@ -30,16 +30,16 @@
                         </div>
 
                         <div class="ml-3">
-                            <div class="text-sm text-white">
+                            <div class="text-sm text-black">
                                 {{ $session->agent->platform() ? $session->agent->platform() : 'Unknown' }} - {{ $session->agent->browser() ? $session->agent->browser() : 'Unknown' }}
                             </div>
 
                             <div>
-                                <div class="text-xs text-white">
+                                <div class="text-xs text-black">
                                     {{ $session->ip_address }},
 
                                     @if ($session->is_current_device)
-                                        <span class="text-green-500 font-semibold">{{ __('This device') }}</span>
+                                        <span class="text-black font-semibold">{{ __('This device') }}</span>
                                     @else
                                         {{ __('Last active') }} {{ $session->last_active }}
                                     @endif

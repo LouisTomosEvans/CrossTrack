@@ -25,14 +25,6 @@ Route::middleware(['auth:sanctum', 'verified', 'subscribed'])->get('/dashboard',
     return view('dashboard');
 })->name('dashboard');
 
-Route::middleware(['auth:sanctum', 'verified', 'subscribed'])->get('/knowledge-base', function () {
-    return view('dashboard');
-})->name('dashboard');
-
-Route::middleware(['auth:sanctum', 'verified', 'subscribed'])->get('/location-tools', function () {
-    return view('dashboard');
-})->name('dashboard');
-
 Route::middleware(['auth:sanctum', 'verified'])->get('/profile', function () {
     return view('profile/show');
 })->name('profile');

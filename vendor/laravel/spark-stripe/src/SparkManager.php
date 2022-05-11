@@ -117,7 +117,7 @@ class SparkManager
      *
      * @param  mixed  $billable
      * @param  \Illuminate\Http\Request  $request
-     * @return boolean
+     * @return bool
      */
     public function isAuthorizedToViewBillingPortal($billable, Request $request)
     {
@@ -201,7 +201,7 @@ class SparkManager
      * Determine if the application should charge billables per seat.
      *
      * @param  string  $billableType
-     * @return boolean
+     * @return bool
      */
     public function chargesPerSeat($billableType)
     {

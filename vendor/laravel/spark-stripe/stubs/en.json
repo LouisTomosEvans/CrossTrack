@@ -270,6 +270,7 @@
     "The provided coupon code is invalid." : "The provided coupon code is invalid.",
     "The selected country is invalid." : "The selected country is invalid.",
     "The selected plan is invalid." : "The selected plan is invalid.",
+    "This coupon code can only be used by new customers." : "This coupon code can only be used by new customers.",
     "Terms of Service" : "Terms of Service",
     "This account does not have an active subscription." : "This account does not have an active subscription.",
     "The receipt emails must be valid email addresses.": "The receipt emails must be valid email addresses.",

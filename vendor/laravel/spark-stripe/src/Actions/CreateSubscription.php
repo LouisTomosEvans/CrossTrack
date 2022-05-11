@@ -8,6 +8,7 @@ use Laravel\Cashier\SubscriptionBuilder;
 use Spark\Billable;
 use Spark\Contracts\Actions\CreatesSubscriptions;
 use Spark\Events\SubscriptionCreated;
+use Spark\HandlesCouponExceptions;
 use Spark\Spark;
 use Stripe\Exception\InvalidRequestException;
 use Stripe\PromotionCode;
@@ -15,6 +16,8 @@ use Stripe\Subscription;
 
 class CreateSubscription implements CreatesSubscriptions
 {
+    use HandlesCouponExceptions;
+
     /**
      * @inheritDoc
      */
@@ -32,7 +35,7 @@ class CreateSubscription implements CreatesSubscriptions
 
         $this->configureTrial($billable, $planObject, $builder);
 
-        if (isset($options['coupon'])) {
+        if (isset($options['coupon']) && $options['coupon']) {
             $this->applyCoupon($options['coupon'], $billable, $builder);
         }
 
@@ -61,10 +64,8 @@ class CreateSubscription implements CreatesSubscriptions
         try {
             return $builder->create();
         } catch (InvalidRequestException $e) {
-            if ($e->getStripeParam() == 'coupon') {
-                throw ValidationException::withMessages([
-                    '*' => __('The provided coupon code is invalid.')
-                ]);
+            if (in_array($e->getStripeParam(), ['coupon', 'promotion_code'])) {
+                return $this->handleCouponException($e);
             }
 
             report($e);
