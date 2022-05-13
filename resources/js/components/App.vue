@@ -91,11 +91,11 @@
           </v-list-item-content>
         </v-list-item>
 
-        <div v-if="$vuetify.breakpoint.mdAndDown" >
+        <div >
             <v-divider style="color: white"></v-divider>
         </div>
 
-        <v-list-item v-if="$vuetify.breakpoint.mdAndDown" color='white' v-ripple="false" href="/logout"  dark class="p-1 pl-5" style="text-decoration: none; color: inherit;" >
+        <v-list-item color='white' v-ripple="false" href="/logout"  dark class="p-1 pl-5" style="text-decoration: none; color: inherit;" >
           <v-list-item-icon style="color: white;" class="d-flex align-items-center">
             <v-icon>mdi-logout</v-icon>
           </v-list-item-icon>
@@ -107,21 +107,14 @@
 
         </v-list-item-group>
     </v-list>
-    <template v-slot:append>
-        <div v-if="$vuetify.breakpoint.lgAndUp">
-            <v-btn style="left: 10; right: 10; position: absolute; bottom: 10;" elevation=0 href="/logout" color="#95ABA3">
-                <span style="color: white;">Logout</span>
-            </v-btn>
-        </div>
-    </template>
     </v-navigation-drawer>
     <v-main class="background-main">
         <div class="container">
-            <div class="col-12 p-0" v-if="plan == 'Free Trial'">
-            <v-alert dense text color="orange"><span style="font-size: 0.8rem"><b style="color: #000000 !important">⚠️ You are currently on your free trial! </b></span></v-alert>
+            <div class="col-12 pt-3 p-0" v-if="plan == 'Free Trial'">
+            <v-alert dense text color="orange" style="border: 2px orange solid"><div class="d-flex justify-content-between align-items-center"><span style="font-size: 0.8rem"><span style="color: #000000 !important">⚠️ <b>You are currently on your free trial!</b></span></span><v-spacer></v-spacer><v-btn href='/billing' small elevation=0 color="#fb5f65"><span style="color: white;">Upgrade Now</span></v-btn></div></v-alert>
         </div>
         <router-view></router-view>
-      </div>
+        </div>
     </v-main>
   </v-app>
 </template>
@@ -163,6 +156,8 @@ export default {
 <style scoped>
     .container {
     max-width: 1200px;
+    padding-left: 24px;
+    padding-right: 24px;
     }
 
     .background{

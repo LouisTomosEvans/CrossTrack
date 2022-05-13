@@ -18,10 +18,14 @@ use App\Models\User;
 */
 
 Route::get('/', function () {
-    return redirect('https://onlyfans.com');
+    return redirect('https://bbc.com');
 });
 
 Route::middleware(['auth:sanctum', 'verified', 'subscribed'])->get('/dashboard', function () {
+    return view('dashboard');
+})->name('dashboard');
+
+Route::middleware(['auth:sanctum', 'verified', 'subscribed'])->get('/reports', function () {
     return view('dashboard');
 })->name('dashboard');
 

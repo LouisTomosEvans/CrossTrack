@@ -1,6 +1,6 @@
 <template>
         <div class="row justify-content-center">
-            <div class="col-12 pt-6 pb-0">
+            <div class="col-12 pt-4 pb-0">
                 <h5 style="color: dark-grey">🍑 Dashboard</h5>
             </div>
             <div class="col-4">
@@ -58,36 +58,106 @@
                     </div>
                 </v-card>
             </div>
-            <div class="col-4">
-                <v-card elevation=0>
+            <div class="d-flex p-0 m-0">
+            <div class="col-6" style="height: 100%">
+                <v-card elevation=0 style="height: 100%; min-height: 400px;">
                     <div class="p-4">
                         <b>📈<span style="font-size: 0.75rem; color: dark-gray; opacity: 0.75;"> Earnings</span></b>
                         <div id="chart">
-                            <apexchart type="pie" width="380" :options="piechartOptions" :series="pieseries"></apexchart>
+                            <apexchart type="pie" width="100%" :options="piechartOptions" :series="pieseries"></apexchart>
                         </div>
                     </div>
                 </v-card>
             </div>
-            <div class="col-8">
-                <v-card elevation=0>
-                    <div class="p-4">
+            <div class="col-6" style="height: 100%">
+                <v-card elevation=0 style="height: 100%; min-height: 400px;">
+                    <div class="p-4 pb-0">
                         <b>🕵️<span style="font-size: 0.75rem; color: dark-gray; opacity: 0.75;"> Earnings Breakdown</span></b>
+                        <v-simple-table style="max-height: 325px; min-height: 325px;">
+                        <template v-slot:default>
+                        <thead>
+                            <tr>
+                            <th class="text-left">
+                                Number
+                            </th>
+                            <th class="text-left">
+                                Type
+                            </th>
+                            <th class="text-left">
+                                Proportion
+                            </th>
+                            <th class="text-left">
+                                Money
+                            </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                            v-for="item in tableData"
+                            :key="item.name"
+                            >
+                            <td>{{ item.number }}</td>
+                            <td>{{ item.type }}</td>
+                            <td><span v-if="item.proportion == 'Total:'"><b>{{ item.proportion }}</b></span><span v-else>{{ item.proportion }}</span></td>
+                            <td><span v-if="item.proportion == 'Total:'" style="color: #34a853"><b>{{ item.money }}</b></span><span style="color: #34a853" v-else>{{ item.money }}</span></td>
+                            </tr>
+                        </tbody>
+                        </template>
+                    </v-simple-table>
                     </div>
                 </v-card>
             </div>
-            <div class="col-8">
-                <v-card elevation=0>
-                    <div class="p-4">
+            </div>
+            <div class="d-flex p-0 m-0">
+            <div class="col-8" style="height: 100%">
+                <v-card elevation=0 style="height: 100%; min-height: 350px;">
+                    <div class="p-4 pb-0">
                         <b>⏱️<span style="font-size: 0.75rem; color: dark-gray; opacity: 0.75;"> Latest Earnings</span></b>
+                        <v-simple-table style="max-height: 325px; min-height: 325px;">
+                        <template v-slot:default>
+                        <thead>
+                            <tr>
+                            <th class="text-left">
+                                Number
+                            </th>
+                            <th class="text-left">
+                                Type
+                            </th>
+                            <th class="text-left">
+                                Proportion
+                            </th>
+                            <th class="text-left">
+                                Money
+                            </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                            v-for="item in tableData"
+                            :key="item.name"
+                            >
+                            <td>{{ item.number }}</td>
+                            <td>{{ item.type }}</td>
+                            <td>{{ item.proportion }}</td>
+                            <td>{{ item.money }}</td>
+                            </tr>
+                        </tbody>
+                        </template>
+                    </v-simple-table>
                     </div>
                 </v-card>
             </div>
-            <div class="col-4">
-                <v-card elevation=0>
+            <div class="col-4" style="height: 100%;">
+                <v-card elevation=0 style="height: 100%; min-height: 400px;">
                     <div class="p-4">
                         <b>😏 <span style="font-size: 0.75rem; color: dark-gray; opacity: 0.75;">Monthly Fan Retention Rate</span></b>
+                        <div id="chart">
+                            <apexchart type="line" height="100%" :options="lineChartOptions" :series="lineSeries"></apexchart>
+                        </div>
                     </div>
                 </v-card>
+            </div>
             </div>
             <div class="col-12 ">
                 <v-divider></v-divider>
@@ -98,7 +168,7 @@
             <div class="col-12 py-0 pb-3" style="font-size: 0.75rem; color: dark-gray; opacity: 0.3;">
             <br>
             <b>
-                DISCLAIMER: Peached is not affiliated with OnlyFans.com in any way. OnlyFans is a trademark of FENIX INTERNATIONAL LIMITED.
+                DISCLAIMER: Peached is not affiliated with OnlyFans.com in any way. <br> OnlyFans is a trademark of FENIX INTERNATIONAL LIMITED.
             </b>
             </div>
         </div>
@@ -141,13 +211,13 @@
                     fill: {
                         type: 'gradient',
                         gradient: {
-                            shade: 'dark',
-                            gradientToColors: [ '#95aba3'],
-                            shadeIntensity: 1,
+                            shadeIntensity: 0.5,
                             type: 'horizontal',
                             opacityFrom: 1,
+                            gradientFromColors:  ['#9ccca6'],
+                            gradientToColors:  ['#95aba3'],
                             opacityTo: 1,
-                            stops: [0, 100, 100, 100]
+                            stops: [0, 100],
                         },
                     },
                     yaxis: {
@@ -161,6 +231,9 @@
                     width: 380,
                     type: 'pie',
                     },
+                    fill: {
+                        colors: ['#9ccca6', '#fcc693', '#baebfd', '#95aba3', '#fcb3c0']
+                    },
                     legend: {
                         position: 'bottom'
                     },
@@ -173,10 +246,81 @@
                         },
                         legend: {
                         position: 'bottom'
-                        }
+                        },
+                        dataLabels: {
+                            style: {
+                                colors: ['#9ccca6', '#fcc693', '#baebfd','#95aba3', '#fcb3c0']
+                            }
+                        },
                     }
                     }]
                 },
+                tableData: [
+                    {
+                        number: 159,
+                        type: 'New Subs',
+                        proportion: '34.23%',
+                        money: '+£534.23',
+                    },
+                    {
+                        number: 159,
+                        type: 'New Subs',
+                        proportion: '34.23%',
+                        money: '+£534.23',
+                    },
+                    {
+                        number: 159,
+                        type: 'New Subs',
+                        proportion: '34.23%',
+                        money: '+£534.23',
+                    },
+                    {
+                        number: 159,
+                        type: 'New Subs',
+                        proportion: '34.23%',
+                        money: '+£534.23',
+                    },
+                    {
+                        number: 159,
+                        type: 'New Subs',
+                        proportion: '34.23%',
+                        money: '+£534.23',
+                    },
+                    {
+                        number: null,
+                        type: null,
+                        proportion: 'Total:',
+                        money: '+£4534.23',
+                    },
+                ],
+                lineSeries: [{
+                data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
+                }],
+                lineChartOptions: {
+                    chart: {
+                    height: 350,
+                    type: 'line',
+                    zoom: {
+                        enabled: false
+                    }
+                    },
+                    dataLabels: {
+                    enabled: false
+                    },
+                    stroke: {
+                    curve: 'straight'
+                    },
+                    grid: {
+                    row: {
+                        colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+                        opacity: 0.5
+                    },
+                    },
+                    xaxis: {
+                    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+                    }
+                },
+
             }
         }
     }
@@ -205,6 +349,8 @@
     padding-bottom: 100%;
     background-color: #9CCCA6;
     border-radius: 4px;
+    justify-content: center;
+    align-items: center;
 }
 
 .square-3 {
@@ -222,7 +368,7 @@
 .icon{
     position: absolute;
     top: 50%;
-    left: 15%;
+    left: 16%;
     transform: translate(-50%, -50%);
 }
 </style>
