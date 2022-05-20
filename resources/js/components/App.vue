@@ -16,6 +16,22 @@
           </v-list-item-title>
         </v-list-item-content>
         </v-list-item> -->
+        <div class="col-12 pb-0">
+          <v-select
+          :items="items"
+          label="Account"
+          dense
+          outlined
+          dark
+          color="white"
+          hide-details
+          single-line
+        ></v-select>
+        </div>
+
+         <div>
+            <v-divider style="color: white"></v-divider>
+        </div>
 
         <v-list-item color='white' :to="'/dashboard'" dark v-ripple="false" class="p-1 pl-5" style="text-decoration: none; color: inherit;" >
           <v-list-item-icon>
@@ -68,6 +84,15 @@
 
           <v-list-item-content>
             <v-list-item-title class="sidebarText">Profile</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+         <v-list-item color='white' v-ripple="false" :to="'/accounts'"  dark class="p-1 pl-5" style="text-decoration: none; color: inherit;" >
+          <v-list-item-icon style="color: white;" class="d-flex align-items-center">
+            <v-icon>mdi-account-multiple</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title class="sidebarText">Accounts</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 

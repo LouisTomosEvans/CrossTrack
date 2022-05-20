@@ -35,10 +35,14 @@ Vue.component('report-component', reportComponent);
 import insightComponent from './components/insightComponent.vue'
 Vue.component('insight-component', insightComponent);
 
+import accountComponent from './components/accountsComponent.vue'
+Vue.component('account-component', accountComponent);
+
 const routes = [
     { path: '/', component: dashboardComponent },
     { path: '/reports', component: reportComponent },
     { path: '/insights', component: insightComponent },
+    { path: '/accounts', component: accountComponent },
     {path: '/:catchAll(.*)', component: dashboardComponent }
 ]
 

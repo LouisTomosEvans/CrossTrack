@@ -1,9 +1,124 @@
 <template>
         <div class="row justify-content-center">
-            <div class="col-12 py-2 d-flex justify-content-between align-items-center">
-                <h5 style="color: dark-grey; margin-bottom: 0px">📋 <b><span>{{ timeText }}</span></b> Reports</h5>
-                <div>
-                    <v-btn-toggle class="mt-0 pt-0" v-model="timeText" tile color="#FB5F65" mandatory dense group>
+            <div class="col-12 py-4 d-flex justify-content-between align-items-center">
+                <h5 style="color: dark-grey; margin-bottom: 0px">📋 Reports</h5>
+            </div>
+            <div class="col-12 pt-1 pb-0 d-flex">
+                <v-card elevation=0 class="col-12 p-4 d-flex justify-content-between align-items-center">
+                    <div class="col-6 p-0 d-flex">
+                <v-menu
+                ref="menuFrom"
+                v-model="menuFrom"
+                :close-on-content-click="false"
+                transition="scale-transition"
+                offset-y
+                min-width="auto"
+                style="z-index: 99;"
+                >
+                <template v-slot:activator="{ on, attrs }">
+                <v-text-field
+                    outlined
+                    label="From"
+                    append-icon="mdi-calendar"
+                    class="col-6 mr-3"
+                    hide-details
+                    dense
+                    readonly
+                    v-bind="attrs"
+                    v-on="on"
+                    color="#95aba3"
+                    single-line
+                    v-model="dateFrom"
+                ></v-text-field>
+                </template>
+                <v-date-picker
+                    v-model="dateFrom"
+                    :active-picker.sync="activePicker"
+                    :max="(new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)"
+                    min="1950-01-01"
+                    color="#95aba3"
+                >
+                <v-spacer></v-spacer>
+                <v-btn
+                    color="#95aba3"
+                    @click="menuFrom = false"
+                    elevation="0"
+                ><span style="color: white;">
+                    Cancel
+                </span>
+                </v-btn>
+                <v-btn
+                    color="#95aba3"
+                    elevation="0"
+                    @click="$refs.menuFrom.save(dateFrom)"
+                >
+                <span style="color: white;">
+                OK
+                </span>
+                </v-btn>
+                </v-date-picker>
+                </v-menu>
+                <v-icon>mdi-arrow-right-thick</v-icon>
+                <v-menu
+                ref="menuTo"
+                v-model="menuTo"
+                :close-on-content-click="false"
+                transition="scale-transition"
+                offset-y
+                min-width="auto"
+                >
+                <template v-slot:activator="{ on, attrs }">
+                <v-text-field
+                    outlined
+                    label="To"
+                    append-icon="mdi-calendar"
+                    class="col-6 ml-3"
+                    hide-details
+                    dense
+                    readonly
+                    v-bind="attrs"
+                    v-on="on"
+                    color="#95aba3"
+                    single-line
+                    v-model="dateTo"
+                ></v-text-field>
+                </template>
+                <v-date-picker
+                    v-model="dateTo"
+                    :active-picker.sync="activePicker"
+                    :max="(new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)"
+                    min="1950-01-01"
+                    color="#95aba3"
+                >
+                <v-spacer></v-spacer>
+                <v-btn
+                    text
+                    color="#95aba3"
+                    @click="menuTo = false"
+                >
+                    Cancel
+                </v-btn>
+                <v-btn
+                    text
+                    color="#95aba3"
+                    @click="$refs.menuTo.save(dateTo)"
+                >
+                    OK
+                </v-btn>
+                </v-date-picker>
+                </v-menu>
+                </div>
+                <v-btn elevation=0 color="#95aba3"><span style="color: white">
+                    <v-icon left dark>
+                        mdi-file-download
+                    </v-icon>
+                    Download Report
+                    </span>
+                </v-btn>
+
+                </v-card>
+                <!-- <div>
+                    <v-btn-toggle class="mt-0 pt-0" v-model="timeText" tile rounded color="#FB5F65" mandatory dense group>
                         <v-btn value="Weekly" style="font-size: 0.6rem;">
                         Weekly
                         </v-btn>
@@ -16,57 +131,15 @@
                         Yearly
                         </v-btn>
                     </v-btn-toggle>
-                </div>
-            </div>
-            <div class="col-12 pt-3 pb-0 d-flex justify-content-between align-items-center">
-                <v-menu
-                    ref="menu"
-                    v-model="menu"
-                    :close-on-content-click="false"
-                    :return-value.sync="date"
-                    transition="scale-transition"
-                    offset-y
-                    max-width="290px"
-                    min-width="auto"
-                >
-                    <template v-slot:activator="{ on, attrs }">
-                        <p
-                            class="mb-0"
-                            v-bind="attrs"
-                            v-on="on"
-                        ><b>📅 {{date}}</b></p>
-                    </template>
-                    <v-date-picker
-                    v-model="date"
-                    type="year"
-                    no-title
-                    scrollable
-                    color="#fb5f65"
-                    >
-                        <v-spacer></v-spacer>
-                        <v-btn
-                            text
-                            color="#fb5f65"
-                            @click="menu = false"
-                        >
-                            Cancel
-                        </v-btn>
-                        <v-btn
-                            text
-                            color="#fb5f65"
-                            @click="$refs.menu.save(date)"
-                        >
-                            Ok
-                        </v-btn>
-                    </v-date-picker>
-                </v-menu>
-                <v-btn small elevation=0 color="#95aba3"><span style="color: white">
+                </div> -->
+
+                <!-- <v-btn elevation=0 color="#95aba3"><span style="color: white">
                     <v-icon left dark>
                         mdi-file-download
                     </v-icon>
                     Download Report
                     </span>
-                </v-btn>
+                </v-btn> -->
             </div>
             <div class="col-12">
                 <v-divider></v-divider>
@@ -430,3 +503,13 @@
         }
     }
 </script>
+
+<style scoped>
+    .v-btn-toggle{
+        border: 2px #fb5f65 solid;
+        border-radius: 6px;
+    }
+    .theme--light.v-text-field--outlined{
+        color: #fb5f65
+    }
+</style>

@@ -29,6 +29,14 @@ Route::middleware(['auth:sanctum', 'verified', 'subscribed'])->get('/reports', f
     return view('dashboard');
 })->name('dashboard');
 
+Route::middleware(['auth:sanctum', 'verified', 'subscribed'])->get('/insight', function () {
+    return view('dashboard');
+})->name('dashboard');
+
+Route::middleware(['auth:sanctum', 'verified', 'subscribed'])->get('/accounts', function () {
+    return view('dashboard');
+})->name('dashboard');
+
 Route::middleware(['auth:sanctum', 'verified'])->get('/profile', function () {
     return view('profile/show');
 })->name('profile');

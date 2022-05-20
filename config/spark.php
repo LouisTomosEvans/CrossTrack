@@ -45,7 +45,7 @@ return [
 
     'brand' =>  [
          'logo' => realpath(__DIR__.'/../public/.svg'),
-         'color' => '#000000',
+         'color' => '#fb5f65',
     ],
 
     /*
@@ -125,10 +125,10 @@ return [
 
             'plans' => [
                 [
-                    'name' => '🥈 Silver',
+                    'name' => 'Starter',
                     'short_description' => 'Get started using hunt intelligence via the Silver Plan',
-                    'monthly_id' => 'price_1KfvgeD5fy9Yqy8V2MSuiHYa',
-                    'yearly_id' => 'price_1KfvgeD5fy9Yqy8VfKiFQEaM',
+                    'monthly_id' => 'price_1Kzp1aIYXNZxXk5hsoKyXf5w',
+                    'yearly_id' => 'price_1Kzp2uIYXNZxXk5hzW9pFNWY',
                     'yearly_incentive' => 'Get 2 Months Free',
                     'features' => [
                         'Locate Facebook and Instagram Places',
