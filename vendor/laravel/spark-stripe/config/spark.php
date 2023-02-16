@@ -63,6 +63,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Spark Date Format
+    |--------------------------------------------------------------------------
+    |
+    | This date format will be utilized by Spark to format dates in various
+    | locations within the billing portal, such as while showing invoice
+    | dates. You should customize the format based on your own locale.
+    |
+    */
+
+    'date_format' => 'F j, Y',
+
+    /*
+    |--------------------------------------------------------------------------
     | Features
     |--------------------------------------------------------------------------
     |
@@ -73,13 +86,13 @@ return [
     */
 
     'features' => [
-        // Features::billingAddressCollection(),
+        // Features::billingAddressCollection(['required' => true]),
         // Features::mustAcceptTerms(),
         // Features::euVatCollection(['home-country' => 'BE']),
         // Features::receiptEmails(['custom-addresses' => true]),
+        // Features::topUps(['price' => env('SPARK_TOP_UP_PRICE')]),
         Features::paymentNotificationEmails(),
     ],
-
 
     /*
     |--------------------------------------------------------------------------
@@ -138,7 +151,6 @@ return [
                 ],
             ],
 
-
         ],
-    ]
+    ],
 ];

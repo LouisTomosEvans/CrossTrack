@@ -1,10 +1,7 @@
-const defaultTheme = require('tailwindcss/defaultTheme');
+const defaultTheme = require('tailwindcss/defaultTheme')
 
 module.exports = {
-    purge: [
-        './resources/views/inertia/*.blade.php',
-        './resources/js/**/*.vue',
-    ],
+    content: ['./resources/views/**/*.blade.php', './resources/js/**/*.vue'],
     theme: {
         extend: {
             fontFamily: {
@@ -12,5 +9,4 @@ module.exports = {
             },
         },
     },
-    variants: {}
 }

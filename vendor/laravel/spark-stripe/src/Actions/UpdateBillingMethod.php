@@ -7,7 +7,7 @@ use Spark\Contracts\Actions\UpdatesBillingMethod;
 class UpdateBillingMethod implements UpdatesBillingMethod
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function update($billable, $billingMethod)
     {

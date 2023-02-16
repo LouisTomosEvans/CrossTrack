@@ -5,10 +5,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Peached') }}</title>
+        <title>{{ config('app.name', 'LeadRhino') }}</title>
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
 
         <!-- Styles -->
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
@@ -17,6 +17,18 @@
 
         <!-- Scripts -->
         <script src="{{ mix('js/app.js') }}" defer></script>
+
+        <style>
+            .font-sans {
+                font-family: 'Inter', sans-serif;
+            }
+            .font-serif {
+                font-family: 'Inter', serif;
+            }
+            .font-mono {
+                font-family: 'Inter', monospace;
+            }
+        </style>
     </head>
     <body class="font-sans antialiased">
         <x-jet-banner />
@@ -26,15 +38,15 @@
 
             <!-- Page Heading -->
             @if (isset($header))
-                <header class="shadow" style="background-color: white;">
-                    <div class="max-w-7xl mx-auto py-3 px-4 sm:px-6 lg:px-8">
+                <header class="shadow" style="background-color: #171e25;">
+                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                         {{ $header }}
                     </div>
                 </header>
             @endif
 
             <!-- Page Content -->
-            <main style="background-color: #f3f4f6;">
+            <main style="background-color: #F8F8F8;">
                 {{ $slot }}
             </main>
         </div>

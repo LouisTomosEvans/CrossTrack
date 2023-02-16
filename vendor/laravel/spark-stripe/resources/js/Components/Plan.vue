@@ -2,13 +2,13 @@
     <div>
         <div class="flex justify-between">
             <h2 class="px-6 pt-4 text-xl font-semibold text-gray-700">
-                {{ plan.name }}
+                {{ __(plan.name) }}
             </h2>
 
             <div class="h-1/2 px-4 py-1 bg-gray-200 text-gray-700 text-sm font-semibold rounded-bl-md"
                         v-if="! hideIncentive && ((plan.incentive.monthly && plan.interval == 'monthly') ||
                               (plan.incentive.yearly && plan.interval == 'yearly'))">
-                {{ plan.incentive[plan.interval] }}
+                {{ __(plan.incentive[plan.interval]) }}
             </div>
         </div>
 
@@ -16,13 +16,13 @@
             <div class="mt-2 text-md font-semibold text-gray-700">
                 <span v-html="plan.price"></span>
                 <span v-if="$page.props.collectsVat">({{ __('ex VAT') }})</span>
-                <template v-if="seatName"> / {{ seatName }} / {{ __(plan.interval) }}</template>
+                <template v-if="seatName"> / {{ __(seatName) }} / {{ __(plan.interval) }}</template>
                 <template v-else>/ {{ __(plan.interval) }}</template>
                 <span class="text-gray-400" v-if="plan.trial_days">({{ __(':days day trial', {days: plan.trial_days })}})</span>
             </div>
 
             <div class="mt-3 max-w-xl text-sm text-gray-600">
-                {{ plan.short_description }}
+                {{ __(plan.short_description) }}
             </div>
 
             <div class="mt-3 space-y-2">
@@ -32,7 +32,7 @@
                     </svg>
 
                     <div class="ml-2 text-sm text-gray-600">
-                        {{ feature }}
+                        {{ __(feature) }}
                     </div>
                 </div>
             </div>
@@ -41,11 +41,7 @@
 </template>
 
 <script>
-    import FormatsValues from './../Mixins/FormatsValues';
-
     export default {
-        mixins: [FormatsValues],
-
         props: ['plan', 'seatName', 'hideIncentive']
     }
 </script>

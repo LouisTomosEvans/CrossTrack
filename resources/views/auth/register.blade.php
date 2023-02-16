@@ -1,5 +1,5 @@
 <x-guest-layout>
-    <x-jet-authentication-card class="mb-3">
+    <x-jet-authentication-card>
         <x-slot name="logo">
             <x-jet-authentication-card-logo />
         </x-slot>
@@ -8,14 +8,28 @@
 
         <form method="POST" action="{{ route('register') }}">
             @csrf
+            <!-- If there is a token in data display text -->
+
+            @if(session('invite'))
+                <p class="text-sm" style="color: #28323b">You have been invited to join a team. Please enter your details below to create your account:</p>
+            @else
+                <p class="text-sm" style="color: #28323b">Sign up now and start your <b>14-day free trial</b> to see how LeadRhino can help you identify and convert more leads:</p>
+            @endif
 
             <div>
-                <x-jet-label for="name" value="{{ __('Name') }}" />
+                <x-jet-label for="name" value="{{ __('Your Name') }}" />
                 <x-jet-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
             </div>
 
+            @if (!session('invite'))
+                <div class="mt-4">
+                    <x-jet-label for="name" value="{{ __('Your Company Name') }}" />
+                    <x-jet-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
+                </div>
+            @endif
+
             <div class="mt-4">
-                <x-jet-label for="email" value="{{ __('Email') }}" />
+                <x-jet-label for="email" value="{{ __('Your Work Email') }}" />
                 <x-jet-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required />
             </div>
 
@@ -29,6 +43,10 @@
                 <x-jet-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" required autocomplete="new-password" />
             </div>
 
+            @if(session('invite'))
+                <input type="hidden" name="invite" for="invite" value="{{ session('invite') }}">
+            @endif
+
             @if (Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())
                 <div class="mt-4">
                     <x-jet-label for="terms">
@@ -37,8 +55,8 @@
 
                             <div class="ml-2">
                                 {!! __('I agree to the :terms_of_service and :privacy_policy', [
-                                        'terms_of_service' => '<a target="_blank" href="'.route('terms.show').'" class="underline text-sm text-gray-600 hover:text-gray-900">'.__('Terms of Service').'</a>',
-                                        'privacy_policy' => '<a target="_blank" href="'.route('policy.show').'" class="underline text-sm text-gray-600 hover:text-gray-900">'.__('Privacy Policy').'</a>',
+                                        'terms_of_service' => '<a target="_blank" href="'.route('terms.show').'" style="color: #44d62c !important" class="underline text-sm">'.__('Terms of Service').'</a>',
+                                        'privacy_policy' => '<a target="_blank" href="'.route('policy.show').'" style="color: #44d62c !important" class="underline text-sm">'.__('Privacy Policy').'</a>',
                                 ]) !!}
                             </div>
                         </div>
@@ -47,7 +65,7 @@
             @endif
 
             <div class="flex items-center justify-end mt-4">
-                <a class="underline text-sm text-black hover:text-black" href="{{ route('login') }}">
+                <a class="underline text-sm" href="{{ route('login') }}">
                     {{ __('Already registered?') }}
                 </a>
 

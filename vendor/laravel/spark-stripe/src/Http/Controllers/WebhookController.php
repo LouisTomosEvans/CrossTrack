@@ -6,6 +6,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Mail;
 use Laravel\Cashier\Cashier;
 use Laravel\Cashier\Http\Controllers\WebhookController as CashierController;
+use Laravel\Cashier\Invoice;
 use Laravel\Cashier\Payment;
 use Spark\Events\PaymentSucceeded;
 use Spark\Events\SubscriptionCancelled;
@@ -14,13 +15,12 @@ use Spark\Events\SubscriptionUpdated;
 use Spark\Features;
 use Spark\Mail\ConfirmPayment;
 use Spark\Mail\NewReceipt;
-use Stripe\PaymentIntent as StripePaymentIntent;
 use Stripe\Subscription;
 
 class WebhookController extends CashierController
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     protected function handleCustomerSubscriptionUpdated(array $payload)
     {
@@ -48,7 +48,7 @@ class WebhookController extends CashierController
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     protected function handleCustomerSubscriptionDeleted(array $payload)
     {
@@ -56,13 +56,22 @@ class WebhookController extends CashierController
             parent::handleCustomerSubscriptionDeleted($payload);
 
             event(new SubscriptionCancelled($billable));
+
+            if (config('spark.void_cancelled_subscription_invoices', false)) {
+                if ($subscription = $billable->subscriptions()->where('stripe_id', $payload['data']['object']['id'])->first()) {
+                    $subscription->invoicesIncludingPending()
+                        ->where(fn (Invoice $invoice) => $invoice->isOpen())
+                        ->each
+                        ->void();
+                }
+            }
         }
 
         return $this->successMethod();
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     protected function handleCustomerDeleted(array $payload)
     {
@@ -76,7 +85,7 @@ class WebhookController extends CashierController
     }
 
     /**
-     * Handle a successful invoice payment from a Stripe subscription.
+     * Handle a successful invoice payment event.
      *
      * @param  array  $payload
      * @return \Illuminate\Http\Response
@@ -84,25 +93,20 @@ class WebhookController extends CashierController
     protected function handleInvoicePaymentSucceeded(array $payload)
     {
         if ($billable = $this->getUserByStripeId($payload['data']['object']['customer'])) {
-            $invoice = $billable->findInvoice($payload['data']['object']['id']);
+            if ($invoice = $billable->findInvoice($payload['data']['object']['id'])) {
+                if (! $billable->localReceipts()->where('provider_id', $invoice->id)->first()) {
+                    $billable->localReceipts()->create([
+                        'provider_id' => $invoice->id,
+                        'amount' => Cashier::formatAmount($invoice->amount_due, $invoice->currency),
+                        'tax' => $invoice->tax(),
+                        'paid_at' => $invoice->date(),
+                    ]);
 
-            if ($existing = $billable->localReceipts()->where('provider_id', $invoice->id)->first()) {
-                return $this->successMethod();
+                    $this->sendReceiptNotification($billable, $invoice);
+                }
+
+                event(new PaymentSucceeded($billable, $invoice));
             }
-
-            $billable->localReceipts()->create([
-                'provider_id' => $invoice->id,
-                'amount' => Cashier::formatAmount($invoice->amount_due, $invoice->currency),
-                'tax' => $invoice->tax(),
-                'paid_at' => $invoice->date(),
-            ]);
-
-            event(new PaymentSucceeded($billable, $invoice));
-
-            $this->sendReceiptNotification(
-                $billable,
-                $invoice
-            );
         }
 
         return $this->successMethod();
@@ -118,9 +122,8 @@ class WebhookController extends CashierController
     {
         if ($billable = $this->getUserByStripeId($payload['data']['object']['customer'])) {
             if (in_array(Notifiable::class, class_uses_recursive($billable))) {
-                $payment = new Payment(StripePaymentIntent::retrieve(
-                    $payload['data']['object']['payment_intent'],
-                    $billable->stripeOptions()
+                $payment = new Payment($billable->stripe()->paymentIntents->retrieve(
+                    $payload['data']['object']['payment_intent']
                 ));
 
                 $this->sendPaymentConfirmationNotification($billable, $payment);
@@ -135,6 +138,7 @@ class WebhookController extends CashierController
      *
      * @param  \Spark\Billable  $billable
      * @param  \Laravel\Cashier\Invoice|null  $invoice
+     * @return void
      */
     protected function sendReceiptNotification($billable, $invoice)
     {
@@ -159,6 +163,7 @@ class WebhookController extends CashierController
      *
      * @param  \Spark\Billable  $billable
      * @param  \Laravel\Cashier\Payment  $payment
+     * @return void
      */
     protected function sendPaymentConfirmationNotification($billable, $payment)
     {

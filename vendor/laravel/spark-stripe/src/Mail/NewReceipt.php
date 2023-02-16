@@ -9,7 +9,8 @@ use Illuminate\Support\HtmlString;
 
 class NewReceipt extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * The available invoice.

@@ -12,7 +12,7 @@ use Stripe\Invoice;
 class UpdateSubscription implements UpdatesSubscriptions
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function update($subscription, $plan)
     {
@@ -26,13 +26,13 @@ class UpdateSubscription implements UpdatesSubscriptions
             $subscription->swap($plan);
         } catch (CardException $e) {
             throw ValidationException::withMessages([
-                '*' => __('Your card was declined. Please contact your card issuer for more information.')
+                '*' => __('Your card was declined. Please contact your card issuer for more information.'),
             ]);
         } catch (\Throwable $e) {
             report($e);
 
             throw ValidationException::withMessages([
-                '*' => __('We are unable to process your payment. Please contact customer support.')
+                '*' => __('We are unable to process your payment. Please contact customer support.'),
             ]);
         }
     }
@@ -41,6 +41,7 @@ class UpdateSubscription implements UpdatesSubscriptions
      * Attempt to pay failed payments if any.
      *
      * @param  \Laravel\Cashier\Subscription  $subscription
+     *
      * @throws ValidationException
      */
     protected function payPendingPayments($subscription)
@@ -56,7 +57,7 @@ class UpdateSubscription implements UpdatesSubscriptions
                 $invoice->asStripeInvoice()->pay();
             } catch (ApiErrorException $e) {
                 throw ValidationException::withMessages([
-                    '*' => __('Your card was declined. Please contact your card issuer for more information.')
+                    '*' => __('Your card was declined. Please contact your card issuer for more information.'),
                 ]);
             }
         }

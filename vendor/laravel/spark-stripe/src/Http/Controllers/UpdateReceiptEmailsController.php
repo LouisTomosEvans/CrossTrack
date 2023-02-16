@@ -23,13 +23,13 @@ class UpdateReceiptEmailsController
 
         if (validator($emails, ['*' => 'email'])->fails()) {
             throw ValidationException::withMessages([
-                'emails' => __('The receipt emails must be valid email addresses.')
+                'emails' => __('The receipt emails must be valid email addresses.'),
             ]);
         }
 
         if (count($emails) > 3) {
             throw ValidationException::withMessages([
-                'emails' => __('Please provide a maximum of three receipt emails addresses.')
+                'emails' => __('Please provide a maximum of three receipt emails addresses.'),
             ]);
         }
 

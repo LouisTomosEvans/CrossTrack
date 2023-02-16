@@ -2,6 +2,8 @@
 
 use App\Models\User;
 use Spark\Features;
+use Spark\Billable;
+use App\Models\Team;
 
 return [
 
@@ -117,11 +119,11 @@ return [
 
     'billables' => [
 
-        'user' => [
-            'model' => User::class,
+        'Team' => [
+            'model' => Team::class,
 
             'default_interval' => 'monthly',
-            'trial_days' => 7,
+            'trial_days' => 14,
 
             'plans' => [
                 [

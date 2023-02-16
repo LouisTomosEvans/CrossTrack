@@ -1,10 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Spark\Http\Middleware\HandleInertiaRequests;
 
 Route::group([
     'namespace' => 'Spark\Http\Controllers',
-    'prefix' => 'spark'
+    'prefix' => 'spark',
 ], function () {
     // Stripe Webhook Controller...
     Route::post('webhook', 'WebhookController@handleWebhook');
@@ -19,8 +20,14 @@ Route::group([
         // Payment Method...
         Route::put('/subscription/payment-method', 'UpdatePaymentMethodController');
 
+        // Invoice Controller...
+        Route::post('/{invoiceId}/pay', 'PayInvoiceController');
+
         // Billing Information...
         Route::put('/billing-information', 'UpdateBillingInformationController');
+
+        // Top Ups...
+        Route::put('/top-up', 'TopUpBalanceController');
 
         // Receipt Emails...
         Route::put('/receipt-emails', 'UpdateReceiptEmailsController');
@@ -40,7 +47,7 @@ Route::group([
 });
 
 Route::group([
-    'middleware' => config('spark.middleware', ['web', 'auth']),
+    'middleware' => array_merge(config('spark.middleware', ['web', 'auth']), [HandleInertiaRequests::class]),
     'namespace' => 'Spark\Http\Controllers',
     'prefix' => config('spark.path'),
 ], function () {

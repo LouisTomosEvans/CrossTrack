@@ -20,25 +20,10 @@ class AppController extends Controller
     {
         $plan = null;
         $user = Auth::user();
-        if($user->subscribed()){
-            $plan = $user->sparkPlan()->name;
-        }
-        if ($plan == null) {
-            $plan = 'Free Trial';
-        }
-        return [$user->name, $plan];
-    }
-    public function plan()
-    {
-        $user = Auth::user();
-        $plan = null;
-        if($user->subscribed()){
-            $plan = $user->sparkPlan()->name;
-        }
-        if ($plan == null) {
-            $plan = 'Free Trial';
-            $endDate = $user->trial_ends_at;
-        }
-        return [$plan, $endDate];
+
+        $teams = $user->teams;
+        $currentTeam = $user->currentTeam;
+
+        return [$user, $currentTeam->id, $teams];
     }
 }

@@ -244,7 +244,7 @@ class Plan implements Arrayable, JsonSerializable
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function toArray()
     {
@@ -268,9 +268,9 @@ class Plan implements Arrayable, JsonSerializable
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return $this->toArray();
     }

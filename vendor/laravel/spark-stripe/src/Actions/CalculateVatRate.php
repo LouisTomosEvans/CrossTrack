@@ -9,7 +9,7 @@ use Spark\Contracts\Actions\CalculatesVatRate;
 class CalculateVatRate implements CalculatesVatRate
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function calculate($homeCountry, $country, $postalCode, $vatNumber)
     {

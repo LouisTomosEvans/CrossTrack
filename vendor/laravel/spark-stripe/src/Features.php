@@ -2,8 +2,6 @@
 
 namespace Spark;
 
-use Illuminate\Support\Arr;
-
 class Features
 {
     /**
@@ -97,6 +95,16 @@ class Features
     }
 
     /**
+     * Determine if the application allows customers to top up their balances.
+     *
+     * @return bool
+     */
+    public static function allowsTopUps()
+    {
+        return static::enabled('top-ups');
+    }
+
+    /**
      * Enable requiring accepting terms before subscribing.
      *
      * @return string
@@ -122,10 +130,13 @@ class Features
     /**
      * Enable the billing address collection feature.
      *
+     * @param  array  $options
      * @return string
      */
-    public static function billingAddressCollection()
+    public static function billingAddressCollection(array $options = [])
     {
+        config(['spark-options.billing-address-collection' => $options]);
+
         return 'billing-address-collection';
     }
 
@@ -150,5 +161,18 @@ class Features
     public static function paymentNotificationEmails()
     {
         return 'sends-payment-notification-emails';
+    }
+
+    /**
+     * Enable customers to top up their balances.
+     *
+     * @param  array  $options
+     * @return string
+     */
+    public static function topUps(array $options = [])
+    {
+        config(['spark-options.top-ups' => $options]);
+
+        return 'top-ups';
     }
 }

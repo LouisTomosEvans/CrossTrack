@@ -9,7 +9,7 @@ use Mpociot\VatCalculator\VatCalculator;
 class ValidVatNumber implements Rule
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function passes($attribute, $value)
     {
@@ -21,7 +21,7 @@ class ValidVatNumber implements Rule
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function message()
     {

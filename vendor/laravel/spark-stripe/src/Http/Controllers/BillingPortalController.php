@@ -10,7 +10,8 @@ use Spark\Spark;
 
 class BillingPortalController
 {
-    use GuessesBillableTypes, RetrievesBillableModels;
+    use GuessesBillableTypes;
+    use RetrievesBillableModels;
 
     /**
      * Show the billing portal.
@@ -49,7 +50,6 @@ class BillingPortalController
     {
         if (! is_readable($file = lang_path('spark/'.app()->getLocale().'.json'))) {
             $file = lang_path('spark/'.app('translator')->getFallback().'.json');
-
         }
 
         return is_readable($file) ? file_get_contents($file) : '{}';

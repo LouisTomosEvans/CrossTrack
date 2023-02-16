@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 Use Laravel\Sanctum\HasApiTokens;
 use App\Models\User;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,26 +19,25 @@ use App\Models\User;
 */
 
 Route::get('/', function () {
-    return redirect('https://bbc.com');
+    return redirect('https://leadrhino.webflow.io');
 });
 
-Route::middleware(['auth:sanctum', 'verified', 'subscribed'])->get('/dashboard', function () {
+Route::get('member/register/{token}', [AuthController::class, 'create'])->name('member/register');
+
+Route::middleware(['auth:sanctum', 'verified', 'checkActiveTeam', 'subscribed'])->get('/team', function () {
     return view('dashboard');
 })->name('dashboard');
 
-Route::middleware(['auth:sanctum', 'verified', 'subscribed'])->get('/reports', function () {
+Route::middleware(['auth:sanctum', 'verified', 'checkActiveTeam', 'subscribed'])->get('/company', function () {
     return view('dashboard');
 })->name('dashboard');
 
-Route::middleware(['auth:sanctum', 'verified', 'subscribed'])->get('/insight', function () {
+Route::middleware(['auth:sanctum', 'verified', 'checkActiveTeam', 'subscribed'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
 
-Route::middleware(['auth:sanctum', 'verified', 'subscribed'])->get('/accounts', function () {
-    return view('dashboard');
-})->name('dashboard');
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/profile', function () {
+Route::middleware(['auth:sanctum', 'verified', 'checkActiveTeam'])->get('/profile', function () {
     return view('profile/show');
 })->name('profile');
 
@@ -46,4 +46,7 @@ Route::get('/logout', function () {
     return view('auth/login');
 })->name('logout');
 
-
+// teams create page
+Route::middleware(['auth:sanctum', 'verified', 'checkNotActiveTeam'])->get('/teams/create', function () {
+    return view('teams/create');
+})->name('teams.create');

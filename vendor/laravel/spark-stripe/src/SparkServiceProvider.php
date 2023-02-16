@@ -2,19 +2,18 @@
 
 namespace Spark;
 
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Cashier\Cashier;
-use Money\Currencies\ISOCurrencies;
-use Money\Currency;
-use Money\Formatter\IntlMoneyFormatter;
-use Money\Money;
-use NumberFormatter;
+use Laravel\Cashier\Events\WebhookReceived;
 use RuntimeException;
 use Spark\Contracts\Actions\CalculatesVatRate;
 use Spark\Contracts\Actions\CreatesSubscriptions;
+use Spark\Contracts\Actions\PaysInvoices;
 use Spark\Contracts\Actions\UpdatesBillingMethod;
 use Spark\Contracts\Actions\UpdatesSubscriptions;
+use Spark\Listeners\TopUpBalanceListener;
 
 class SparkServiceProvider extends ServiceProvider
 {
@@ -36,10 +35,12 @@ class SparkServiceProvider extends ServiceProvider
 
         $this->app->singleton(CalculatesVatRate::class, Actions\CalculateVatRate::class);
         $this->app->singleton(CreatesSubscriptions::class, Actions\CreateSubscription::class);
+        $this->app->singleton(PaysInvoices::class, Actions\PayInvoice::class);
         $this->app->singleton(UpdatesBillingMethod::class, Actions\UpdateBillingMethod::class);
         $this->app->singleton(UpdatesSubscriptions::class, Actions\UpdateSubscription::class);
 
         $this->registerCommands();
+        $this->registerListeners();
     }
 
     /**
@@ -59,7 +60,6 @@ class SparkServiceProvider extends ServiceProvider
         $this->configureMigrations();
         $this->configureTranslations();
         $this->configurePublishing();
-        $this->configureMoneyFormatting();
     }
 
     /**
@@ -143,24 +143,14 @@ class SparkServiceProvider extends ServiceProvider
     }
 
     /**
-     * Define the callback Cashier uses for money formatting.
+     * Register the Spark event listeners.
      *
      * @return void
      */
-    protected function configureMoneyFormatting()
+    protected function registerListeners()
     {
-        Cashier::formatCurrencyUsing(function ($amount, $currency) {
-            $money = new Money($amount, new Currency(strtoupper($currency ?? config('cashier.currency'))));
-
-            $numberFormatter = new NumberFormatter(
-                config('cashier.currency_locale'), NumberFormatter::CURRENCY
-            );
-
-            $numberFormatter->setAttribute(NumberFormatter::MIN_FRACTION_DIGITS, 0);
-
-            $moneyFormatter = new IntlMoneyFormatter($numberFormatter, new ISOCurrencies());
-
-            return $moneyFormatter->format($money);
+        $this->booting(function () {
+            Event::listen(WebhookReceived::class, TopUpBalanceListener::class);
         });
     }
 }

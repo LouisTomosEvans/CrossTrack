@@ -14,7 +14,7 @@ class SubscriptionCancelled
     /**
      * Create a new event instance.
      *
-     * @param \Spark\Billable $billable
+     * @param  \Spark\Billable  $billable
      * @return void
      */
     public function __construct($billable)

@@ -2,24 +2,19 @@
 
 namespace Spark\Actions;
 
-use Illuminate\Validation\ValidationException;
-use Laravel\Cashier\Exceptions\PaymentActionRequired;
 use Laravel\Cashier\SubscriptionBuilder;
-use Spark\Billable;
+use Spark\Concerns\HandlesPaymentFailures;
 use Spark\Contracts\Actions\CreatesSubscriptions;
 use Spark\Events\SubscriptionCreated;
-use Spark\HandlesCouponExceptions;
 use Spark\Spark;
-use Stripe\Exception\InvalidRequestException;
-use Stripe\PromotionCode;
 use Stripe\Subscription;
 
 class CreateSubscription implements CreatesSubscriptions
 {
-    use HandlesCouponExceptions;
+    use HandlesPaymentFailures;
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function create($billable, $plan, array $options = [])
     {
@@ -61,27 +56,7 @@ class CreateSubscription implements CreatesSubscriptions
      */
     protected function createSubscriptionViaStripe($builder)
     {
-        try {
-            return $builder->create();
-        } catch (InvalidRequestException $e) {
-            if (in_array($e->getStripeParam(), ['coupon', 'promotion_code'])) {
-                return $this->handleCouponException($e);
-            }
-
-            report($e);
-
-            throw ValidationException::withMessages([
-                '*' => __('We are unable to process your payment. Please contact customer support.')
-            ]);
-        } catch (PaymentActionRequired $e) {
-            throw $e;
-        } catch (\Throwable $e) {
-            report($e);
-
-            throw ValidationException::withMessages([
-                '*' => __('We are unable to process your payment. Please contact customer support.')
-            ]);
-        }
+        return $this->attemptPayment(fn () => $builder->create());
     }
 
     /**
@@ -101,10 +76,8 @@ class CreateSubscription implements CreatesSubscriptions
 
                     $subscription->cancelNow();
 
-                    if (in_array($status, [
-                        Subscription::STATUS_INCOMPLETE,
-                        Subscription::STATUS_INCOMPLETE_EXPIRED
-                    ])) {
+                    if ($status === Subscription::STATUS_INCOMPLETE_EXPIRED) {
+                        $subscription->items()->delete();
                         $subscription->delete();
                     }
                 } catch (\Throwable $e) {
@@ -116,7 +89,7 @@ class CreateSubscription implements CreatesSubscriptions
      * Configure the trial period.
      *
      * @param  \Spark\Billable  $billable
-     * @param  \Spark\Plan $plan
+     * @param  \Spark\Plan  $plan
      * @param  \Laravel\Cashier\SubscriptionBuilder  $builder
      * @return void
      */
@@ -143,14 +116,15 @@ class CreateSubscription implements CreatesSubscriptions
     /**
      * Apply the coupon or promocode.
      *
-     * @param $coupon
+     * @param  string  $coupon
      * @param  \Spark\Billable  $billable
      * @param  \Laravel\Cashier\SubscriptionBuilder  $builder
+     *
      * @throws \Stripe\Exception\ApiErrorException
      */
     protected function applyCoupon($coupon, $billable, SubscriptionBuilder $builder): void
     {
-        $codes = PromotionCode::all(['code' => $coupon], $billable->stripeOptions());
+        $codes = $billable->stripe()->promotionCodes->all(['code' => $coupon]);
 
         if ($codes && $codes->first()) {
             $builder->withPromotionCode($codes->first()->id);

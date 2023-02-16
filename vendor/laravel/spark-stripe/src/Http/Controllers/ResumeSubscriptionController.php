@@ -18,17 +18,17 @@ class ResumeSubscriptionController
     {
         $billable = $this->billable();
 
-        $subscription = $billable->subscription('default');
+        $subscription = $billable->subscription();
 
         if (! $subscription) {
             throw ValidationException::withMessages([
-                '*' => __('This account does not have an active subscription.')
+                '*' => __('This account does not have an active subscription.'),
             ]);
         }
 
         if (! $subscription->onGracePeriod()) {
             throw ValidationException::withMessages([
-                '*' => __('This subscription has expired and cannot be resumed. Please create a new subscription.')
+                '*' => __('This subscription has expired and cannot be resumed. Please create a new subscription.'),
             ]);
         }
 

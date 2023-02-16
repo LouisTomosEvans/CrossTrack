@@ -9,7 +9,8 @@ use Laravel\Cashier\Payment;
 
 class ConfirmPayment extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * The payment ID.

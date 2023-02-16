@@ -7,7 +7,7 @@ use Illuminate\Contracts\Validation\Rule;
 class ValidCountry implements Rule
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function passes($attribute, $value)
     {
@@ -18,7 +18,7 @@ class ValidCountry implements Rule
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function message()
     {

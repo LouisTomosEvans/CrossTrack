@@ -4,10 +4,7 @@ namespace Spark\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Laravel\Cashier\Cashier;
-use Spark\Contracts\Actions\CalculatesVatRate;
-use Spark\Features;
 use Spark\Spark;
-use Stripe\TaxRate as StripeTaxRate;
 
 class TaxController
 {
@@ -37,6 +34,8 @@ class TaxController
 
         if (! $taxRates) {
             return response()->json([
+                'raw_tax' => 0,
+                'raw_total' => $subtotal,
                 'tax' => 0,
                 'total' => $this->formatAmount($subtotal, $request->currency),
             ]);
@@ -45,8 +44,8 @@ class TaxController
         $exclusiveTaxAmount = 0;
         $totalTaxAmount = 0;
 
-        foreach ($taxRates as $taxRatesId){
-            $stripeTaxRate = StripeTaxRate::retrieve($taxRatesId, Cashier::stripeOptions());
+        foreach ($taxRates as $taxRatesId) {
+            $stripeTaxRate = $billable->stripe()->taxRates->retrieve($taxRatesId);
 
             if (! $stripeTaxRate->inclusive) {
                 $exclusiveTaxAmount += ceil($subtotal * ($stripeTaxRate->percentage / 100));
@@ -56,17 +55,19 @@ class TaxController
         }
 
         return response()->json([
+            'raw_tax' => $totalTaxAmount,
+            'raw_total' => $rawTotal = $subtotal + $exclusiveTaxAmount,
             'tax' => $totalTaxAmount ? $this->formatAmount($totalTaxAmount, $request->currency) : null,
-            'total' => $this->formatAmount($subtotal + $exclusiveTaxAmount, $request->currency)
+            'total' => $this->formatAmount($rawTotal, $request->currency),
         ]);
     }
 
     /**
      * Format the given amount.
      *
-     * @param  float $amount
-     * @param  string $currency
-     * @return float|int|string
+     * @param  float  $amount
+     * @param  string  $currency
+     * @return string
      */
     public function formatAmount($amount, $currency)
     {

@@ -38,11 +38,26 @@ Vue.component('insight-component', insightComponent);
 import accountComponent from './components/accountsComponent.vue'
 Vue.component('account-component', accountComponent);
 
+import companiesComponent from './components/companiesComponent.vue'
+Vue.component('companies-component', companiesComponent);
+
+import segmentsComponent from './components/segmentsComponent.vue'
+Vue.component('segments-component', segmentsComponent);
+
+import teamComponent from './components/teamComponent.vue'
+Vue.component('team-component', teamComponent);
+
+import loadingScreenComponent from './components/loadingScreenComponent.vue'
+Vue.component('loading-screen', loadingScreenComponent);
+
 const routes = [
     { path: '/', component: dashboardComponent },
     { path: '/reports', component: reportComponent },
     { path: '/insights', component: insightComponent },
     { path: '/accounts', component: accountComponent },
+    { path: '/companies', component: companiesComponent },
+    { path: '/segments', component: segmentsComponent },
+    { path: '/team', component: teamComponent },
     {path: '/:catchAll(.*)', component: dashboardComponent }
 ]
 

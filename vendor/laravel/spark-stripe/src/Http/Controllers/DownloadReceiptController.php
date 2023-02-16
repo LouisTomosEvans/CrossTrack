@@ -22,8 +22,6 @@ class DownloadReceiptController
     {
         $billable = $this->billable($type, $id);
 
-        $receipt = $billable->localReceipts()->where('provider_id', $receiptId)->firstOrFail();
-
         $receiptData = array_merge([
             'vendor' => 'Laravel',
             'product' => '',
@@ -32,9 +30,6 @@ class DownloadReceiptController
             'vat' => new HtmlString(nl2br(e($billable->extra_billing_information))),
         ], config('spark.receipt_data'));
 
-        return $billable->downloadInvoice(
-            $receipt->provider_id,
-            $receiptData
-        );
+        return $billable->downloadInvoice($receiptId, $receiptData);
     }
 }

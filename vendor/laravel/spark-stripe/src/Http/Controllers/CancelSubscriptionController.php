@@ -17,14 +17,14 @@ class CancelSubscriptionController
     {
         $billable = $this->billable();
 
-        $subscription = $billable->subscription('default');
+        $subscription = $billable->subscription();
 
         if (! $subscription) {
             throw ValidationException::withMessages([
-                '*' => __('This account does not have an active subscription.')
+                '*' => __('This account does not have an active subscription.'),
             ]);
         }
 
-        $billable->subscription('default')->cancel();
+        $subscription->cancel();
     }
 }

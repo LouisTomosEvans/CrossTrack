@@ -4,9 +4,7 @@ namespace Spark;
 
 use Illuminate\Support\Carbon;
 use Laravel\Cashier\Billable as CashierBillable;
-use Laravel\Cashier\Cashier;
 use Spark\Contracts\Actions\CalculatesVatRate;
-use Stripe\TaxRate as StripeTaxRate;
 
 trait Billable
 {
@@ -23,13 +21,17 @@ trait Billable
             $trialDays = $model->sparkConfiguration('trial_days');
 
             $model->forceFill([
-                'trial_ends_at' => $trialDays ? now()->addDays($trialDays) : null
+                'trial_ends_at' => $trialDays ? now()->addDays($trialDays) : null,
             ])->save();
         });
     }
 
     /**
      * Get all of the local receipts.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     *
+     * @deprecated This method will be removed in a future Spark release.
      */
     public function localReceipts()
     {
@@ -49,7 +51,7 @@ trait Billable
 
         if ($subscription && $subscription->valid()) {
             return $plans->first(function ($plan) use ($subscription) {
-                return $plan->id == $subscription->stripe_plan;
+                return $plan->id == $subscription->stripe_price;
             });
         }
     }
@@ -140,13 +142,17 @@ trait Billable
     }
 
     /**
-     * Gert the receipt emails.
+     * Get the receipt emails.
      *
-     * @param  mixed $value
+     * @param  mixed  $value
      * @return array
      */
     public function getReceiptEmailsAttribute($value)
     {
+        if (is_null($value)) {
+            return [];
+        }
+
         return json_decode($value) ?: [];
     }
 
@@ -159,9 +165,13 @@ trait Billable
     protected function fillPaymentMethodDetails($paymentMethod)
     {
         if ($paymentMethod->type === 'card') {
-            $this->card_brand = $paymentMethod->card->brand;
-            $this->card_last_four = $paymentMethod->card->last4;
-            $this->card_expiration = $paymentMethod->card->exp_month.'/'.$paymentMethod->card->exp_year;
+            $this->pm_type = $paymentMethod->card->brand;
+            $this->pm_last_four = $paymentMethod->card->last4;
+            $this->pm_expiration = sprintf('%02d', $paymentMethod->card->exp_month).'/'.$paymentMethod->card->exp_year;
+        } else {
+            $this->pm_type = $type = $paymentMethod->type;
+            $this->pm_last_four = optional($paymentMethod)->$type->last4;
+            $this->pm_expiration = null;
         }
 
         return $this;
@@ -215,7 +225,8 @@ trait Billable
         }
 
         $homeCountry = is_string(config('spark.collects_eu_vat'))
-                        ? config('spark.collects_eu_vat') : Features::option('eu-vat-collection', 'home-country');
+            ? config('spark.collects_eu_vat')
+            : Features::option('eu-vat-collection', 'home-country');
 
         $rate = app(CalculatesVatRate::class)->calculate(
             $homeCountry,
@@ -232,11 +243,11 @@ trait Billable
             return [$existing->stripe_id];
         }
 
-        $stripeTaxRate = StripeTaxRate::create([
+        $stripeTaxRate = $this->stripe()->taxRates->create([
             'display_name' => 'VAT',
             'inclusive' => false,
             'percentage' => $rate,
-        ], Cashier::stripeOptions());
+        ]);
 
         TaxRate::create([
             'stripe_id' => $stripeTaxRate->id,

@@ -4,7 +4,6 @@ namespace Spark\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Laravel\Cashier\Cashier;
-use Stripe\SetupIntent;
 
 class StripeTokenController
 {
@@ -18,10 +17,10 @@ class StripeTokenController
      */
     public function __invoke(Request $request)
     {
-        $setupIntent = SetupIntent::create(null, Cashier::stripeOptions());
+        $setupIntent = Cashier::stripe()->setupIntents->create();
 
         return response()->json([
-            'clientSecret' => $setupIntent->client_secret
+            'clientSecret' => $setupIntent->client_secret,
         ]);
     }
 }

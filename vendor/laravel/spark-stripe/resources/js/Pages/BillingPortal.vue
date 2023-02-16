@@ -1,8 +1,8 @@
 <template>
-    <div class="font-sans antialiased min-h-screen bg-gray-100">
-        <div class="min-h-screen flex">
+    <div class="font-sans antialiased min-h-screen bg-white lg:bg-gray-100">
+        <div class="lg:min-h-screen bg flex flex-wrap lg:flex-nowrap">
             <!-- Static Desktop Sidebar -->
-            <div class="hidden lg:block w-92 pt-24 px-6 bg-white shadow-lg" id="sideBar">
+            <div class="order-last lg:order-first lg:max-w-md py-10 lg:pt-24 px-6 bg-white lg:shadow-lg" id="sideBar">
                 <div class="max-w-md" v-if="$page.props.appLogo" v-html="$page.props.appLogo">
                 </div>
 
@@ -53,7 +53,7 @@
                 </div>
             </div>
 
-            <div class="flex-1">
+            <div class="w-full lg:flex-1 bg-gray-100">
                 <!-- Mobile Top Nav -->
                 <a :href="$page.props.dashboardUrl" class="lg:hidden flex items-center w-full px-4 py-4 bg-white shadow-lg" id="topNavReturnLink">
                     <svg viewBox="0 0 20 20" fill="currentColor" class="arrow-left w-4 h-4 text-gray-400">
@@ -66,7 +66,14 @@
                 </a>
 
                 <!-- Main Content -->
-                <div class="pb-6 pt-6 lg:pt-24 lg:pb-24 lg:max-w-4xl lg:mx-auto">
+                <div class="pb-10 pt-6 lg:pt-24 lg:pb-24 lg:max-w-4xl lg:mx-auto">
+                    <!-- Custom Message -->
+                    <div class="mb-10 sm:px-8" v-if="$page.props.message">
+                        <div class="px-6 py-4 text-sm text-gray-600 bg-blue-100 border border-blue-200 sm:rounded-lg shadow-sm mb-6">
+                            {{ $page.props.message }}
+                        </div>
+                    </div>
+
                     <!-- Error Messages -->
                     <error-messages class="mb-10 sm:px-8" :errors="errors" v-if="errors.length > 0"/>
 
@@ -87,125 +94,158 @@
                                         {{ __('Subscription Information') }}
                                     </h2>
 
-                                    <div class="mt-6 flex items-center">
-                                        <span class="w-1/3 mr-10 text-gray-800 text-sm font-semibold">{{ __('Card') }}</span>
+                                    <div class="mt-6 md:flex items-center">
+                                        <span class="w-1/3 mr-10 text-gray-800 text-sm font-semibold">
+                                            {{ __('Card') }}
+                                            <span v-if="! hasEnoughBalance" class="text-gray-500">(*)</span>
+                                        </span>
 
-                                        <div id="card-element" class="w-full bg-white border border-gray-200 p-3 rounded"></div>
+                                        <div id="card-element" class="w-full mt-1 md:mt-0 bg-white border border-gray-200 p-3 rounded"></div>
                                     </div>
 
-                                    <div class="mt-1 flex items-center" v-if="! showingCouponCode">
-                                        <span class="w-1/3 mr-10">&nbsp;</span>
+                                    <div class="mt-1 md:flex items-center" v-if="hasEnoughBalance">
+                                        <span class="hidden md:block w-1/3 mr-10">&nbsp;</span>
+
+                                        <div class="w-full text-gray-800 text-sm">
+                                            {{ __('Since you have a cash balance sufficient to begin a subscription, providing a payment method is not required. You may leave this field empty if you wish to begin a subscription using your cash balance.') }}
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-1 md:flex items-center" v-if="! showingCouponCode">
+                                        <span class="hidden md:block w-1/3 mr-10">&nbsp;</span>
 
                                         <button class="w-full text-gray-400 text-sm underline text-left active:outline-none focus:outline-none" @click="showCouponCode">
                                             {{ __('Have a coupon code?') }}
                                         </button>
                                     </div>
 
-                                    <div class="mt-6 flex items-center" v-if="showingCouponCode">
-                                        <label for="coupon" class="w-1/3 mr-10 text-gray-800 text-sm font-semibold">{{ __('Coupon') }}</label>
+                                    <div class="mt-6 md:flex items-center" v-if="showingCouponCode">
+                                        <label for="coupon" class="md:w-1/3 mr-10 text-gray-800 text-sm font-semibold">{{ __('Coupon') }}</label>
 
                                         <input type="text" id="coupon" ref="coupon"
                                                v-model="subscriptionForm.coupon"
                                                :placeholder="__('Coupon')"
                                                @keyup.enter="confirmSubscription"
-                                               class="w-full bg-white border border-gray-200 px-3 py-2 rounded outline-none"/>
+                                               class="w-full mt-1 md:mt-0 bg-white border border-gray-200 px-3 py-2 rounded outline-none"/>
                                     </div>
 
                                     <template v-if="collectsVat || collectsBillingAddress">
-                                        <div class="mt-6 flex items-center">
-                                            <span class="w-1/3 mr-10 text-gray-800 text-sm font-semibold">{{ __('Country') }}</span>
+                                        <div class="mt-6 md:flex items-center">
+                                            <span class="md:w-1/3 mr-10 text-gray-800 text-sm font-semibold">
+                                                {{ __('Country') }}
+                                                <span v-if="collectsBillingAddress" class="text-gray-500">(*)</span>
+                                            </span>
 
                                             <select name="country" id="country"
                                                     v-model="subscriptionForm.country"
-                                                    class="form-select w-full bg-white border border-gray-200 px-3 py-2 rounded outline-none">
+                                                    class="form-select w-full mt-1 md:mt-0 bg-white border border-gray-200 px-3 py-2 rounded outline-none">
                                                 <option value="" disabled="">{{ __('Select') }}</option>
                                                 <option v-for="(name, iso) in $page.props.countries" :value="iso">{{ name }}</option>
                                             </select>
                                         </div>
 
-                                        <div class="mt-1 flex items-center" v-if="! addingVatNumber && vatComplicit">
-                                            <span class="w-1/3 mr-10">&nbsp;</span>
+                                        <div class="mt-1 md:flex items-center" v-if="! addingVatNumber && vatComplicit">
+                                            <span class="hidden md:block w-1/3 mr-10">&nbsp;</span>
 
-                                            <button class="w-full text-gray-400 text-sm underline text-left active:outline-none focus:outline-none" @click="showVatNumber">
+                                            <button class="w-full mt-1 md:mt-0 text-gray-400 text-sm underline text-left active:outline-none focus:outline-none" @click="showVatNumber">
                                                 {{ __('Add VAT Number') }}
                                             </button>
                                         </div>
 
                                         <template v-if="(addingVatNumber && vatComplicit) || collectsBillingAddress">
                                             <div v-if="addingVatNumber"
-                                                 class="mt-6 flex items-center">
-                                                <label for="vat" class="w-1/3 mr-10 text-gray-800 text-sm font-semibold">{{ __('VAT Number') }}</label>
+                                                 class="mt-6 md:flex items-center">
+                                                <label for="vat" class="md:w-1/3 mr-10 text-gray-800 text-sm font-semibold">{{ __('VAT Number') }}</label>
 
                                                 <input type="text" id="vat" ref="vat"
                                                        v-model="subscriptionForm.vat"
                                                        :placeholder="__('VAT Number')"
-                                                       class="w-full bg-white border border-gray-200 px-3 py-2 rounded outline-none"/>
+                                                       class="w-full mt-1 md:mt-0 bg-white border border-gray-200 px-3 py-2 rounded outline-none"/>
                                             </div>
 
-                                            <div class="mt-6 flex items-center">
-                                                <label for="address" class="w-1/3 mr-10 text-gray-800 text-sm font-semibold">{{ __('Address') }}</label>
+                                            <div class="mt-6 md:flex items-center">
+                                                <label for="address" class="md:w-1/3 mr-10 text-gray-800 text-sm font-semibold">
+                                                    {{ __('Address') }}
+                                                    <span v-if="collectsBillingAddress && billingAddressRequired" class="text-gray-500">(*)</span>
+                                                </label>
 
                                                 <input type="text" id="address" ref="address"
                                                        v-model="subscriptionForm.address"
                                                        :placeholder="__('Address')"
-                                                       class="w-full bg-white border border-gray-200 px-3 py-2 rounded outline-none"/>
+                                                       class="w-full mt-1 md:mt-0 bg-white border border-gray-200 px-3 py-2 rounded outline-none"/>
                                             </div>
 
-                                            <div class="mt-6 flex items-center">
-                                                <label for="address2" class="w-1/3 mr-10 text-gray-800 text-sm font-semibold">{{ __('Address Line 2') }}</label>
+                                            <div class="mt-6 md:flex items-center">
+                                                <label for="address2" class="md:w-1/3 mr-10 text-gray-800 text-sm font-semibold">{{ __('Address Line 2') }}</label>
 
                                                 <input type="text" id="address2" ref="address2"
                                                        v-model="subscriptionForm.address2"
                                                        :placeholder="__('Address Line 2')"
-                                                       class="w-full bg-white border border-gray-200 px-3 py-2 rounded outline-none"/>
+                                                       class="w-full mt-1 md:mt-0 bg-white border border-gray-200 px-3 py-2 rounded outline-none"/>
                                             </div>
 
-                                            <div class="mt-6 flex items-center">
-                                                <label for="city" class="w-1/3 mr-10 text-gray-800 text-sm font-semibold">{{ __('City') }}</label>
+                                            <div class="mt-6 md:flex items-center">
+                                                <label for="city" class="w-1/3 mr-10 text-gray-800 text-sm font-semibold">
+                                                    {{ __('City') }}
+                                                    <span v-if="collectsBillingAddress && billingAddressRequired" class="text-gray-500">(*)</span>
+                                                </label>
 
                                                 <input type="text" id="city" ref="city"
                                                        v-model="subscriptionForm.city"
                                                        :placeholder="__('City')"
-                                                       class="w-full bg-white border border-gray-200 px-3 py-2 rounded outline-none"/>
+                                                       class="w-full mt-1 md:mt-0 bg-white border border-gray-200 px-3 py-2 rounded outline-none"/>
                                             </div>
 
-                                            <div class="mt-6 flex items-center">
-                                                <label for="state" class="w-1/3 mr-10 text-gray-800 text-sm font-semibold">{{ __('State / County') }}</label>
+                                            <div class="mt-6 md:flex items-center">
+                                                <label for="state" class="md:w-1/3 mr-10 text-gray-800 text-sm font-semibold">
+                                                    {{ __('State / County') }}
+                                                    <span v-if="collectsBillingAddress && billingAddressRequired" class="text-gray-500">(*)</span>
+                                                </label>
 
                                                 <input type="text" id="state" ref="state"
                                                        v-model="subscriptionForm.state"
                                                        :placeholder="__('State / County')"
-                                                       class="w-full bg-white border border-gray-200 px-3 py-2 rounded outline-none"/>
+                                                       class="w-full mt-1 md:mt-0 bg-white border border-gray-200 px-3 py-2 rounded outline-none"/>
                                             </div>
 
-                                            <div class="mt-6 flex items-center">
-                                                <label for="postal_code" class="w-1/3 mr-10 text-gray-800 text-sm font-semibold">{{ __('Zip / Postal Code') }}</label>
+                                            <div class="mt-6 md:flex items-center">
+                                                <label for="postal_code" class="md:w-1/3 mr-10 text-gray-800 text-sm font-semibold">
+                                                    {{ __('Zip / Postal Code') }}
+                                                    <span v-if="collectsBillingAddress && billingAddressRequired" class="text-gray-500">(*)</span>
+                                                </label>
 
                                                 <input type="text" id="postal_code" ref="postal_code"
                                                        v-model="subscriptionForm.postal_code"
                                                        :placeholder="__('Zip / Postal Code')"
-                                                       class="w-full bg-white border border-gray-200 px-3 py-2 rounded outline-none"/>
+                                                       class="w-full mt-1 md:mt-0 bg-white border border-gray-200 px-3 py-2 rounded outline-none"/>
                                             </div>
                                         </template>
                                     </template>
 
-                                    <div class="mt-6 flex">
-                                        <label for="extra" class="w-1/3 mr-10 mt-2 text-gray-800 text-sm font-semibold">{{ __('Extra Billing Information') }}</label>
+                                    <div class="mt-6 md:flex">
+                                        <label for="extra" class="md:w-1/3 mr-10 mt-2 text-gray-800 text-sm font-semibold">{{ __('Extra Billing Information') }}</label>
 
                                         <textarea id="extra" rows="5"
                                                   v-model="subscriptionForm.extra"
                                                   :placeholder="__('If you need to add specific contact or tax information to your receipts, like your full business name, VAT identification number, or address of record, you may add it here.')"
-                                                  class="w-full bg-white border border-gray-200 px-3 py-2 rounded focus:outline-none"></textarea>
+                                                  class="w-full mt-1 md:mt-0 bg-white border border-gray-200 px-3 py-2 rounded focus:outline-none"></textarea>
                                     </div>
 
-                                    <div v-if="enforcesAcceptingTerms" class="mt-6 flex">
-                                        <label for="extra" class="w-1/3 mr-10 mt-2 text-gray-800 text-sm font-semibold"></label>
+                                    <div v-if="enforcesAcceptingTerms" class="mt-6 md:flex">
+                                        <label for="extra" class="hidden md:block w-1/3 mr-10 text-gray-800 text-sm font-semibold"></label>
 
                                         <div class="flex items-center w-full">
-                                            <input class="" type="checkbox" name="accept" v-model="subscriptionForm.accept">
-                                            <a class="ml-2 text-sm font-semibold underline" :href="$page.props.termsUrl">{{__('I accept the terms of service')}}.</a>
+                                            <input type="checkbox" name="accept" v-model="subscriptionForm.accept">
+
+                                            <a class="ml-2 text-sm font-semibold underline" :href="$page.props.termsUrl">
+                                                {{ __('I accept the terms of service') }}.
+                                            </a>
                                         </div>
                                     </div>
+
+                                    <p v-if="collectsBillingAddress" class="text-gray-500 text-sm mt-4">
+                                        (*) {{ __('Required fields') }}
+                                    </p>
                                 </div>
 
                                 <div class="px-6 py-4 mt-5 bg-gray-100 bg-opacity-50 border-t border-gray-100 flex items-center">
@@ -218,7 +258,7 @@
                                         ...
                                     </div>
 
-                                    <spark-button class="ml-auto" @click.native="confirmSubscription" disabled="true" ref="confirmSubscriptionButton">
+                                    <spark-button class="ml-auto" @click.native="confirmSubscription" :disabled="! canSubscribe">
                                         {{ __('Subscribe') }}
                                     </spark-button>
                                 </div>
@@ -323,7 +363,7 @@
                                                interval="monthly"
                                                :seat-name="seatName"
                                                :current-plan="plan"
-                                               @plan-selected="switchToPlan($event)"
+                                               @plan-selected="open(switchToPlan, __('Are you sure you would like to switch billing plans?'), [$event])"
                                                v-if="monthlyPlans.length > 0 && showingPlansOfInterval == 'monthly'"/>
 
                                     <!-- Yearly Plans -->
@@ -332,7 +372,7 @@
                                                interval="yearly"
                                                :current-plan="plan"
                                                :seat-name="seatName"
-                                               @plan-selected="switchToPlan($event)"
+                                               @plan-selected="open(switchToPlan, __('Are you sure you would like to switch billing plans?'), [$event])"
                                                v-if="yearlyPlans.length > 0 && showingPlansOfInterval == 'yearly'"/>
                                 </transition>
 
@@ -359,9 +399,13 @@
                                         <div class="px-6 py-4">
                                             <p class="max-w-2xl text-sm text-gray-600" v-if="$page.props.paymentMethod == 'card'"
                                                v-html="__('Your current payment method is a credit card ending in :lastFour that expires on :expiration.', {
-                                                    lastFour: '<span class=\'font-semibold\'>'+$page.props.cardLastFour+'</span>',
-                                                    expiration: '<span class=\'font-semibold\'>'+$page.props.cardExpirationDate+'</span>'
+                                                    lastFour: '<span class=\'font-semibold\'>'+$page.props.pmLastFour+'</span>',
+                                                    expiration: '<span class=\'font-semibold\'>'+$page.props.pmExpirationDate+'</span>'
                                                 })">
+                                            </p>
+
+                                            <p class="max-w-2xl text-sm text-gray-600" v-if="$page.props.paymentMethod == null">
+                                                {{ __('No payment method on file.') }}
                                             </p>
 
                                             <p class="max-w-2xl text-sm text-gray-600 mt-3" v-if="$page.props.billable.vat_id"
@@ -374,79 +418,104 @@
                                                 {{ __('Update Payment Information') }}
                                             </spark-button>
 
-                                            <div class="mt-6 flex items-center" v-if="updatingPaymentMethod">
-                                                <span class="w-1/3 mr-10 text-gray-800 text-sm font-semibold">{{ __('Card') }}</span>
+                                            <div class="mt-6 md:flex items-center" v-if="updatingPaymentMethod">
+                                                <span class="md:w-1/3 mr-10 text-gray-800 text-sm font-semibold">{{ __('Card') }}</span>
 
-                                                <div id="payment-card-element" class="w-full border border-gray-200 p-3 rounded"></div>
+                                                <div id="payment-card-element" class="w-full mt-1 md:mt-0 border border-gray-200 p-3 rounded"></div>
                                             </div>
 
                                             <template v-if="updatingPaymentMethod && (collectsVat || collectsBillingAddress)">
                                                 <div v-if="collectsVat"
-                                                     class="mt-6 flex items-center">
-                                                    <label for="vat" class="w-1/3 mr-10 text-gray-800 text-sm font-semibold">{{ __('VAT Number') }}</label>
+                                                     class="mt-6 md:flex items-center">
+                                                    <label for="vat" class="md:w-1/3 mr-10 text-gray-800 text-sm font-semibold">{{ __('VAT Number') }}</label>
 
                                                     <input type="text" id="vat" ref="vat"
                                                            v-model="paymentInformationForm.vat"
                                                            :placeholder="__('VAT Number')"
-                                                           class="w-full bg-white border border-gray-200 px-3 py-2 rounded outline-none"/>
+                                                           class="w-full mt-1 md:mt-0 bg-white border border-gray-200 px-3 py-2 rounded outline-none"/>
                                                 </div>
 
-                                                <div class="mt-6 flex items-center">
-                                                    <label for="address" class="w-1/3 mr-10 text-gray-800 text-sm font-semibold">{{ __('Address') }}</label>
+                                                <div class="mt-6 md:flex items-center">
+                                                    <label for="address" class="md:w-1/3 mr-10 text-gray-800 text-sm font-semibold">
+                                                        {{ __('Address') }}
+                                                        <span v-if="collectsBillingAddress && billingAddressRequired" class="text-gray-500">(*)</span>
+                                                    </label>
 
                                                     <input type="text" id="address" ref="address"
                                                            v-model="paymentInformationForm.address"
                                                            :placeholder="__('Address')"
-                                                           class="w-full bg-white border border-gray-200 px-3 py-2 rounded outline-none"/>
+                                                           class="w-full mt-1 md:mt-0 bg-white border border-gray-200 px-3 py-2 rounded outline-none"/>
                                                 </div>
 
-                                                <div class="mt-6 flex items-center">
-                                                    <label for="address2" class="w-1/3 mr-10 text-gray-800 text-sm font-semibold">{{ __('Address Line 2') }}</label>
+                                                <div class="mt-6 md:flex items-center">
+                                                    <label for="address2" class="md:w-1/3 mr-10 text-gray-800 text-sm font-semibold">{{ __('Address Line 2') }}</label>
 
                                                     <input type="text" id="address2" ref="address2"
                                                            v-model="paymentInformationForm.address2"
                                                            :placeholder="__('Address Line 2')"
-                                                           class="w-full bg-white border border-gray-200 px-3 py-2 rounded outline-none"/>
+                                                           class="w-full mt-1 md:mt-0 bg-white border border-gray-200 px-3 py-2 rounded outline-none"/>
                                                 </div>
 
-                                                <div class="mt-6 flex items-center">
-                                                    <label for="city" class="w-1/3 mr-10 text-gray-800 text-sm font-semibold">{{ __('City') }}</label>
+                                                <div class="mt-6 md:flex items-center">
+                                                    <label for="city" class="md:w-1/3 mr-10 text-gray-800 text-sm font-semibold">
+                                                        {{ __('City') }}
+                                                        <span v-if="collectsBillingAddress && billingAddressRequired" class="text-gray-500">(*)</span>
+                                                    </label>
 
                                                     <input type="text" id="city" ref="city"
                                                            v-model="paymentInformationForm.city"
                                                            :placeholder="__('City')"
-                                                           class="w-full bg-white border border-gray-200 px-3 py-2 rounded outline-none"/>
+                                                           class="w-full mt-1 md:mt-0 bg-white border border-gray-200 px-3 py-2 rounded outline-none"/>
                                                 </div>
 
-                                                <div class="mt-6 flex items-center">
-                                                    <label for="state" class="w-1/3 mr-10 text-gray-800 text-sm font-semibold">{{ __('State / County') }}</label>
+                                                <div class="mt-6 md:flex items-center">
+                                                    <label for="state" class="md:w-1/3 mr-10 text-gray-800 text-sm font-semibold">
+                                                        {{ __('State / County') }}
+                                                        <span v-if="collectsBillingAddress && billingAddressRequired" class="text-gray-500">(*)</span>
+                                                    </label>
 
                                                     <input type="text" id="state" ref="state"
                                                            v-model="paymentInformationForm.state"
                                                            :placeholder="__('State / County')"
-                                                           class="w-full bg-white border border-gray-200 px-3 py-2 rounded outline-none"/>
+                                                           class="w-full mt-1 md:mt-0 bg-white border border-gray-200 px-3 py-2 rounded outline-none"/>
                                                 </div>
 
-                                                <div class="mt-6 flex items-center">
-                                                    <label for="postal_code" class="w-1/3 mr-10 text-gray-800 text-sm font-semibold">{{ __('Zip / Postal Code') }}</label>
+                                                <div class="mt-6 md:flex items-center">
+                                                    <label for="postal_code" class="md:w-1/3 mr-10 text-gray-800 text-sm font-semibold">
+                                                        {{ __('Zip / Postal Code') }}
+                                                        <span v-if="collectsBillingAddress && billingAddressRequired" class="text-gray-500">(*)</span>
+                                                    </label>
 
                                                     <input type="text" id="postal_code" ref="postal_code"
                                                            v-model="paymentInformationForm.postal_code"
                                                            :placeholder="__('Zip / Postal Code')"
-                                                           class="w-full bg-white border border-gray-200 px-3 py-2 rounded outline-none"/>
+                                                           class="w-full mt-1 md:mt-0 bg-white border border-gray-200 px-3 py-2 rounded outline-none"/>
                                                 </div>
 
-                                                <div class="mt-6 flex items-center">
-                                                    <span class="w-1/3 mr-10 text-gray-800 text-sm font-semibold">{{ __('Country') }}</span>
+                                                <div class="mt-6 md:flex items-center">
+                                                    <span class="md:w-1/3 mr-10 text-gray-800 text-sm font-semibold">
+                                                        {{ __('Country') }}
+                                                        <span v-if="collectsBillingAddress" class="text-gray-500">(*)</span>
+                                                    </span>
 
                                                     <select name="country" id="country"
                                                             v-model="paymentInformationForm.country"
-                                                            class="form-select w-full bg-white border border-gray-200 px-3 py-2 rounded outline-none">
+                                                            class="form-select w-full mt-1 md:mt-0 bg-white border border-gray-200 px-3 py-2 rounded outline-none">
                                                         <option value="" disabled="">{{ __('Select') }}</option>
                                                         <option v-for="(name, iso) in $page.props.countries" :value="iso">{{ name }}</option>
                                                     </select>
                                                 </div>
                                             </template>
+                                        </div>
+
+                                        <div class="px-6" v-if="updatingPaymentMethod">
+                                            <p v-if="collectsBillingAddress" class="text-gray-500 text-sm mt-4">
+                                                (*) {{ __('Required fields') }}
+                                            </p>
+
+                                            <info-messages v-if="hasUnpaidInvoices()" class="mt-4">
+                                                {{ __('You have some unpaid invoices. After updating your payment method, you may retry the payments via the invoice list below.') }}
+                                            </info-messages>
                                         </div>
 
                                         <div class="px-6 py-4 mt-5 bg-gray-100 bg-opacity-50 border-t border-gray-100 text-right" v-if="updatingPaymentMethod">
@@ -466,39 +535,20 @@
                             <div class="mt-3 sm:px-8">
                                 <div class="bg-white sm:rounded-lg shadow-sm">
                                     <div class="px-6 py-4 ">
-                                        <div class="mt-6 flex">
-                                            <label for="coupon_for_existing" class="w-1/3 mr-10 mt-2 text-gray-800 text-sm font-semibold">{{ __('Coupon') }}</label>
+                                        <div class="mt-6 md:flex">
+                                            <label for="coupon_for_existing" class="md:w-1/3 mr-10 mt-2 text-gray-800 text-sm font-semibold">{{ __('Coupon') }}</label>
 
                                             <input type="text" id="coupon_for_existing" ref="coupon_for_existing"
                                                    v-model="couponForm.coupon"
                                                    :placeholder="__('Coupon')"
-                                                   class="w-full bg-white border border-gray-200 px-3 py-2 rounded outline-none"/>
+                                                   class="w-full mt-1 md:mt-0 bg-white border border-gray-200 px-3 py-2 rounded outline-none"/>
                                         </div>
                                     </div>
 
                                     <div class="px-6 py-4 mt-5 bg-gray-100 bg-opacity-50 border-t border-gray-100 text-right">
-                                        <spark-button @click.native="applyCoupon">
+                                        <spark-button @click.native="applyCoupon" disabled="true" ref="applyCouponButton">
                                             {{ __('Apply') }}
                                         </spark-button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Cancel Subscription -->
-                            <section-heading class="mt-10 px-4 sm:px-8">
-                                {{ __('Cancel Subscription') }}
-                            </section-heading>
-
-                            <div class="mt-3 sm:px-8">
-                                <div class="px-6 py-4 bg-white sm:rounded-lg shadow-sm">
-                                    <div class="max-w-2xl text-sm text-gray-600">
-                                        {{ __('You may cancel your subscription at any time. Once your subscription has been cancelled, you will have the option to resume the subscription until the end of your current billing cycle.') }}
-                                    </div>
-
-                                    <div class="mt-4">
-                                        <spark-secondary-button @click.native="cancelSubscription">
-                                            {{ __('Cancel Subscription') }}
-                                        </spark-secondary-button>
                                     </div>
                                 </div>
                             </div>
@@ -518,7 +568,7 @@
                                     </div>
 
                                     <div class="mt-4">
-                                        <spark-button @click.native="resumeSubscription">
+                                        <spark-button @click.native="open(resumeSubscription, __('Are you sure you want to resume your subscription?'))">
                                             {{ __('Resume Subscription') }}
                                         </spark-button>
                                     </div>
@@ -539,12 +589,12 @@
                                             {{ __('If you need to add specific contact or tax information to your receipts, like your full business name, VAT identification number, or address of record, you may add it here.') }}
                                         </div>
 
-                                        <div class="mt-6 flex">
-                                            <label for="extra" class="w-1/3 mr-10 mt-2 text-gray-800 text-sm font-semibold">{{ __('Extra Billing Information') }}</label>
+                                        <div class="mt-6 md:flex">
+                                            <label for="extra" class="md:w-1/3 mr-10 mt-2 text-gray-800 text-sm font-semibold">{{ __('Extra Billing Information') }}</label>
 
                                             <textarea id="extra" rows="3"
                                                       v-model="billingInformationForm.extra"
-                                                      class="w-full border border-gray-200 px-3 py-2 rounded focus:outline-none"></textarea>
+                                                      class="w-full mt-1 md:mt-0 border border-gray-200 px-3 py-2 rounded focus:outline-none"></textarea>
                                         </div>
                                     </div>
 
@@ -570,20 +620,104 @@
                                             {{ __('We will send a receipt download link to the email addresses that you specify below. You may separate multiple email addresses using commas.') }}
                                         </div>
 
-                                        <div class="mt-6 flex">
-                                            <label for="receipt_emails" class="w-1/3 mr-10 mt-2 text-gray-800 text-sm font-semibold">{{ __('Email Addresses') }}</label>
+                                        <div class="mt-6 md:flex">
+                                            <label for="receipt_emails" class="md:w-1/3 mr-10 mt-2 text-gray-800 text-sm font-semibold">{{ __('Email Addresses') }}</label>
 
                                             <input type="text" id="receipt_emails" ref="city"
                                                    v-model="receiptEmailsForm.receipt_emails"
                                                    :placeholder="__('Email Addresses')"
-                                                   class="w-full bg-white border border-gray-200 px-3 py-2 rounded outline-none"/>
+                                                   class="w-full mt-1 md:mt-0 bg-white border border-gray-200 px-3 py-2 rounded outline-none"/>
                                         </div>
                                     </div>
 
                                     <div class="px-6 py-4 mt-5 bg-gray-100 bg-opacity-50 border-t border-gray-100 text-right">
-                                        <spark-button @click.native="updateReceiptEmails">
+                                        <spark-button @click.native="updateReceiptEmails" disabled="true" ref="updateReceiptEmailsButton">
                                             {{ __('Save') }}
                                         </spark-button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Payments -->
+                        <div class="mt-10" v-if="$page.props.allowsTopUps || $page.props.raw_balance != 0 || $page.props.state != 'none'">
+                            <section-heading class="px-4 sm:px-8">
+                                {{ __('Payments') }}
+                            </section-heading>
+
+                            <div class="mt-3 sm:px-8">
+                                <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
+                                    <div class="relative bg-white pt-5 px-4 pb-12 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden" v-if="$page.props.allowsTopUps || $page.props.raw_balance != 0">
+                                        <dt class="pb-1">
+                                            <p class="text-sm font-medium text-gray-500 truncate">{{ __('Customer Balance') }}</p>
+                                        </dt>
+
+                                        <dd class="pb-6 flex items-baseline sm:pb-7">
+                                            <p class="text-2xl font-semibold text-gray-900">
+                                                {{ $page.props.balance }}
+                                            </p>
+
+                                            <div class="absolute bottom-0 inset-x-0 px-6 py-4 mt-5 h-16 bg-gray-100 bg-opacity-50 border-t border-gray-100 text-right">
+                                                <spark-button @click.native="topUpBalance" ref="topUpBalance" v-if="$page.props.allowsTopUps">
+                                                    {{ __('Top Up Balance') }}
+
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                                    </svg>
+                                                </spark-button>
+                                            </div>
+                                        </dd>
+                                    </div>
+
+                                    <div class="relative bg-white pt-5 px-4 pb-12 sm:pt-6 sm:px-6 shadow rounded-lg overflow-hidden" v-if="$page.props.state != 'none'">
+                                        <dt class="pb-1">
+                                            <p class="text-sm font-medium text-gray-500 truncate">
+                                                <span v-if="$page.props.nextPayment">
+                                                    {{ __('Next Payment on') }} {{ $page.props.nextPayment.date }}
+                                                </span>
+                                                <span v-else>
+                                                    {{ __('Next Payment') }}
+                                                </span>
+                                            </p>
+                                        </dt>
+
+                                        <dd class="pb-6 flex items-baseline sm:pb-7">
+                                            <div v-if="$page.props.nextPayment">
+                                                <p class="text-2xl font-semibold text-gray-900">
+                                                    {{ $page.props.nextPayment.amount }}
+                                                </p>
+                                            </div>
+
+                                            <div v-else>
+                                                <p>
+                                                    {{ __('No payment scheduled.') }}
+                                                </p>
+                                            </div>
+
+                                            <div class="absolute bottom-0 inset-x-0 px-6 py-4 h-16 bg-gray-100 bg-opacity-50 border-t border-gray-100 text-right">
+                                            </div>
+                                        </dd>
+                                    </div>
+                                </dl>
+                            </div>
+                        </div>
+
+                        <div v-if="$page.props.state == 'active'">
+                            <!-- Cancel Subscription -->
+                            <section-heading class="mt-10 px-4 sm:px-8">
+                                {{ __('Cancel Subscription') }}
+                            </section-heading>
+
+                            <div class="mt-3 sm:px-8">
+                                <div class="px-6 py-4 bg-white sm:rounded-lg shadow-sm">
+                                    <div class="max-w-2xl text-sm text-gray-600">
+                                        {{ __('You may cancel your subscription at any time. Once your subscription has been cancelled, you will have the option to resume the subscription until the end of your current billing cycle.') }}
+                                    </div>
+
+                                    <div class="mt-4">
+                                        <spark-secondary-button @click.native="open(cancelSubscription, __('Are you sure you want to cancel your subscription?'))">
+                                            {{ __('Cancel Subscription') }}
+                                        </spark-secondary-button>
                                     </div>
                                 </div>
                             </div>
@@ -595,7 +729,11 @@
                                 {{ __('Receipts') }}
                             </section-heading>
 
-                            <receipt-list class="mt-3 sm:px-8" :receipts="$page.props.receipts"/>
+                            <receipt-list
+                                @payment-retried="open(retryPayment, __('Are you sure you want to attempt to pay :amount?', { amount: $event.amount }), [$event])"
+                                class="mt-3 sm:px-8"
+                                :receipts="$page.props.receipts"
+                            />
                         </div>
 
                         <div class="text-center mt-10 lg:hidden" id="footerTermsLink" v-if="$page.props.termsUrl">
@@ -616,6 +754,19 @@
                 <div></div>
             </div>
         </div>
+
+        <modal v-if="showModal" ref="modal" :title="__('Confirm Billing Action')" :max-width="800" @closed="showModal = false">
+            <template #default>
+                {{ confirmText }}
+            </template>
+
+            <template #footer>
+                <div class="flex justify-end mt-4">
+                    <spark-secondary-button @click.native="close">{{ __('Nevermind') }}</spark-secondary-button>
+                    <spark-button class="ml-2" @click.native="confirm">{{ __('Confirm') }}</spark-button>
+                </div>
+            </template>
+        </modal>
     </div>
 
     <!-- bg-gray-50 bg-gray-100 bg-gray-200 bg-gray-300 bg-gray-400 bg-gray-500 bg-gray-600 bg-gray-700 bg-gray-800 bg-gray-900 -->
@@ -631,8 +782,8 @@
 <script>
 import ErrorMessages from './../Components/ErrorMessages';
 import InfoMessages from './../Components/InfoMessages';
-import FormatsValues from './../Mixins/FormatsValues';
 import IntervalSelector from './../Components/IntervalSelector';
+import Modal from './../Components/Modal';
 import Plan from './../Components/Plan';
 import PlanList from './../Components/PlanList';
 import PlanSectionHeading from './../Components/PlanSectionHeading';
@@ -643,12 +794,11 @@ import SparkSecondaryButton from './../Components/SecondaryButton';
 import {Inertia} from '@inertiajs/inertia'
 
 export default {
-    mixins: [FormatsValues],
-
     components: {
         ErrorMessages,
         InfoMessages,
         IntervalSelector,
+        Modal,
         Plan,
         PlanList,
         PlanSectionHeading,
@@ -661,6 +811,7 @@ export default {
     props: [
         'billableId',
         'billableType',
+        'billingAddressRequired',
         'enforcesAcceptingTerms',
         'collectsVat',
         'collectsBillingAddress',
@@ -683,6 +834,7 @@ export default {
 
             subscribing: null,
             subscriptionCardElement: null,
+            subscriptionCardElementComplete: false,
             showingCouponCode: false,
             addingVatNumber: false,
             subscriptionForm: {
@@ -700,6 +852,7 @@ export default {
 
             checkoutTax: 0,
             checkoutAmount: 0,
+            rawCheckoutAmount: 0,
             loadingTaxCalculations: true,
 
             paymentInformationForm: {
@@ -728,6 +881,13 @@ export default {
             billingInformationForm: {
                 extra: ''
             },
+
+            topUp: null,
+
+            confirmAction: null,
+            confirmArguments: [],
+            confirmText: '',
+            showModal: false,
         };
     },
 
@@ -752,6 +912,22 @@ export default {
             })
         },
 
+        "couponForm.coupon"(val) {
+            if (val) {
+                this.$refs.applyCouponButton.$el.removeAttribute('disabled')
+            } else {
+                this.$refs.applyCouponButton.$el.setAttribute('disabled', 'disabled')
+            }
+        },
+
+        "receiptEmailsForm.receipt_emails"(newValue, oldValue) {
+            if (newValue || oldValue) {
+                this.$refs.updateReceiptEmailsButton.$el.removeAttribute('disabled')
+            } else {
+                this.$refs.updateReceiptEmailsButton.$el.setAttribute('disabled', 'disabled')
+            }
+        },
+
         subscribing(val) {
             if (!val) {
                 window.history.pushState({}, document.title, window.location.pathname);
@@ -761,6 +937,7 @@ export default {
                 this.calculatingTax(this.subscribing, (data) => {
                     this.checkoutTax = data.tax;
                     this.checkoutAmount = data.total;
+                    this.rawCheckoutAmount = data.raw_total;
                 });
             }
 
@@ -780,6 +957,7 @@ export default {
                 this.calculatingTax(this.subscribing, (data) => {
                     this.checkoutTax = data.tax;
                     this.checkoutAmount = data.total;
+                    this.rawCheckoutAmount = data.raw_total;
                 });
             }
         },
@@ -789,6 +967,7 @@ export default {
                 this.calculatingTax(this.subscribing, (data) => {
                     this.checkoutTax = data.tax;
                     this.checkoutAmount = data.total;
+                    this.rawCheckoutAmount = data.raw_total;
                 });
             }
         }, 500)
@@ -847,10 +1026,6 @@ export default {
         if (this.$page.props.state == 'none' && this.$page.props.subscribingTo) {
             this.startSubscribingToPlan(this.$page.props.subscribingTo);
         }
-
-        if (this.collectsVat && !this.$page.props.billable.billing_country) {
-            this.subscriptionForm.country = this.$page.props.homeCountry;
-        }
     },
 
     computed: {
@@ -863,6 +1038,15 @@ export default {
                 'PL', 'PT', 'RO', 'SI', 'SK',
                 'FI', 'SE', 'GB',
             ], this.subscriptionForm.country) : false;
+        },
+
+        hasEnoughBalance() {
+            return this.$page.props.raw_balance != 0 &&
+                this.rawCheckoutAmount <= -(this.$page.props.raw_balance);
+        },
+
+        canSubscribe() {
+            return this.hasEnoughBalance || this.subscriptionCardElementComplete;
         }
     },
 
@@ -897,7 +1081,6 @@ export default {
             return card;
         },
 
-
         /**
          * Begin the process of subscription to a plan.
          */
@@ -906,13 +1089,17 @@ export default {
 
             this.subscriptionCardElement = this.createCardElement('#card-element');
 
-            this.subscriptionCardElement.on('ready', () => {
-                this.subscriptionCardElement.focus()
-            });
+            if (! this.hasEnoughBalance) {
+                this.subscriptionCardElement.on('ready', () => {
+                    this.subscriptionCardElement.focus();
+                });
+            }
 
             this.subscriptionCardElement.on('change', (event) => {
                 if (event.complete) {
-                    this.$refs.confirmSubscriptionButton.$el.removeAttribute('disabled')
+                    this.subscriptionCardElementComplete = true;
+                } else {
+                    this.subscriptionCardElementComplete = false;
                 }
             })
         },
@@ -928,6 +1115,32 @@ export default {
             }
 
             this.processing = true;
+
+            let submitConfirmSubscription = (paymentMethod = null) => {
+                this.request('POST', '/spark/subscription', {
+                    plan: this.subscribing.id,
+                    payment_method: paymentMethod,
+                    coupon: this.subscriptionForm.coupon,
+                    extra_billing_information: this.subscriptionForm.extra,
+                    billing_address: this.subscriptionForm.address,
+                    billing_address_line_2: this.subscriptionForm.address2,
+                    billing_city: this.subscriptionForm.city,
+                    billing_state: this.subscriptionForm.state,
+                    billing_postal_code: this.subscriptionForm.postal_code,
+                    billing_country: this.subscriptionForm.country,
+                    vat_id: this.subscriptionForm.vat,
+                }).then(response => {
+                    this.billingInformationForm.extra = this.subscriptionForm.extra;
+
+                    this.handlePaymentResponse(response);
+                });
+            }
+
+            if (! this.subscriptionCardElementComplete) {
+                submitConfirmSubscription();
+
+                return;
+            }
 
             this.generateSetupIntentToken(secret => {
                 let payload = {
@@ -955,32 +1168,23 @@ export default {
 
                         this.processing = false;
                     } else {
-                        this.request('POST', '/spark/subscription', {
-                            plan: this.subscribing.id,
-                            payment_method: response.setupIntent.payment_method,
-                            coupon: this.subscriptionForm.coupon,
-                            extra_billing_information: this.subscriptionForm.extra,
-                            billing_address: this.subscriptionForm.address,
-                            billing_address_line_2: this.subscriptionForm.address2,
-                            billing_city: this.subscriptionForm.city,
-                            billing_state: this.subscriptionForm.state,
-                            billing_postal_code: this.subscriptionForm.postal_code,
-                            billing_country: this.subscriptionForm.country,
-                            vat_id: this.subscriptionForm.vat,
-                        }).then(response => {
-                            this.billingInformationForm.extra = this.subscriptionForm.extra;
-
-                            if (response && response.data.paymentId) {
-                                window.location = '/' + this.$page.props.cashierPath + '/payment/' + response.data.paymentId + '?redirect=' + window.location.origin + '/' + this.$page.props.sparkPath;
-                            } else if (response) {
-                                this.reloadData();
-                            } else {
-                                this.processing = false;
-                            }
-                        });
+                        submitConfirmSubscription(response.setupIntent.payment_method);
                     }
                 });
             });
+        },
+
+        /**
+         * Handle a payment response and optionally redirect to the payment page.
+         */
+        handlePaymentResponse(response) {
+            if (response && response.data.paymentId) {
+                window.location = '/' + this.$page.props.cashierPath + '/payment/' + response.data.paymentId + '?redirect=' + window.location.origin + '/' + this.$page.props.sparkPath;
+            } else if (response) {
+                this.reloadData(['nextPayment', 'plan', 'receipts', 'state', 'trialEndsAt']);
+            } else {
+                this.processing = false;
+            }
         },
 
         /**
@@ -992,7 +1196,7 @@ export default {
             this.request('PUT', '/spark/subscription', {
                 plan: plan.id,
             }).then(response => {
-                this.reloadData();
+                this.reloadData(['nextPayment', 'plan', 'receipts', 'state', 'trialEndsAt']);
             });
         },
 
@@ -1082,6 +1286,10 @@ export default {
             });
         },
 
+        hasUnpaidInvoices() {
+            return this.$page.props.receipts.filter(receipt => receipt.status === 'open').length > 0;
+        },
+
         /**
          * Generate a Stripe Setup Intent token.
          */
@@ -1107,6 +1315,24 @@ export default {
         },
 
         /**
+         * Redirect the customer to the generated pay link for topping up balances.
+         */
+        topUpBalance() {
+            this.processing = true;
+
+            this.request('PUT', '/spark/top-up')
+                .then(response => {
+                    if (response && response.data.url) {
+                        window.location = response.data.url;
+                    } else {
+                        this.processing = false;
+                    }
+
+                    this.reloadData();
+                });
+        },
+
+        /**
          * Update the email addresses we send receipts to.
          */
         updateReceiptEmails() {
@@ -1116,6 +1342,10 @@ export default {
                 receipt_emails: this.receiptEmailsForm.receipt_emails,
             }).then(response => {
                 this.reloadData();
+
+                if (! this.receiptEmailsForm.receipt_emails) {
+                    this.$refs.updateReceiptEmailsButton.$el.setAttribute('disabled', 'disabled')
+                }
             });
         },
 
@@ -1173,6 +1403,15 @@ export default {
             });
         },
 
+        retryPayment(invoice) {
+            this.processing = true;
+
+            this.request('POST', `/spark/${invoice.id}/pay`)
+                .then(response => {
+                    this.handlePaymentResponse(response);
+                });
+        },
+
         /**
          * Start periodically reloading the page's data.
          */
@@ -1185,8 +1424,9 @@ export default {
         /**
          * Reload the page's data, while maintaining any current state.
          */
-        reloadData() {
+        reloadData(only = []) {
             return this.$inertia.reload({
+                ...(only.length && {only}),
                 onSuccess: () => {
                     this.selectingNewPlan = false;
                     this.processing = false;
@@ -1221,6 +1461,31 @@ export default {
                 document.body.scrollTop = 0;
                 document.documentElement.scrollTop = 0;
             });
+        },
+
+        confirm() {
+            this.$refs.modal?.close();
+
+            this.confirmAction(...this.confirmArguments);
+
+            this.confirmAction = null;
+            this.confirmArguments = [];
+            this.confirmText = '';
+        },
+
+        open(confirmAction, confirmText, confirmArguments = []) {
+            this.confirmAction = confirmAction;
+            this.confirmArguments = confirmArguments;
+            this.confirmText = confirmText;
+            this.showModal = true;
+        },
+
+        close() {
+            this.$refs.modal?.close();
+
+            this.confirmAction = null;
+            this.confirmArguments = [];
+            this.confirmText = '';
         },
     },
 }

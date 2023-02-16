@@ -66,14 +66,17 @@ class UpdatePaymentMethodController
     {
         $countryRule = Features::collectsBillingAddress() ? 'required' : 'nullable';
 
+        $addressRequired = Features::collectsBillingAddress() &&
+            (bool) Features::option('billing-address-collection', 'required');
+
         $request->validate([
-            'billing_address' => ['nullable', 'max:225'],
+            'billing_address' => [$addressRequired ? 'required' : 'nullable', 'max:225'],
             'billing_address_line_2' => ['nullable', 'max:225'],
-            'billing_city' => ['nullable', 'max:225'],
-            'billing_state' => ['nullable', 'max:225'],
-            'billing_postal_code' => ['nullable', 'max:225'],
-            'billing_country' => [$countryRule, 'max:2', new ValidCountry],
-            'vat_id' => ['nullable', 'max:225', new ValidVatNumber],
+            'billing_city' => [$addressRequired ? 'required' : 'nullable', 'max:225'],
+            'billing_state' => [$addressRequired ? 'required' : 'nullable', 'max:225'],
+            'billing_postal_code' => [$addressRequired ? 'required' : 'nullable', 'max:225'],
+            'billing_country' => [$countryRule, 'max:2', new ValidCountry()],
+            'vat_id' => ['nullable', 'max:225', new ValidVatNumber()],
         ]);
     }
 }

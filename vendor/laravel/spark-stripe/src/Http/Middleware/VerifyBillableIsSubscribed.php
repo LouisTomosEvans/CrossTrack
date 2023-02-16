@@ -57,7 +57,7 @@ class VerifyBillableIsSubscribed
 
         $subscription = $billable->subscription();
 
-        if ($plan && (! $subscription || $subscription->stripe_plan != $plan)) {
+        if ($plan && (! $subscription || $subscription->stripe_price != $plan)) {
             return false;
         }
 

@@ -14,6 +14,8 @@ class PaymentSucceeded
     public $billable;
 
     /**
+     * The invoice instance.
+     *
      * @var \Laravel\Cashier\Invoice
      */
     public $invoice;
@@ -22,7 +24,8 @@ class PaymentSucceeded
      * Create a new event instance.
      *
      * @param  \Spark\Billable  $billable
-     * @param  Invoice  $invoice
+     * @param  \Laravel\Cashier\Invoice  $invoice
+     * @return void
      */
     public function __construct($billable, Invoice $invoice)
     {

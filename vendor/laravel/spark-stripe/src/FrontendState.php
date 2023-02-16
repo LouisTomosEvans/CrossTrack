@@ -2,11 +2,13 @@
 
 namespace Spark;
 
-use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Laravel\Cashier\Cashier;
-use Stripe\Price;
+use Laravel\Cashier\Invoice;
+use Laravel\Cashier\Subscription;
+use Stripe\Subscription as StripeSubscription;
 
 class FrontendState
 {
@@ -19,29 +21,42 @@ class FrontendState
      */
     public function current($type, Model $billable)
     {
-        $subscription = $billable->subscription('default');
+        /** @var \Laravel\Cashier\Subscription|null */
+        $subscription = $billable->subscription();
+
+        // Filter out incomplete subscriptions for now...
+        if ($subscription && $subscription->incomplete()) {
+            $subscription = null;
+        }
 
         $plans = static::getPlans($type, $billable);
 
         $plan = $subscription && $subscription->active()
-                    ? $plans->firstWhere('id', $subscription->stripe_plan)
+                    ? $plans->firstWhere('id', $subscription->stripe_price)
                     : null;
 
         $homeCountry = is_string(config('spark.collects_eu_vat'))
                         ? config('spark.collects_eu_vat')
                         : Features::option('eu-vat-collection', 'home-country');
 
+        $upcomingInvoice = $subscription ? $subscription->upcomingInvoice() : null;
+
+        $rawBalance = $billable->rawBalance();
+
         return [
+            'allowsTopUps' => Features::allowsTopUps() && Features::option('top-ups', 'price'),
             'appLogo' => $this->logo(),
             'appName' => config('app.name', 'Laravel'),
+            'balance' => ltrim(Cashier::formatAmount($rawBalance, $billable->preferredCurrency()), '-'),
             'billable' => $billable->toArray(),
             'billableId' => (string) $billable->id,
             'billableName' => $billable->name,
             'billableType' => $type,
+            'billingAddressRequired' => Features::collectsBillingAddress() && (bool) Features::option('billing-address-collection', 'required'),
             'brandColor' => $this->brandColor(),
-            'cardBrand' => $billable->card_brand,
-            'cardExpirationDate' => $billable->card_expiration,
-            'cardLastFour' => $billable->card_last_four,
+            'pmType' => $billable->pm_type,
+            'pmExpirationDate' => $billable->pm_expiration,
+            'pmLastFour' => $billable->pm_last_four,
             'cashierPath' => config('cashier.path'),
             'collectsVat' => Features::collectsEuVat(),
             'collectsBillingAddress' => Features::collectsBillingAddress(),
@@ -49,12 +64,15 @@ class FrontendState
             'dashboardUrl' => $this->dashboardUrl(),
             'defaultInterval' => config('spark.billables.'.$type.'.default_interval', 'monthly'),
             'enforcesAcceptingTerms' => Features::enforcesAcceptingTerms(),
-            'genericTrialEndsAt' => $billable->onGenericTrial() ? $billable->genericTrialEndsAt()->format('F j, Y') : null,
+            'genericTrialEndsAt' => $billable->onGenericTrial() ? $billable->genericTrialEndsAt()->translatedFormat(config('spark.date_format', 'F j, Y')) : null,
             'homeCountry' => $homeCountry,
+            'message' => request('message', ''),
             'monthlyPlans' => $plans->where('interval', 'monthly')->where('active', true)->values(),
-            'paymentMethod' => $billable->card_last_four ? 'card' : null,
+            'nextPayment' => $upcomingInvoice ? ['amount' => $upcomingInvoice->amountDue(), 'date' => $upcomingInvoice->date()->translatedFormat(config('spark.date_format', 'F j, Y'))] : null,
+            'paymentMethod' => $billable->pm_last_four ? 'card' : null,
             'plan' => $plan,
-            'receipts' => $this->receipts($billable),
+            'raw_balance' => $rawBalance,
+            'receipts' => fn () => $this->invoices($billable),
             'seatName' => Spark::seatName($type),
             'sendsReceiptsToCustomAddresses' => Features::optionEnabled('receipt-emails-sending', 'custom-addresses'),
             'sparkPath' => config('spark.path'),
@@ -62,7 +80,7 @@ class FrontendState
             'stripeKey' => config('cashier.key'),
             'stripeVersion' => Cashier::STRIPE_VERSION,
             'termsUrl' => $this->termsUrl(),
-            'trialEndsAt' => $subscription && $subscription->onTrial() ? $subscription->trial_ends_at->format('F j, Y') : null,
+            'trialEndsAt' => $subscription && $subscription->onTrial() ? $subscription->trial_ends_at->translatedFormat(config('spark.date_format', 'F j, Y')) : null,
             'userAvatar' => Auth::user()->profile_photo_url,
             'userName' => Auth::user()->name,
             'yearlyPlans' => $plans->where('interval', 'yearly')->where('active', true)->values(),
@@ -109,17 +127,27 @@ class FrontendState
         $plans = Spark::plans($type);
 
         $prices = collect(
-            Price::all(['limit' => 100], Cashier::stripeOptions())->data
+            $billable->stripe()->prices->all(['limit' => 100])->data
         );
 
-        return $plans->map(function ($plan) use ($billable, $prices) {
+        return $plans->map(function ($plan) use ($prices) {
             if (! $stripePrice = $prices->firstWhere('id', $plan->id)) {
                 throw new \RuntimeException('Price ['.$plan->id.'] does not exist in your Stripe account.');
             }
 
             $plan->rawPrice = $stripePrice->unit_amount;
 
-            $plan->price = Cashier::formatAmount($stripePrice->unit_amount, $stripePrice->currency);
+            $price = Cashier::formatAmount($stripePrice->unit_amount, $stripePrice->currency);
+
+            if (Str::endsWith($price, '.00')) {
+                $price = substr($price, 0, -3);
+            }
+
+            if (Str::endsWith($price, '.0')) {
+                $price = substr($price, 0, -2);
+            }
+
+            $plan->price = $price;
 
             $plan->currency = $stripePrice->currency;
 
@@ -131,7 +159,7 @@ class FrontendState
      * Get the current subscription state.
      *
      * @param  \Illuminate\Database\Eloquent\Model  $billable
-     * @param  \Laravel\Cashier\Subscription  $subscription
+     * @param  \Laravel\Cashier\Subscription|null  $subscription
      * @return string
      */
     protected function state(Model $billable, $subscription)
@@ -148,10 +176,45 @@ class FrontendState
     }
 
     /**
+     * List all invoices of the given billable.
+     *
+     * @param  \Spark\Billable  $billable
+     * @return array
+     */
+    protected function invoices($billable)
+    {
+        return $billable->invoicesIncludingPending(['limit' => 100, 'expand' => ['data.subscription']])
+            ->filter(fn (Invoice $invoice) => $invoice->isOpen() || $invoice->isPaid())
+            ->filter(function (Invoice $invoice) {
+                // If the subscription is cancelled, we will filter out open invoices...
+                return ! $invoice->subscription instanceof StripeSubscription ||
+                    $invoice->subscription->status !== StripeSubscription::STATUS_CANCELED ||
+                    $invoice->isPaid();
+            })
+            ->map(function (Invoice $invoice) use ($billable) {
+                return [
+                    'amount' => $invoice->realTotal(),
+                    'date' => $invoice->date()->translatedFormat(config('spark.date_format', 'F j, Y')),
+                    'id' => $invoice->id,
+                    'receipt_url' => route('receipts.download', [
+                        $billable->sparkConfiguration()['type'],
+                        $billable->id,
+                        $invoice->id,
+                    ]),
+                    'status' => $invoice->status,
+                ];
+            })
+            ->values()
+            ->toArray();
+    }
+
+    /**
      * List all receipts of the given billable.
      *
      * @param  \Illuminate\Database\Eloquent\Model  $billable
      * @return array
+     *
+     * @deprecated Will be removed in a future Spark release.
      */
     protected function receipts(Model $billable)
     {
@@ -160,11 +223,12 @@ class FrontendState
                 $receipt->receipt_url = route('receipts.download', [
                     $billable->sparkConfiguration()['type'],
                     $billable->id,
-                    $receipt->provider_id
+                    $receipt->provider_id,
                 ]);
 
                 return $receipt;
             })
+            ->values()
             ->toArray();
     }
 

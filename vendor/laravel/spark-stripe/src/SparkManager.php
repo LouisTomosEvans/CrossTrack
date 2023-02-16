@@ -9,6 +9,13 @@ use InvalidArgumentException;
 class SparkManager
 {
     /**
+     * The webhook metadata indicator for balance top ups.
+     *
+     * @var string
+     */
+    const BALANCE_TOP_UP = 'spark_balance_top_up';
+
+    /**
      * Indicates if Spark migrations will be run.
      *
      * @var bool

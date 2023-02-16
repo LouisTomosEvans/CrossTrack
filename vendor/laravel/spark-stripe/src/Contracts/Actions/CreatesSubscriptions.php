@@ -13,7 +13,7 @@ interface CreatesSubscriptions
      * @return mixed
      *
      * @throws \Illuminate\Validation\ValidationException
-     * @throws \Laravel\Cashier\Exceptions\PaymentActionRequired
+     * @throws \Laravel\Cashier\Exceptions\IncompletePayment
      */
     public function create($billable, $plan, array $options = []);
 }

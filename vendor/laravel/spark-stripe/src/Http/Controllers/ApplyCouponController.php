@@ -7,24 +7,29 @@ use Illuminate\Validation\ValidationException;
 use Laravel\Cashier\Subscription;
 use Spark\HandlesCouponExceptions;
 use Stripe\Exception\InvalidRequestException;
-use Stripe\PromotionCode;
 
 class ApplyCouponController
 {
-    use RetrievesBillableModels, HandlesCouponExceptions;
+    use RetrievesBillableModels;
+    use HandlesCouponExceptions;
 
     /**
      * Update the receipt emails for the given billable.
      *
      * @param  \Illuminate\Http\Request
      * @return void
+     *
      * @throws \Illuminate\Validation\ValidationException
      */
     public function __invoke(Request $request)
     {
         $billable = $this->billable();
 
-        $subscription = $billable->subscription('default');
+        $request->validate([
+            'coupon' => ['required'],
+        ]);
+
+        $subscription = $billable->subscription();
 
         try {
             $this->applyCoupon($request->coupon, $billable, $subscription);
@@ -36,26 +41,27 @@ class ApplyCouponController
             report($e);
 
             throw ValidationException::withMessages([
-                '*' => __('An unexpected error occurred and we have notified our support team. Please try again later.')
+                '*' => __('An unexpected error occurred and we have notified our support team. Please try again later.'),
             ]);
         }
     }
 
     /**
-     * @param  Subscription|null  $subscription
-     * @param  $coupon
+     * @param    $coupon
+     * @param  \Spark\Billable  $billable
+     * @param  \Laravel\Cashier\Subscription|null  $subscription
      */
     protected function applyCoupon($coupon, $billable, ?Subscription $subscription): void
     {
-        $codes = PromotionCode::all(['code' => $coupon], $billable->stripeOptions());
+        $codes = $billable->stripe()->promotionCodes->all(['code' => $coupon]);
 
         if ($codes && $codes->first()) {
             $subscription->updateStripeSubscription([
-                'promotion_code' => $codes->first()->id
+                'promotion_code' => $codes->first()->id,
             ]);
         } else {
             $subscription->updateStripeSubscription([
-                'coupon' => $coupon
+                'coupon' => $coupon,
             ]);
         }
     }

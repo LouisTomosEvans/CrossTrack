@@ -3,8 +3,7 @@
 namespace Spark\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Laravel\Cashier\Exceptions\PaymentActionRequired;
-use Spark\Billable;
+use Laravel\Cashier\Exceptions\IncompletePayment;
 use Spark\Contracts\Actions\CreatesSubscriptions;
 use Spark\Contracts\Actions\UpdatesBillingMethod;
 use Spark\Features;
@@ -51,9 +50,9 @@ class NewSubscriptionController
                 $request->plan,
                 ['coupon' => $request->coupon]
             );
-        } catch (PaymentActionRequired $e) {
+        } catch (IncompletePayment $e) {
             return response()->json([
-                'paymentId' => $e->payment->id
+                'paymentId' => $e->payment->id,
             ]);
         }
     }
@@ -88,16 +87,19 @@ class NewSubscriptionController
     {
         $countryRule = Features::collectsBillingAddress() ? 'required' : 'nullable';
 
+        $addressRequired = Features::collectsBillingAddress() &&
+            (bool) Features::option('billing-address-collection', 'required');
+
         $request->validate([
             'plan' => ['required', new ValidPlan($request->billableType)],
             'extra_billing_information' => 'max:2048',
-            'billing_address' => ['nullable', 'max:225'],
+            'billing_address' => [$addressRequired ? 'required' : 'nullable', 'max:225'],
             'billing_address_line_2' => ['nullable', 'max:225'],
-            'billing_city' => ['nullable', 'max:225'],
-            'billing_state' => ['nullable', 'max:225'],
-            'billing_postal_code' => ['nullable', 'max:225'],
-            'billing_country' => [$countryRule, 'max:2', new ValidCountry],
-            'vat_id' => ['nullable', 'max:225', new ValidVatNumber],
+            'billing_city' => [$addressRequired ? 'required' : 'nullable', 'max:225'],
+            'billing_state' => [$addressRequired ? 'required' : 'nullable', 'max:225'],
+            'billing_postal_code' => [$addressRequired ? 'required' : 'nullable', 'max:225'],
+            'billing_country' => [$countryRule, 'max:2', new ValidCountry()],
+            'vat_id' => ['nullable', 'max:225', new ValidVatNumber()],
         ]);
     }
 }
