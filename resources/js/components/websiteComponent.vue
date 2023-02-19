@@ -36,6 +36,16 @@
                                 </v-text-field>
                             </v-col>
                         </v-row>
+                        <v-row class="pt-0">
+                            <v-col cols="12" class="pt-0">
+                                <v-text-field prefix="https://" color="#f05628" dense v-model="domain" height="40px" elevation=0 single-line hide-details style="width: 100%;">
+                                    
+                                    <template v-slot:label>
+                                        <strong>Enter your website domain</strong> ex. LeadRhino.io
+                                    </template>
+                                </v-text-field>
+                            </v-col>
+                        </v-row>
                     </v-card-text>
                     <v-card-actions class="pt-0 pb-4">
                     <v-spacer></v-spacer>
@@ -367,6 +377,7 @@
                 activateWebsiteDialog: false,
                 activateWebsite: {},
                 name: '',
+                domain: '',
                 tableOptions: {
                     page: 0,
                     itemsPerPage: 10,
@@ -421,6 +432,7 @@
                 route = route.replace('{team_id}', this.user.current_team_id);
                 let payload = {
                     name: this.name,
+                    domain: this.domain,
                 }
                 this.$http.post(route, payload, {withCredentials: true}).then((res) => {
                     this.getWebsites();

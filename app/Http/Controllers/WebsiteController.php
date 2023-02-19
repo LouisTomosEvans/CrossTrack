@@ -25,6 +25,7 @@ class WebsiteController extends Controller
     {
         $request->validate([
             'name' => 'required',
+            'domain' => 'required',
         ]);
 
         // check user is apart of team
@@ -44,11 +45,12 @@ class WebsiteController extends Controller
 
         $website = auth()->user()->currentTeam->websites()->create([
             'name' => $request->name,
+            'domain' => $request->domain,
             'tracking_code' => $request->tracking_code,
             'tracking_status' => 0,
         ]);
 
-        return json_encode(['success' => true]);
+        return json_encode(['success' => true, 'tracking_code' => $request->tracking_code]);
     }
 
     // update a website
