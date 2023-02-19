@@ -29,7 +29,7 @@
                         </v-row>
                         <v-row class="pt-0">
                             <v-col cols="12" class="pt-0">
-                                <v-text-field color="#f05628" dense v-model="email" height="40px" elevation=0 single-line hide-details style="width: 100%;">
+                                <v-text-field color="#f05628" dense v-model="name" height="40px" elevation=0 single-line hide-details style="width: 100%;">
                                     <template v-slot:label>
                                         <strong>Enter your website name</strong> ex. LeadRhino
                                     </template>
@@ -366,6 +366,7 @@
                 deactivateWebsite: {},
                 activateWebsiteDialog: false,
                 activateWebsite: {},
+                name: '',
                 tableOptions: {
                     page: 0,
                     itemsPerPage: 10,
@@ -419,7 +420,7 @@
                 let route = '../api/teams/websites/{team_id}';
                 route = route.replace('{team_id}', this.user.current_team_id);
                 let payload = {
-                    email: this.email,
+                    name: this.name,
                 }
                 this.$http.post(route, payload, {withCredentials: true}).then((res) => {
                     this.getWebsites();
