@@ -118,7 +118,6 @@
                         color="#f05628"
                         :loading="loading"
                         loading-text="Loading your team members... Please wait"
-                        show-select
                         checkbox-color="#f05628"
                         style="border-radius: 8px;  border: thin solid rgba(0,0,0,.12);"
                         >

@@ -52,6 +52,10 @@ Route::group(['prefix' => 'teams'], function()
     Route::middleware(['auth:sanctum', 'verified'])->get('join/{team_id}/{user_id}', [App\Http\Controllers\TeamMemberController::class, 'joinTeam'])->name('teams.join');
     Route::middleware(['auth:sanctum', 'verified'])->get('deny/{team_id}/{user_id}', [App\Http\Controllers\TeamMemberController::class, 'denyTeam'])->name('teams.deny');
 
+    // websites
+    Route::middleware(['auth:sanctum', 'verified'])->get('websites/{id}', [App\Http\Controllers\WebsiteController::class, 'index'])->name('websites.show');
+    Route::middleware(['auth:sanctum', 'verified'])->put('websites/{id}/{website_id}', [App\Http\Controllers\WebsiteController::class, 'updateStatus'])->name('teams.website.update.status');
+
 
 });
 

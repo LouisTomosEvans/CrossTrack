@@ -30,4 +30,10 @@ class Team extends Model
         return $this->owner()->email;
     }
 
+    public function websites()
+    {
+        return $this->hasMany(Website::class);
+    }
+
+
 }

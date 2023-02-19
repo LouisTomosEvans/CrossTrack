@@ -29,15 +29,6 @@ Vue.use(VueAxios, axios);
 import dashboardComponent from './components/dashboardComponent.vue'
 Vue.component('dashboard-component', dashboardComponent);
 
-import reportComponent from './components/reportComponent.vue'
-Vue.component('report-component', reportComponent);
-
-import insightComponent from './components/insightComponent.vue'
-Vue.component('insight-component', insightComponent);
-
-import accountComponent from './components/accountsComponent.vue'
-Vue.component('account-component', accountComponent);
-
 import companiesComponent from './components/companiesComponent.vue'
 Vue.component('companies-component', companiesComponent);
 
@@ -47,17 +38,19 @@ Vue.component('segments-component', segmentsComponent);
 import teamComponent from './components/teamComponent.vue'
 Vue.component('team-component', teamComponent);
 
+import websiteComponent from './components/websiteComponent.vue'
+Vue.component('website-component', websiteComponent);
+
+
 import loadingScreenComponent from './components/loadingScreenComponent.vue'
 Vue.component('loading-screen', loadingScreenComponent);
 
 const routes = [
     { path: '/', component: dashboardComponent },
-    { path: '/reports', component: reportComponent },
-    { path: '/insights', component: insightComponent },
-    { path: '/accounts', component: accountComponent },
     { path: '/companies', component: companiesComponent },
     { path: '/segments', component: segmentsComponent },
     { path: '/team', component: teamComponent },
+    { path: '/websites', component: websiteComponent },
     {path: '/:catchAll(.*)', component: dashboardComponent }
 ]
 

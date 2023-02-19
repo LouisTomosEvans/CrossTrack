@@ -6,6 +6,10 @@ use Illuminate\Support\Facades\Session;
 Use Laravel\Sanctum\HasApiTokens;
 use App\Models\User;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\TeamMemberController;
+use App\Http\Controllers\TeamController;
+use App\Http\Controllers\WebsiteController;
+use App\Http\Controllers\TrackingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,17 +28,21 @@ Route::get('/', function () {
 
 Route::get('member/register/{token}', [AuthController::class, 'create'])->name('member/register');
 
-Route::middleware(['auth:sanctum', 'verified', 'checkActiveTeam', 'subscribed'])->get('/team', function () {
-    return view('dashboard');
-})->name('dashboard');
-
-Route::middleware(['auth:sanctum', 'verified', 'checkActiveTeam', 'subscribed'])->get('/company', function () {
-    return view('dashboard');
-})->name('dashboard');
-
 Route::middleware(['auth:sanctum', 'verified', 'checkActiveTeam', 'subscribed'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
+
+Route::middleware(['auth:sanctum', 'verified', 'checkActiveTeam', 'subscribed'])->get('/websites', function () {
+    return view('dashboard');
+})->name('websites');
+
+Route::middleware(['auth:sanctum', 'verified', 'checkActiveTeam', 'subscribed'])->get('/team', function () {
+    return view('dashboard');
+})->name('team');
+
+Route::middleware(['auth:sanctum', 'verified', 'checkActiveTeam', 'subscribed'])->get('/company', function () {
+    return view('dashboard');
+})->name('company');
 
 
 Route::middleware(['auth:sanctum', 'verified', 'checkActiveTeam'])->get('/profile', function () {
@@ -50,3 +58,7 @@ Route::get('/logout', function () {
 Route::middleware(['auth:sanctum', 'verified', 'checkNotActiveTeam'])->get('/teams/create', function () {
     return view('teams/create');
 })->name('teams.create');
+
+
+// route for tracking script
+Route::get('/tracking/{tracking_code}', [TrackingController::class, 'getTrackingScript'])->name('tracking');

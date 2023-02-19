@@ -37,8 +37,17 @@ class CheckActiveTeam
                 // return the user to create a team
                 return redirect()->route('teams.create');
             }
-        } else {
-            $teamUser = $request->user()->teams()->where('team_id', $currentTeam->id)->firstOrFail();
+        } else {           
+            //  get team user where team_id = current team id
+            $teamCollection = $request->user()->teams()->get();
+
+            // go through each team collection and find the current team
+            $teamUser = $teamCollection->first(function ($team) use ($currentTeam) {
+                return $team->id == $currentTeam->id;
+            });
+
+
+            
             if($teamUser->pivot->active == 0) {
                 if ($request->user()->teams()->count() > 0) {
                     // set the first team as the active team
