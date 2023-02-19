@@ -54,6 +54,7 @@ Route::group(['prefix' => 'teams'], function()
 
     // websites
     Route::middleware(['auth:sanctum', 'verified'])->get('websites/{id}', [App\Http\Controllers\WebsiteController::class, 'index'])->name('websites.show');
+    Route::middleware(['auth:sanctum', 'verified'])->post('websites/{id}', [App\Http\Controllers\WebsiteController::class, 'store'])->name('websites.show');
     Route::middleware(['auth:sanctum', 'verified'])->put('websites/{id}/{website_id}', [App\Http\Controllers\WebsiteController::class, 'updateStatus'])->name('teams.website.update.status');
 
 
