@@ -23,9 +23,4 @@ class Website extends Model
     {
         return $this->belongsTo(Team::class);
     }
-
-    public function tracking()
-    {
-        return $this->hasOne(Tracking::class);
-    }
 }
