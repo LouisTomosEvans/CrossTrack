@@ -39,7 +39,6 @@
                         <v-row class="pt-0">
                             <v-col cols="12" class="pt-0">
                                 <v-text-field prefix="https://" color="#f05628" dense v-model="domain" height="40px" elevation=0 single-line hide-details style="width: 100%;">
-                                    
                                     <template v-slot:label>
                                         <strong>Enter your website domain</strong> ex. LeadRhino.io
                                     </template>
