@@ -6,6 +6,12 @@ use Illuminate\Http\Request;
 
 class TrackingController extends Controller
 {
+    /**
+     * Get the tracking script for the given tracking code.
+     *
+     * @param  string $trackingCode
+     * @return \Illuminate\Http\Response
+     */
     public function getTrackingScript($trackingCode)
     {
         // check tracking code is in request

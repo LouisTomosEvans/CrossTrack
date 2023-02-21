@@ -62,10 +62,11 @@ class WebsiteController extends Controller
     }
 
     // update a website
-    public function update(Request $request, $id)
+    public function update(Request $request, $id, $website_id)
     {
         $request->validate([
             'name' => 'required',
+            'domain' => 'required',
         ]);
 
         // check user is apart of team
@@ -73,23 +74,29 @@ class WebsiteController extends Controller
             abort(403);
         }
 
-        $website = auth()->user()->currentTeam->websites()->findOrFail($id);
+        $website = auth()->user()->currentTeam->websites()->findOrFail($website_id);
+
+        // get the favicon
+        $faviconPath = Favicon::fetch('https://' . $request->domain)->store('public/favicons');
+
         $website->update([
             'name' => $request->name,
+            'domain' => $request->domain,
+            'favicon' => $faviconPath,
         ]);
 
         return json_encode(['success' => true]);
     }
 
     // delete a website
-    public function destroy($id)
+    public function destroy($id, $website_id)
     {
         // check user is apart of team
         if (!auth()->user()->isMemberOfTeam(auth()->user()->currentTeam)) {
             abort(403);
         }
 
-        $website = auth()->user()->currentTeam->websites()->findOrFail($id);
+        $website = auth()->user()->currentTeam->websites()->findOrFail($website_id);
         $website->delete();
 
         return json_encode(['success' => true]);
@@ -113,6 +120,30 @@ class WebsiteController extends Controller
         ]);
 
         return json_encode(['success' => true]);
+    }
+
+    // get website tracking snippet
+    public function trackingSnippet($id, $website_id)
+    {
+        // get team
+        $team = Team::findOrFail($id);
+
+        // check user is apart of team
+        if (!auth()->user()->isMemberOfTeam($team)) {
+            abort(403);
+        }
+
+        $website = auth()->user()->currentTeam->websites()->findOrFail($website_id);
+
+        // get the tracking snippet
+        $trackingSnippet = "<script async src=\"https://app.leadrhino.io/tracking/{tracking-code}\"></script>";
+
+        $trackingSnippet = str_replace("{tracking-code}", $website->tracking_code, $trackingSnippet);
+
+        return JSON_encode([
+            'trackingSnippet' => $trackingSnippet,
+        ]);
+
     }
 
 }

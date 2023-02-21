@@ -207,14 +207,14 @@
                                     <v-list-item-title style="font-weight: 700;">Actions</v-list-item-title>
                                   </v-list-item-content>
                                 </v-list-item>
-                                <v-list-item  style="cursor: pointer;">
+                                <v-list-item  style="cursor: pointer;" @click="editDetailsDialog = true; editItem = item">
                                   <v-list-item-content>
                                     <v-list-item-title>
                                         Edit Details
                                     </v-list-item-title>
                                   </v-list-item-content>
                                 </v-list-item>
-                                <v-list-item style="cursor: pointer;">
+                                <v-list-item style="cursor: pointer;" @click="trackingItem = item; getTrackingSnippet();">
                                   <v-list-item-content>
                                     <v-list-item-title>
                                         Copy Tracking Script
@@ -268,7 +268,7 @@
 
             <!-- dialog -->
       <v-dialog
-      v-model="removeUserDialog"
+      v-model="deleteWebsiteDialog"
       persistent
       max-width="550px"
       >
@@ -285,11 +285,11 @@
           </v-card-text>
           <v-card-actions class="pt-0 pb-4">
           <v-spacer></v-spacer>
-          <v-btn @click="removeUserDialog = false" outlined elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+          <v-btn @click="deleteWebsiteDialog = false" outlined elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
               <span>Close</span>
           </v-btn>
-          <v-btn @click="removeTeamMember()" elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
-              <span style="color: #FFFFFF;" class="px-4">Remove User</span>
+          <v-btn @click="deleteWebsiteFunction()" elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+              <span style="color: #FFFFFF;" class="px-4">Delete Website</span>
           </v-btn>
           </v-card-actions>
       </v-card>
@@ -350,6 +350,56 @@
           </v-card-actions>
       </v-card>
       </v-dialog>
+
+      <v-dialog
+                v-model="editDetailsDialog"
+                persistent
+                max-width="550px"
+                >
+                <v-card style="border-radius: 8px; box-shadow: 0px 0px 5px 0px rgba(40,50,59,.1);">
+                    <v-card-title>
+                        <b><span style="font-size: 1.25rem; color: #28323b;">Edit Website</span></b>
+                    </v-card-title>
+                    <v-card-text>
+                        <v-row>
+                            <v-col cols="12">
+                                <span style="color: #28323b; font-size: 0.8125rem;">Adding a new website to your account has never been easier. Simply enter the name you want to call it and click the "Add Website" button, and you're good to go! Once they website has been created we will generate a tracking script for you to add to your website's code. This will allow you to gain valuable insights into your website's traffic and audience.</span>
+                            </v-col>
+                        </v-row>
+                        <v-row class="pt-0">
+                            <v-col cols="12" class="pt-0">
+                                <v-text-field color="#f05628" dense v-model="editItem.name" height="40px" elevation=0 single-line hide-details style="width: 100%;">
+                                    <template v-slot:label>
+                                        <strong>Change your websites name</strong> ex. LeadRhino
+                                    </template>
+                                </v-text-field>
+                            </v-col>
+                        </v-row>
+                        <v-row class="pt-0">
+                            <v-col cols="12" class="pt-0">
+                                <v-text-field prefix="https://" color="#f05628" dense v-model="editItem.domain" height="40px" elevation=0 single-line hide-details style="width: 100%;">
+                                    <template v-slot:label>
+                                        <strong>Change your websites domain</strong> ex. LeadRhino.io
+                                    </template>
+                                </v-text-field>
+                            </v-col>
+                        </v-row>
+                    </v-card-text>
+                    <v-card-actions class="pt-0 pb-4">
+                    <v-spacer></v-spacer>
+                    <v-btn @click="editDetailsDialog = false" outlined elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+                        <span>Close</span>
+                    </v-btn>
+                    <v-btn @click="editWebsite()" class="px-4" elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+                        <span style="color: #FFFFFF;" >Edit Website</span>
+                    </v-btn>
+                    </v-card-actions>
+                </v-card>
+                </v-dialog>
+
+                <v-snackbar v-model="snackbar" :timeout="5000" :color="snackbarColor" style="justify-content: center;">
+                    <b style="font-size: 0.8125rem;">{{ snackbarText }}</b>
+                </v-snackbar>
         </div>
 </template>
 
@@ -380,6 +430,14 @@
                 deactivateWebsite: {},
                 activateWebsiteDialog: false,
                 activateWebsite: {},
+                deleteWebsiteDialog: false,
+                deleteWebsite: {},
+                editDetailsDialog: false,
+                editItem: {},
+                snackbar: false,
+                snackbarText: '',
+                snackbarColor: '',
+                trackingItem: {},
                 name: '',
                 domain: '',
                 tableOptions: {
@@ -453,7 +511,7 @@
                 route = route.replace('{website_id}', this.deactivateWebsite.id);
                 this.$http.put(route, {withCredentials: true}).then((res) => {
                     this.getWebsites();
-                    this.deactivatewebsiteDialog = false;
+                    this.deactivateWebsiteDialog = false;
                     this.deactivateWebsite = {};
                 })
                 .finally(() => {
@@ -474,19 +532,68 @@
                 this.loading = false;
                 });
             },
-            deleteWEbsite(){
+            deleteWebsiteFunction(){
                 this.loading = true;
-                let route = '../api/teams/invitation/{team_id}/{invite_id}';
+                let route = '../api/teams/websites/{team_id}/{website_id}';
                 route = route.replace('{team_id}', this.user.current_team_id);
-                route = route.replace('{invite_id}', this.deleteInvitationObj.id);
+                route = route.replace('{website_id}', this.deleteWebsite.id);
                 this.$http.delete(route, {withCredentials: true}).then((res) => {
                     this.getWebsites();
-                    this.deleteInvitationDialog = false;
-                    this.deleteInvitationObj = {};
+                    this.deleteWebsiteDialog = false;
+                    this.deleteWebsite = {};
                 })
                 .finally(() => {
-                this.loading = false;
+                    this.loading = false;
                 });
+            },
+            editWebsite(){
+                this.loading = true;
+                let route = '../api/teams/websites/{team_id}/{website_id}';
+                route = route.replace('{team_id}', this.user.current_team_id);
+                route = route.replace('{website_id}', this.editItem.id);
+                let payload = {
+                    name: this.editItem.name,
+                    domain: this.editItem.domain,
+                }
+                this.$http.post(route, payload, {withCredentials: true}).then((res) => {
+                    this.getWebsites();
+                    this.editDetailsDialog = false;
+                    this.editItem = {};
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
+            },
+            getTrackingSnippet(){
+                let route = '../api/teams/websites/{team_id}/{website_id}/tracking-snippet';
+                route = route.replace('{team_id}', this.user.current_team_id);
+                route = route.replace('{website_id}', this.trackingItem.id);
+                this.$http.get(route, {withCredentials: true}).then((res) => {
+                    let tracking_snippet = res.data.trackingSnippet;
+                    // add to users clipboard
+                    this.$copyText(tracking_snippet);
+                    this.trackingItem = {};
+                    // show snack bar
+                    this.snackbarText = 'Tracking Script copied to clipboard';
+                    this.snackbarColor = 'success';
+                    this.snackbar = true;
+
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
+            },
+            $copyText(text) {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                textarea.setAttribute('readonly', '');
+                textarea.style.position = 'absolute';
+                textarea.style.left = '-9999px';
+                document.body.appendChild(textarea);
+                textarea.select();
+                const result = document.execCommand('copy');
+                document.body.removeChild(textarea);
+                return result;
             },
             // get random color for avatar
             getColor(name) {
@@ -661,6 +768,22 @@
 
 @keyframes blinker {  
     50% { opacity: 0.2; }
+}
+
+.v-snack__wrapper{
+    margin-bottom: 0px;
+}
+.v-sheet.v-snack__wrapper{
+    box-shadow: 0px 0px 5px 0px rgba(40,50,59,.1);
+    /* 8px on top corners */
+    border-radius: 20px 20px 0px 0px !important;
+}
+.v-snack__content{
+    padding: 8px 12px !important;
+    /* alig text in center */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 </style>

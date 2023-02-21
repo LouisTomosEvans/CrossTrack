@@ -56,6 +56,9 @@ Route::group(['prefix' => 'teams'], function()
     Route::middleware(['auth:sanctum', 'verified'])->get('websites/{id}', [App\Http\Controllers\WebsiteController::class, 'index'])->name('websites.show');
     Route::middleware(['auth:sanctum', 'verified'])->post('websites/{id}', [App\Http\Controllers\WebsiteController::class, 'store'])->name('websites.show');
     Route::middleware(['auth:sanctum', 'verified'])->put('websites/{id}/{website_id}', [App\Http\Controllers\WebsiteController::class, 'updateStatus'])->name('teams.website.update.status');
+    Route::middleware(['auth:sanctum', 'verified'])->post('websites/{id}/{website_id}', [App\Http\Controllers\WebsiteController::class, 'update'])->name('teams.website.update');
+    Route::middleware(['auth:sanctum', 'verified'])->delete('websites/{id}/{website_id}', [App\Http\Controllers\WebsiteController::class, 'destroy'])->name('teams.website.delete');
+    Route::middleware(['auth:sanctum', 'verified'])->get('websites/{id}/{website_id}/tracking-snippet', [App\Http\Controllers\WebsiteController::class, 'trackingSnippet'])->name('teams.website.trackingSnippet');
 
 
 });
