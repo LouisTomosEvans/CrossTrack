@@ -512,8 +512,15 @@
                 let year = d.getFullYear();
                 if (month.length < 2) month = '0' + month;
                 if (day.length < 2) day = '0' + day;
-                // inlude time
-                return [year, month, day].join('/') + ' ' + [d.getHours(), d.getMinutes(), d.getSeconds()].join(':');
+                let hours = d.getHours();
+                if (hours < 10) hours = '0' + hours;
+                let minutes = d.getMinutes();
+                if (minutes < 10) minutes = '0' + minutes;
+                let seconds = d.getSeconds();
+                if (seconds < 10) seconds = '0' + seconds;
+
+
+                return [year, month, day].join('/') + ' ' + [hours, minutes, seconds].join(':');
             },
             formatLastSeenDate(date){
                 let d = new Date(date);

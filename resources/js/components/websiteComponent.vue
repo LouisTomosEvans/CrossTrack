@@ -133,10 +133,15 @@
                         <template v-slot:item.name="{ item }">
                             <div v-if="item" class="d-flex align-items-center">
                                 <!-- website icon -->
-                                <v-avatar class="mr-1" size="24" color="info">
+                                <v-avatar class="mr-1" size="24" color="info" v-if="!item.favicon">
                                     <!-- 0.75 size -->
                                     <v-icon color="white" style="font-size: 0.95rem;">mdi-web</v-icon>
                                 </v-avatar>
+                                <!-- show favicon -->
+                                <div class="mr-1" style="height: 24px; width: 24px;" v-else>
+                                    <!-- 0.75 size -->
+                                    <img :src="getFaviconURL(item.favicon)" style="width: 24px; height: 24px; border-radius: 4px;">
+                                </div>
                                 <span class="ml-1" style="color: #28323b; font-size: 0.8125rem;">{{ item.name }}</span>
                             </div>
                             <div v-else class="d-flex align-items-center">
@@ -191,7 +196,7 @@
                         <template v-slot:item.actions="{ item }">
                             <v-menu offset-y nudge-left="150px">
                                 <template v-slot:activator="{ on }">
-                                    <v-btn v-if="item.id != user.id" icon v-on="on">
+                                    <v-btn icon v-on="on">
                                         <v-icon>mdi-dots-vertical</v-icon>
                                     </v-btn>
                                 </template>
@@ -205,7 +210,7 @@
                                 <v-list-item  style="cursor: pointer;">
                                   <v-list-item-content>
                                     <v-list-item-title>
-                                        Test Code Implementation
+                                        Edit Details
                                     </v-list-item-title>
                                   </v-list-item-content>
                                 </v-list-item>
@@ -505,8 +510,15 @@
                 let year = d.getFullYear();
                 if (month.length < 2) month = '0' + month;
                 if (day.length < 2) day = '0' + day;
-                // inlude time
-                return [year, month, day].join('/') + ' ' + [d.getHours(), d.getMinutes(), d.getSeconds()].join(':');
+                let hours = d.getHours();
+                if (hours < 10) hours = '0' + hours;
+                let minutes = d.getMinutes();
+                if (minutes < 10) minutes = '0' + minutes;
+                let seconds = d.getSeconds();
+                if (seconds < 10) seconds = '0' + seconds;
+
+
+                return [year, month, day].join('/') + ' ' + [hours, minutes, seconds].join(':');
             },
             formatLastSeenDate(date){
                 let d = new Date(date);
@@ -551,6 +563,12 @@
                 .finally(() => {
                     this.loading = false;
                 });
+            },
+            getFaviconURL(url) {
+                // remove the public and replace it with storage
+                url = url.replace('public', 'storage');
+                // return the url
+                return url;
             },
             
         }

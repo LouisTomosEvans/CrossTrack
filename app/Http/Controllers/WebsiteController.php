@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Website;
 use App\Models\Team;
+use AshAllenDesign\FaviconFetcher\Facades\Favicon;
 
 class WebsiteController extends Controller
 {
@@ -43,14 +44,21 @@ class WebsiteController extends Controller
             'team_id' => auth()->user()->currentTeam->id,
         ]);
 
+        // get the favicon
+        $faviconPath = Favicon::fetch('https://' . $request->domain)->store('public/favicons');
+
+
         $website = auth()->user()->currentTeam->websites()->create([
             'name' => $request->name,
             'domain' => $request->domain,
+            'favicon' => $faviconPath,
             'tracking_code' => $request->tracking_code,
             'tracking_status' => 0,
         ]);
 
-        return json_encode(['success' => true, 'tracking_code' => $request->tracking_code]);
+
+
+        return json_encode(['success' => true]);
     }
 
     // update a website
@@ -106,5 +114,6 @@ class WebsiteController extends Controller
 
         return json_encode(['success' => true]);
     }
+
 }
 
