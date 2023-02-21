@@ -391,7 +391,44 @@
                         <span>Close</span>
                     </v-btn>
                     <v-btn @click="editWebsite()" class="px-4" elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
-                        <span style="color: #FFFFFF;" >Edit Website</span>
+                        <span style="color: #FFFFFF;" >Save Changes</span>
+                    </v-btn>
+                    </v-card-actions>
+                </v-card>
+                </v-dialog>
+
+                <v-dialog
+                v-model="trackingSnippetDialog"
+                persistent
+                max-width="550px"
+                >
+                <v-card style="border-radius: 8px; box-shadow: 0px 0px 5px 0px rgba(40,50,59,.1);">
+                    <v-card-title>
+                        <b><span style="font-size: 1.25rem; color: #28323b;">Tracking Snippet</span></b>
+                    </v-card-title>
+                    <v-card-text>
+                        <v-row>
+                            <v-col cols="12">
+                                <span style="color: #28323b; font-size: 0.8125rem;">Adding a new website to your account has never been easier. Simply enter the name you want to call it and click the "Add Website" button, and you're good to go! Once they website has been created we will generate a tracking script for you to add to your website's code. This will allow you to gain valuable insights into your website's traffic and audience.</span>
+                            </v-col>
+                        </v-row>
+                        <v-row class="pt-1">
+                            <v-col cols="12" class="pt-0">
+                                <v-textarea color="#f05628" dense rows="2" v-model="trackingSnippet" elevation=0 hide-details style="width: 100%;">
+                                    <template v-slot:label>
+                                        <strong>Tracking Snippet</strong>
+                                    </template>
+                                </v-textarea>
+                            </v-col>
+                        </v-row>
+                    </v-card-text>
+                    <v-card-actions class="pt-0 pb-4">
+                    <v-spacer></v-spacer>
+                    <v-btn @click="trackingSnippetDialog = false" outlined elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+                        <span>I'll do it later</span>
+                    </v-btn>
+                    <v-btn @click="copyTrackingSnippet" class="px-4" elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+                        <span style="color: #FFFFFF;" >Copy Snippet</span>
                     </v-btn>
                     </v-card-actions>
                 </v-card>
@@ -433,6 +470,8 @@
                 deleteWebsiteDialog: false,
                 deleteWebsite: {},
                 editDetailsDialog: false,
+                trackingSnippetDialog: false,
+                trackingSnippet: '',
                 editItem: {},
                 snackbar: false,
                 snackbarText: '',
@@ -498,7 +537,11 @@
                 }
                 this.$http.post(route, payload, {withCredentials: true}).then((res) => {
                     this.getWebsites();
+                    // get tracking snippet
+                    this.trackingSnippet = res.data.trackingSnippet;
                     this.dialog = false;
+                    // show tracking pixel dialog
+                    this.trackingSnippetDialog = true;
                 })
                 .finally(() => {
                     this.loading = false;
@@ -574,6 +617,7 @@
                     this.$copyText(tracking_snippet);
                     this.trackingItem = {};
                     // show snack bar
+                    this.snackbar = false;
                     this.snackbarText = 'Tracking Script copied to clipboard';
                     this.snackbarColor = 'success';
                     this.snackbar = true;
@@ -582,6 +626,13 @@
                 .finally(() => {
                     this.loading = false;
                 });
+            },
+            copyTrackingSnippet(){
+                this.$copyText(this.trackingSnippet);
+                this.trackingSnippetDialog = false;
+                this.snackbarText = 'Tracking Script copied to clipboard';
+                this.snackbarColor = 'success';
+                this.snackbar = true;
             },
             $copyText(text) {
                 const textarea = document.createElement('textarea');

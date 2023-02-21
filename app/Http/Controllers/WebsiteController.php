@@ -56,9 +56,11 @@ class WebsiteController extends Controller
             'tracking_status' => 0,
         ]);
 
+        // get the tracking snippet
+        $trackingSnippet = "<script async src=\"https://app.leadrhino.io/tracking/{tracking-code}\"></script>";
+        $trackingSnippet = str_replace('{tracking-code}', $website->tracking_code, $trackingSnippet);
 
-
-        return json_encode(['success' => true]);
+        return json_encode(['success' => true, 'trackingSnippet' => $trackingSnippet]);
     }
 
     // update a website
@@ -76,8 +78,13 @@ class WebsiteController extends Controller
 
         $website = auth()->user()->currentTeam->websites()->findOrFail($website_id);
 
-        // get the favicon
-        $faviconPath = Favicon::fetch('https://' . $request->domain)->store('public/favicons');
+        // if domain has changed
+        if ($request->domain != $website->domain) {
+            // get the favicon
+            $faviconPath = Favicon::fetch('https://' . $request->domain)->store('public/favicons');
+        } else {
+            $faviconPath = $website->favicon;
+        }
 
         $website->update([
             'name' => $request->name,
