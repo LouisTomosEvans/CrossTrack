@@ -18,8 +18,8 @@
                 max-width="550px"
                 >
                 <v-card style="border-radius: 8px; box-shadow: 0px 0px 5px 0px rgba(40,50,59,.1);">
-                    <v-card-title>
-                        <b><span style="font-size: 1.25rem; color: #28323b;">Add Website</span></b>
+                    <v-card-title style="border-bottom: solid 1px lightgrey; margin-bottom: 1rem;">
+                        <b><span style="font-size: 1rem; color: #28323b;">Add Website</span></b>
                     </v-card-title>
                     <v-card-text>
                         <v-row>
@@ -144,14 +144,6 @@
                                 </div>
                                 <span class="ml-1" style="color: #28323b; font-size: 0.8125rem;">{{ item.name }}</span>
                             </div>
-                            <div v-else class="d-flex align-items-center">
-                                <!-- 24px circle with white email icon in it -->
-                                <v-avatar class="mr-1" size="24" color="info">
-                                    <!-- 0.75 size -->
-                                    <v-icon color="white" style="font-size: 0.95rem;">mdi-email-outline</v-icon>
-                                </v-avatar>
-                                <span class="ml-1" style="color: #28323b; font-size: 0.8125rem;">Invitation Sent</span>
-                            </div>
                         </template>
                         <template v-slot:item.email="{ item }">
                             <span style="color: #28323b; font-size: 0.8125rem;">{{ item.email }}</span>
@@ -174,7 +166,7 @@
                             <!-- small chip with transparent background -->
                             <!-- expand the code below for invited if the item.active == null -->
                             <v-chip label small :color="item.active == 1 ? '#E8F5E9' : '#FFEBEE'" :text-color="item.active == 1 ? 'success' : 'error'">
-                                <span>{{ item.active == 1 ? 'Active' : 'De-Activated' }}</span>
+                                <span>{{ item.active == 1 ? 'Active' : 'Archived' }}</span>
                             </v-chip>
                         </template>
 
@@ -204,7 +196,16 @@
                                 <!-- heading -->
                                 <v-list-item v-if="item" style="background-color: #F5F5F5;">
                                   <v-list-item-content>
-                                    <v-list-item-title style="font-weight: 700;">Actions</v-list-item-title>
+                                    <v-list-item-title style="font-weight: 700;">Quick Actions</v-list-item-title>
+                                  </v-list-item-content>
+                                </v-list-item>
+                                <v-list-item  style="cursor: pointer;" link :href="item.domain">
+                                  <v-list-item-content>
+                                    <v-list-item-title>
+                                        Go To Website
+                                        <v-icon style="font-size: 0.8125rem; margin-left: 4px;">mdi-open-in-new</v-icon>
+                                    </v-list-item-title>
+
                                   </v-list-item-content>
                                 </v-list-item>
                                 <v-list-item  style="cursor: pointer;" @click="editDetailsDialog = true; editItem = item">
@@ -221,17 +222,19 @@
                                     </v-list-item-title>
                                   </v-list-item-content>
                                 </v-list-item>
+                                <!-- divider -->
+                                <v-divider class="my-1"></v-divider>
                                 <v-list-item v-if="item.active == 0" style="cursor: pointer;" @click="activateWebsiteDialog = true; activateWebsite = item">
                                   <v-list-item-content>
                                     <v-list-item-title>
-                                        Activate Website
+                                        Un-Archive Website
                                     </v-list-item-title>
                                   </v-list-item-content>
                                 </v-list-item >
                                 <v-list-item v-if="item.active == 1" style="cursor: pointer;" @click="deactivateWebsiteDialog = true; deactivateWebsite = item">
                                   <v-list-item-content>
                                     <v-list-item-title>
-                                        De-activate Website
+                                        Archive Website
                                     </v-list-item-title>
                                   </v-list-item-content>
                                 </v-list-item>
@@ -273,8 +276,8 @@
       max-width="550px"
       >
       <v-card style="border-radius: 8px; box-shadow: 0px 0px 5px 0px rgba(40,50,59,.1);">
-          <v-card-title>
-              <b><span style="font-size: 1.25rem; color: #28323b;">Delete Website</span></b>
+          <v-card-title style="border-bottom: solid 1px lightgrey; margin-bottom: 1rem;">
+              <b><span style="font-size: 1rem; color: #28323b;">Delete Website</span></b>
           </v-card-title>
           <v-card-text>
               <v-row>
@@ -301,13 +304,13 @@
       max-width="550px"
       >
       <v-card style="border-radius: 8px; box-shadow: 0px 0px 5px 0px rgba(40,50,59,.1);">
-          <v-card-title>
-              <b><span style="font-size: 1.25rem; color: #28323b;">De-activate Website</span></b>
-          </v-card-title>
+        <v-card-title style="border-bottom: solid 1px lightgrey; margin-bottom: 1rem;">
+            <b><span style="font-size: 1rem; color: #28323b;">Archive Website</span></b>
+        </v-card-title>
           <v-card-text>
               <v-row>
                   <v-col cols="12">
-                      <span style="color: #28323b; font-size: 0.8125rem;">To deactivate a website from your team, simply click the "De-activate Website" button below. We will no longer track your leads for this website until you re-activate it.</span>
+                      <span style="color: #28323b; font-size: 0.8125rem;">To Archive a website from your team, simply click the "Archive Website" button below. We will no longer track your leads for this website until you un-archive it.</span>
                   </v-col>
               </v-row>
           </v-card-text>
@@ -317,7 +320,7 @@
               <span>Close</span>
           </v-btn>
           <v-btn @click="deactivateWebsiteFunction()" elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
-              <span style="color: #FFFFFF;" class="px-4">De-activate Website</span>
+              <span style="color: #FFFFFF;" class="px-4">Archive Website</span>
           </v-btn>
           </v-card-actions>
       </v-card>
@@ -329,13 +332,13 @@
       max-width="550px"
       >
       <v-card style="border-radius: 8px; box-shadow: 0px 0px 5px 0px rgba(40,50,59,.1);">
-          <v-card-title>
-              <b><span style="font-size: 1.25rem; color: #28323b;">Activate Website</span></b>
+        <v-card-title style="border-bottom: solid 1px lightgrey; margin-bottom: 1rem;">
+              <b><span style="font-size: 1rem; color: #28323b;">Un-Archive Website</span></b>
           </v-card-title>
           <v-card-text>
               <v-row>
                   <v-col cols="12">
-                      <span style="color: #28323b; font-size: 0.8125rem;">To activate a website, simply click the "Activate Website" button below. We will continue to add your leads to your dashboard.</span>
+                      <span style="color: #28323b; font-size: 0.8125rem;">To Un-Archive a website, simply click the "Un-Archive Website" button below. We will continue to add your leads to your dashboard.</span>
                   </v-col>
               </v-row>
           </v-card-text>
@@ -345,7 +348,7 @@
               <span>Close</span>
           </v-btn>
           <v-btn @click="activateWebsiteFunction()" elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
-              <span style="color: #FFFFFF;" class="px-4">Activate Website</span>
+              <span style="color: #FFFFFF;" class="px-4">Un-Archive Website</span>
           </v-btn>
           </v-card-actions>
       </v-card>
@@ -357,8 +360,8 @@
                 max-width="550px"
                 >
                 <v-card style="border-radius: 8px; box-shadow: 0px 0px 5px 0px rgba(40,50,59,.1);">
-                    <v-card-title>
-                        <b><span style="font-size: 1.25rem; color: #28323b;">Edit Website</span></b>
+                    <v-card-title style="border-bottom: solid 1px lightgrey; margin-bottom: 1rem;">
+                        <b><span style="font-size: 1rem; color: #28323b;">Edit Website</span></b>
                     </v-card-title>
                     <v-card-text>
                         <v-row>
@@ -403,8 +406,8 @@
                 max-width="550px"
                 >
                 <v-card style="border-radius: 8px; box-shadow: 0px 0px 5px 0px rgba(40,50,59,.1);">
-                    <v-card-title>
-                        <b><span style="font-size: 1.25rem; color: #28323b;">Tracking Snippet</span></b>
+                    <v-card-title style="border-bottom: solid 1px lightgrey; margin-bottom: 1rem;">
+                        <b><span style="font-size: 1rem; color: #28323b;">Tracking Snippet</span></b>
                     </v-card-title>
                     <v-card-text>
                         <v-row>

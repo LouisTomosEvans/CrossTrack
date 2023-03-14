@@ -22,6 +22,8 @@ class WebsiteFactory extends Factory
             'team_id' => rand(1, 10),
             'tracking_code' => $this->faker->uuid(),
             'tracking_status' => false,
+            'domain' => $this->faker->domainName(),
+            'favicon' => $this->faker->imageUrl(),
             'created_at' => now(),
             'updated_at' => now(),
         ];

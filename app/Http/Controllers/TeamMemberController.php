@@ -37,7 +37,12 @@ class TeamMemberController extends Controller
             abort(403);
         }
 
-        $team = Team::with('users', 'invites')->findOrFail($id);
+        // get team from cache
+        $team = cache()->remember('team_' . $id, now()->addMinutes(5), function () use ($id) {
+            return Team::with('users', 'invites')->findOrFail($id);
+        });
+
+        // merge users and invites
         $team->members = $team->users->merge($team->invites);
 
         foreach ($team->members as $member) {
@@ -50,7 +55,6 @@ class TeamMemberController extends Controller
                 $member->pivot->invite = 1;
             }
         }
-
 
         return $team->members;
     }
@@ -72,6 +76,10 @@ class TeamMemberController extends Controller
         if (!$team->pivot->active && $user->current_team_id === $team_id) {
             $user->switchTeam($user->teams()->where('active', 1)->first());
         }
+
+        // clear cache
+        cache()->forget('team_' . $team_id);
+
 
         return json_encode(['success' => true]);
     }
@@ -97,6 +105,9 @@ class TeamMemberController extends Controller
         }
 
         $user->detachTeam($team);
+
+        // clear cache
+        cache()->forget('team_' . $team_id);
         
 
 
@@ -143,6 +154,9 @@ class TeamMemberController extends Controller
             ]);
         }
 
+        // clear cache
+        cache()->forget('team_' . $team_id);
+
         return json_encode(['success' => true]);
     }
 
@@ -188,6 +202,9 @@ class TeamMemberController extends Controller
             $user->current_team_id = null;
             $user->save();
         }
+
+        // clear cache
+        cache()->forget('team_' . $team_id);
 
 
         return json_encode(['success' => true]);

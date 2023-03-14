@@ -18,8 +18,8 @@
                 max-width="550px"
                 >
                 <v-card style="border-radius: 8px; box-shadow: 0px 0px 5px 0px rgba(40,50,59,.1);">
-                    <v-card-title>
-                        <b><span style="font-size: 1.25rem; color: #28323b;">Send Invite</span></b>
+                    <v-card-title style="border-bottom: solid 1px lightgrey; margin-bottom: 1rem;">
+                        <b><span style="font-size: 1rem; color: #28323b;">Send Invitation</span></b>
                     </v-card-title>
                     <v-card-text>
                         <v-row>
@@ -184,7 +184,7 @@
                                 <!-- heading -->
                                 <v-list-item v-if="item.pivot" style="background-color: #F5F5F5;">
                                   <v-list-item-content>
-                                    <v-list-item-title style="font-weight: 700;">Actions</v-list-item-title>
+                                    <v-list-item-title style="font-weight: 700;">Quick Actions</v-list-item-title>
                                   </v-list-item-content>
                                 </v-list-item>
                                 <v-list-item v-if="item.pivot.active == 0 && item.pivot.invite == 0" style="cursor: pointer;" @click="activateUserDialog = true; activateUser = item">
@@ -246,9 +246,9 @@
       max-width="550px"
       >
       <v-card style="border-radius: 8px; box-shadow: 0px 0px 5px 0px rgba(40,50,59,.1);">
-          <v-card-title>
-              <b><span style="font-size: 1.25rem; color: #28323b;">Remove user</span></b>
-          </v-card-title>
+        <v-card-title style="border-bottom: solid 1px lightgrey; margin-bottom: 1rem;">
+                        <b><span style="font-size: 1rem; color: #28323b;">Remove User</span></b>
+                    </v-card-title>
           <v-card-text>
               <v-row>
                   <v-col cols="12">
@@ -274,9 +274,9 @@
       max-width="550px"
       >
       <v-card style="border-radius: 8px; box-shadow: 0px 0px 5px 0px rgba(40,50,59,.1);">
-          <v-card-title>
-              <b><span style="font-size: 1.25rem; color: #28323b;">De-activate user</span></b>
-          </v-card-title>
+        <v-card-title style="border-bottom: solid 1px lightgrey; margin-bottom: 1rem;">
+                        <b><span style="font-size: 1rem; color: #28323b;">De-activate User</span></b>
+                    </v-card-title>
           <v-card-text>
               <v-row>
                   <v-col cols="12">
@@ -302,9 +302,9 @@
       max-width="550px"
       >
       <v-card style="border-radius: 8px; box-shadow: 0px 0px 5px 0px rgba(40,50,59,.1);">
-          <v-card-title>
-              <b><span style="font-size: 1.25rem; color: #28323b;">Activate user</span></b>
-          </v-card-title>
+        <v-card-title style="border-bottom: solid 1px lightgrey; margin-bottom: 1rem;">
+                        <b><span style="font-size: 1rem; color: #28323b;">Activate User</span></b>
+                    </v-card-title>
           <v-card-text>
               <v-row>
                   <v-col cols="12">
@@ -330,9 +330,9 @@
       max-width="550px"
       >
       <v-card style="border-radius: 8px; box-shadow: 0px 0px 5px 0px rgba(40,50,59,.1);">
-          <v-card-title>
-              <b><span style="font-size: 1.25rem; color: #28323b;">Delete Invitation</span></b>
-          </v-card-title>
+        <v-card-title style="border-bottom: solid 1px lightgrey; margin-bottom: 1rem;">
+            <b><span style="font-size: 1rem; color: #28323b;">Delete Invitation</span></b>
+        </v-card-title>
           <v-card-text>
               <v-row>
                   <v-col cols="12">

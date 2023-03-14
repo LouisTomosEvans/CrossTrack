@@ -40,9 +40,9 @@ Route::middleware(['auth:sanctum', 'verified', 'checkActiveTeam', 'subscribed'])
     return view('dashboard');
 })->name('team');
 
-Route::middleware(['auth:sanctum', 'verified', 'checkActiveTeam', 'subscribed'])->get('/company', function () {
+Route::middleware(['auth:sanctum', 'verified', 'checkActiveTeam', 'subscribed'])->get('/companies', function () {
     return view('dashboard');
-})->name('company');
+})->name('companies');
 
 
 Route::middleware(['auth:sanctum', 'verified', 'checkActiveTeam'])->get('/profile', function () {

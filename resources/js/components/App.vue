@@ -65,7 +65,7 @@
           </v-list-item-icon>
         </v-list-item>
 
-        <v-list-item color="#f05628" :v-ripple="false" class="p-1 pl-5" style="text-decoration: none;"  v-if="!mini" >
+        <!-- <v-list-item color="#f05628" :v-ripple="false" class="p-1 pl-5" style="text-decoration: none;"  v-if="!mini" >
           <v-list-item-icon class="d-flex align-items-center">
             <v-icon>mdi-sitemap-outline</v-icon>
           </v-list-item-icon>
@@ -79,9 +79,9 @@
           <v-list-item-icon class="d-flex align-items-center">
             <v-icon>mdi-sitemap-outline</v-icon>
           </v-list-item-icon>
-        </v-list-item>
+        </v-list-item> -->
 
-        <v-list-item color="#f05628" :v-ripple="false" class="p-1 pl-5" style="text-decoration: none;"  v-if="!mini" >
+        <!-- <v-list-item color="#f05628" :v-ripple="false" class="p-1 pl-5" style="text-decoration: none;"  v-if="!mini" >
           <v-list-item-icon class="d-flex align-items-center">
             <v-icon>mdi-map</v-icon>
           </v-list-item-icon>
@@ -95,7 +95,7 @@
           <v-list-item-icon class="d-flex align-items-center">
             <v-icon>mdi-map</v-icon>
           </v-list-item-icon>
-        </v-list-item>
+        </v-list-item> -->
 
         <div>
             <v-divider style="color: #28323b"></v-divider>
@@ -117,7 +117,7 @@
           </v-list-item-icon>
         </v-list-item>
 
-        <v-list-item color="#f05628" :v-ripple="false" :to="'/integrations'" class="p-1 pl-5" style="text-decoration: none;" v-if="!mini">
+        <!-- <v-list-item color="#f05628" :v-ripple="false" :to="'/integrations'" class="p-1 pl-5" style="text-decoration: none;" v-if="!mini">
                   <v-list-item-icon class="d-flex align-items-center">
                     <v-icon>mdi-connection</v-icon>
                   </v-list-item-icon>
@@ -131,7 +131,7 @@
                   <v-list-item-icon class="d-flex align-items-center">
                     <v-icon>mdi-connection</v-icon>
                   </v-list-item-icon>
-                </v-list-item>
+                </v-list-item> -->
 
                 <v-list-item color="#f05628" :v-ripple="false"  :to="'/team'" class="p-1 pl-5" style="text-decoration: none;" v-if="!mini">
           <v-list-item-icon class="d-flex align-items-center">

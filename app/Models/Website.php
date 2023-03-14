@@ -23,4 +23,9 @@ class Website extends Model
     {
         return $this->belongsTo(Team::class);
     }
+
+    public function companyLeads()
+    {
+        return $this->hasMany(CompanyLeads::class);
+    }
 }

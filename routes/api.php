@@ -3,6 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AppController;
+use App\Http\Controllers\TeamMemberController;
+use App\Http\Controllers\CompanyLeadsController;
+
 
 
 /*
@@ -59,6 +62,10 @@ Route::group(['prefix' => 'teams'], function()
     Route::middleware(['auth:sanctum', 'verified'])->post('websites/{id}/{website_id}', [App\Http\Controllers\WebsiteController::class, 'update'])->name('teams.website.update');
     Route::middleware(['auth:sanctum', 'verified'])->delete('websites/{id}/{website_id}', [App\Http\Controllers\WebsiteController::class, 'destroy'])->name('teams.website.delete');
     Route::middleware(['auth:sanctum', 'verified'])->get('websites/{id}/{website_id}/tracking-snippet', [App\Http\Controllers\WebsiteController::class, 'trackingSnippet'])->name('teams.website.trackingSnippet');
+
+    // leads
+    Route::middleware(['auth:sanctum', 'verified'])->get('leads/{id}', [App\Http\Controllers\CompanyLeadsController::class, 'index'])->name('leads.show');
+
 
 
 });

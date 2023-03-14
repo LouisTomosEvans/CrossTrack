@@ -19,6 +19,8 @@ class DatabaseSeeder extends Seeder
             TeamSeeder::class,
             InviteSeeder::class,
             WebsiteSeeder::class,
+            CompanyLeadsSeeder::class,
+            VisitsSeeder::class,
         ]);
     }
 }

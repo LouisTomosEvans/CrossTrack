@@ -17,7 +17,16 @@ class WebsiteController extends Controller
         if (!auth()->user()->isMemberOfTeam(auth()->user()->currentTeam)) {
             abort(403);
         }
+
+        // check if websites are cached
+        if (cache()->has('websites')) {
+            return cache()->get('websites');
+        } 
+        // get all websites for the current team and cache them
         $websites = auth()->user()->currentTeam->websites;
+        // cache the websites
+        cache()->put('websites', $websites, now()->addMinutes(5));
+        // return the websites
         return $websites;
     }
 
@@ -60,6 +69,11 @@ class WebsiteController extends Controller
         $trackingSnippet = "<script async src=\"https://app.leadrhino.io/tracking/{tracking-code}\"></script>";
         $trackingSnippet = str_replace('{tracking-code}', $website->tracking_code, $trackingSnippet);
 
+        // recache the websites
+        cache()->forget('websites');
+        $websites = auth()->user()->currentTeam->websites;
+        cache()->put('websites', $websites, now()->addMinutes(5));
+
         return json_encode(['success' => true, 'trackingSnippet' => $trackingSnippet]);
     }
 
@@ -92,6 +106,11 @@ class WebsiteController extends Controller
             'favicon' => $faviconPath,
         ]);
 
+        // recache the websites
+        cache()->forget('websites');
+        $websites = auth()->user()->currentTeam->websites;
+        cache()->put('websites', $websites, now()->addMinutes(5));
+
         return json_encode(['success' => true]);
     }
 
@@ -105,6 +124,12 @@ class WebsiteController extends Controller
 
         $website = auth()->user()->currentTeam->websites()->findOrFail($website_id);
         $website->delete();
+
+        // recache the websites
+        cache()->forget('websites');
+        $websites = auth()->user()->currentTeam->websites;
+        cache()->put('websites', $websites, now()->addMinutes(5));
+
 
         return json_encode(['success' => true]);
     }
@@ -125,6 +150,12 @@ class WebsiteController extends Controller
         $website->update([
             'active' => $website->active ? 0 : 1,
         ]);
+
+        // recache the websites
+        cache()->forget('websites');
+        $websites = auth()->user()->currentTeam->websites;
+        cache()->put('websites', $websites, now()->addMinutes(5));
+        
 
         return json_encode(['success' => true]);
     }
