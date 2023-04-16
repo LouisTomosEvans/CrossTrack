@@ -182,11 +182,6 @@ class TrackingController extends Controller
         })();
         SCRIPT;
 
-        // minimize tracking script
-        $trackingScript = preg_replace('/\s+/', ' ', $trackingScript);
-        $trackingScript = str_replace([' { ', ' } ', ' ; ', ' : ', ' , ', ' ( ', ' ) '], ['{', '}', ';', ':', ',', '(', ')'], $trackingScript);
-
-        
         return response($trackingScript, 200)->header('Content-Type', 'application/javascript')->header('Cache-Control', 'no-cache, no-store, must-revalidate');
     }
 
