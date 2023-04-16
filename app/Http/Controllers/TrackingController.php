@@ -114,6 +114,7 @@ class TrackingController extends Controller
             function sendTrackingData() {
                 var visitorId = getVisitorId();
                 if (visitorId) {
+                    console.log('Visitor ID:', visitorId);
                     getIpAddress().then(function(ipAddress) {
                       var data = {
                         visitor_id: visitorId,
@@ -132,10 +133,12 @@ class TrackingController extends Controller
                         operating_system: navigator.platform,
                         browser_version: navigator.userAgent
                       };
+                      console.log('Data:', data);
                       var request = new XMLHttpRequest();
                       request.open('POST', 'https://app.leadrhino.io/tracking', true);
                       request.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
                       request.send(JSON.stringify(data));
+                      console.log('XHR request sent');
                     }).catch(function(error) {
                       console.error('Error getting IP address:', error);
                     });
