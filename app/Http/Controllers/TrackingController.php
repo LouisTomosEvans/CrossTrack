@@ -112,74 +112,73 @@ class TrackingController extends Controller
             
             // function to send tracking data to server
             function sendTrackingData() {
+              var visitorId = getVisitorId();
+              if (visitorId) {
+                console.log('Visitor ID:', visitorId);
+                getIpAddress().then(function(ipAddress) {
+                  var data = {
+                    visitor_id: visitorId,
+                    website_id: '$trackingCode',
+                    referrer: document.referrer,
+                    url: window.location.href,
+                    title: document.title,
+                    ip_address: ipAddress,
+                    session_duration: getSessionDuration(),
+                    query_string_params: getQueryStringParams(),
+                    screen_size: {
+                      width: window.screen.width,
+                      height: window.screen.height
+                    },
+                    device_type: /Mobi/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop',
+                    operating_system: navigator.platform,
+                    browser_version: navigator.userAgent
+                  };
+                  console.log('Data:', data);
+                  var request = new XMLHttpRequest();
+                  request.open('POST', 'https://app.leadrhino.io/tracking', true);
+                  request.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+                  request.send(JSON.stringify(data));
+                  console.log('XHR request sent');
+                }).catch(function(error) {
+                  console.error('Error getting IP address:', error);
+                });
+              }
+            }
+                
+            // send tracking data using beacon API if available, fallback to XHR
+            if (navigator.sendBeacon) {
+              window.addEventListener('unload', function() {
                 var visitorId = getVisitorId();
                 if (visitorId) {
-                    console.log('Visitor ID:', visitorId);
-                    getIpAddress().then(function(ipAddress) {
-                      var data = {
-                        visitor_id: visitorId,
-                        website_id: '$trackingCode',
-                        referrer: document.referrer,
-                        url: window.location.href,
-                        title: document.title,
-                        ip_address: ipAddress,
-                        session_duration: getSessionDuration(),
-                        query_string_params: getQueryStringParams(),
-                        screen_size: {
-                          width: window.screen.width,
-                          height: window.screen.height
-                        },
-                        device_type: /Mobi/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop',
-                        operating_system: navigator.platform,
-                        browser_version: navigator.userAgent
-                      };
-                      console.log('Data:', data);
-                      var request = new XMLHttpRequest();
-                      request.open('POST', 'https://app.leadrhino.io/tracking', true);
-                      request.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-                      request.send(JSON.stringify(data));
-                      console.log('XHR request sent');
-                    }).catch(function(error) {
-                      console.error('Error getting IP address:', error);
-                    });
-                  }
-                }
-                
-                // send tracking data using beacon API if available, fallback to XHR
-                if (navigator.sendBeacon) {
-                  window.addEventListener('unload', function() {
-                    var visitorId = getVisitorId();
-                    if (visitorId) {
-                      getIpAddress().then(function(ipAddress) {
-                        var data = {
-                          visitor_id: visitorId,
-                          website_id: '$trackingCode',
-                          referrer: document.referrer,
-                          url: window.location.href,
-                          title: document.title,
-                          ip_address: ipAddress,
-                          session_duration: getSessionDuration(),
-                          query_string_params: getQueryStringParams(),
-                          screen_size: {
-                            width: window.screen.width,
-                            height: window.screen.height
-                          },
-                          device_type: /Mobi/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop',
-                          operating_system: navigator.platform,
-                          browser_version: navigator.userAgent
-                        };
-                        navigator.sendBeacon('https://app.leadrhino.io/tracking', JSON.stringify(data));
-                      }).catch(function(error) {
-                        console.error('Error getting IP address:', error);
-                      });
-                    }
-                  });
-                } else {
-                  window.addEventListener('beforeunload', function() {
-                    sendTrackingData();
+                  getIpAddress().then(function(ipAddress) {
+                    var data = {
+                      visitor_id: visitorId,
+                      website_id: '$trackingCode',
+                      referrer: document.referrer,
+                      url: window.location.href,
+                      title: document.title,
+                      ip_address: ipAddress,
+                      session_duration: getSessionDuration(),
+                      query_string_params: getQueryStringParams(),
+                      screen_size: {
+                        width: window.screen.width,
+                        height: window.screen.height
+                      },
+                      device_type: /Mobi/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop',
+                      operating_system: navigator.platform,
+                      browser_version: navigator.userAgent
+                    };
+                    navigator.sendBeacon('https://app.leadrhino.io/tracking', JSON.stringify(data));
+                  }).catch(function(error) {
+                    console.error('Error getting IP address:', error);
                   });
                 }
-            
+              });
+            } else {
+              window.addEventListener('beforeunload', function() {
+                sendTrackingData();
+              });
+            }
         })();
         SCRIPT;
 
