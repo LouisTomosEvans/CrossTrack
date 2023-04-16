@@ -162,6 +162,7 @@ class TrackingController extends Controller
                 sendTrackingData();
               });
             }
+            window.sendTrackingData = sendTrackingData;
         })();
         SCRIPT;
 
