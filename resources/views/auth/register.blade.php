@@ -24,7 +24,7 @@
             @if (!session('invite'))
                 <div class="mt-4">
                     <x-jet-label for="name" value="{{ __('Your Company Name') }}" />
-                    <x-jet-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
+                    <x-jet-input id="company_name" class="block mt-1 w-full" type="text" name="company_name" :value="old('company_name')" required autofocus autocomplete="company_name" />
                 </div>
             @endif
 

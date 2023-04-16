@@ -62,3 +62,6 @@ Route::middleware(['auth:sanctum', 'verified', 'checkNotActiveTeam'])->get('/tea
 
 // route for tracking script
 Route::get('/tracking/{tracking_code}', [TrackingController::class, 'getTrackingScript'])->name('tracking');
+
+// route for tracking traffic
+Route::post('/tracking', [TrackingController::class, 'tracking'])->name('tracking.traffic');

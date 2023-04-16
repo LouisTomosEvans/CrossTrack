@@ -4,20 +4,20 @@
         <loading-screen style="z-index: 9999999 !important"></loading-screen>
     </keep-alive>
 
-    <v-navigation-drawer v-model="drawer" color="#f05628" elevation=0 app class="background border-none d-sm-block" :mini-variant="mini" mini-variant-width="60" absolute style="height: 100%;" :temporary="$vuetify.breakpoint.smOnly" :permanent="$vuetify.breakpoint.mdAndUp" >
+    <v-navigation-drawer v-model="drawer" :color="appStore.primary_color" elevation=0 app class="background border-none d-sm-block" :mini-variant="mini" mini-variant-width="60" absolute style="height: 100%;" :temporary="$vuetify.breakpoint.smOnly" :permanent="$vuetify.breakpoint.mdAndUp" >
     <v-list-item v-ripple="false" class="home">
         <v-list-item-icon v-if="mini" class="d-flex justify-content-center align-items-center" style="margin-top:24px;">
-            <img src="brandAssets/Mark.svg" width=50/>
+            <img :src="appStore.mark" width=50/>
         </v-list-item-icon>
         <v-list-item-content class="header">
-            <img src="brandAssets/Logo.png" style="width: 10% !important;"/>
+            <img :src="appStore.logo" style="width: 10% !important;"/>
         </v-list-item-content>
     </v-list-item>
 
     <v-list dense nav class="p-0 mt-1">
-        <v-list-item-group rounded color="#f05628" mandatory>
+        <v-list-item-group rounded :color="appStore.primary_color" mandatory>
 
-        <v-list-item  color="#f05628" :v-ripple="false" :to="'/dashboard'" class="p-1 pl-5" v-if="!mini">
+        <v-list-item  :color="appStore.primary_color" :v-ripple="false" :to="'/dashboard'" class="p-1 pl-5" v-if="!mini">
           <v-list-item-icon>
             <v-icon class="d-flex align-items-center">mdi-poll</v-icon>
           </v-list-item-icon>
@@ -27,13 +27,13 @@
           </v-list-item-content>
         </v-list-item>
 
-        <v-list-item color="#f05628" :v-ripple="false" :to="'/dashboard'" class="p-1" style="text-decoration: none; " v-if="mini" >
+        <v-list-item :color="appStore.primary_color" :v-ripple="false" :to="'/dashboard'" class="p-1" style="text-decoration: none; " v-if="mini" >
           <v-list-item-icon class="d-flex align-items-center">
             <v-icon>mdi-poll</v-icon>
           </v-list-item-icon>
         </v-list-item>
 
-        <v-list-item color="#f05628" :v-ripple="false" :to="'/companies'" class="p-1 pl-5" style="text-decoration: none;"  v-if="!mini"  >
+        <v-list-item :color="appStore.primary_color" :v-ripple="false" :to="'/companies'" class="p-1 pl-5" style="text-decoration: none;"  v-if="!mini"  >
           <v-list-item-icon class="d-flex align-items-center">
             <v-icon>mdi-domain</v-icon>
           </v-list-item-icon>
@@ -43,13 +43,13 @@
           </v-list-item-content>
         </v-list-item>
 
-        <v-list-item color="#f05628" :v-ripple="false" :to="'/companies'" class="p-1" style="text-decoration: none;" v-if="mini" >
+        <v-list-item :color="appStore.primary_color" :v-ripple="false" :to="'/companies'" class="p-1" style="text-decoration: none;" v-if="mini" >
           <v-list-item-icon class="d-flex align-items-center">
             <v-icon>mdi-domain</v-icon>
           </v-list-item-icon>
         </v-list-item>
 
-        <v-list-item color="#f05628" :v-ripple="false" :to="'/segments'" class="p-1 pl-5" style="text-decoration: none;" v-if="!mini" >
+        <v-list-item :color="appStore.primary_color" :v-ripple="false" :to="'/segments'" class="p-1 pl-5" style="text-decoration: none;" v-if="!mini" >
           <v-list-item-icon class="d-flex align-items-center">
             <v-icon>mdi-chart-pie</v-icon>
           </v-list-item-icon>
@@ -59,7 +59,7 @@
           </v-list-item-content>
         </v-list-item>
 
-        <v-list-item color="#f05628" :v-ripple="false" :to="'/segments'" class="p-1" style="text-decoration: none;" v-if="mini" >
+        <v-list-item :color="appStore.primary_color" :v-ripple="false" :to="'/segments'" class="p-1" style="text-decoration: none;" v-if="mini" >
           <v-list-item-icon class="d-flex align-items-center">
             <v-icon>mdi-chart-pie</v-icon>
           </v-list-item-icon>
@@ -101,7 +101,7 @@
             <v-divider style="color: #28323b"></v-divider>
         </div>
 
-        <v-list-item color="#f05628" :v-ripple="false" :to="'/websites'" class="p-1 pl-5" style="text-decoration: none;" v-if="!mini">
+        <v-list-item :color="appStore.primary_color" :v-ripple="false" :to="'/websites'" class="p-1 pl-5" style="text-decoration: none;" v-if="!mini">
           <v-list-item-icon class="d-flex align-items-center">
             <v-icon>mdi-web</v-icon>
           </v-list-item-icon>
@@ -111,7 +111,7 @@
           </v-list-item-content>
         </v-list-item>
 
-        <v-list-item color="#f05628" :v-ripple="false" :to="'/websites'" class="p-1" style="text-decoration: none;" v-if="mini">
+        <v-list-item :color="appStore.primary_color" :v-ripple="false" :to="'/websites'" class="p-1" style="text-decoration: none;" v-if="mini">
           <v-list-item-icon class="d-flex align-items-center">
             <v-icon>mdi-web</v-icon>
           </v-list-item-icon>
@@ -133,7 +133,7 @@
                   </v-list-item-icon>
                 </v-list-item> -->
 
-                <v-list-item color="#f05628" :v-ripple="false"  :to="'/team'" class="p-1 pl-5" style="text-decoration: none;" v-if="!mini">
+                <v-list-item :color="appStore.primary_color" :v-ripple="false"  :to="'/team'" class="p-1 pl-5" style="text-decoration: none;" v-if="!mini">
           <v-list-item-icon class="d-flex align-items-center">
             <v-icon>mdi-account-group</v-icon>
           </v-list-item-icon>
@@ -143,13 +143,13 @@
           </v-list-item-content>
         </v-list-item>
 
-        <v-list-item href="/billing" :v-ripple="false"  :to="'/team'" color="#f05628" class="p-1" style="text-decoration: none;" v-if="mini">
+        <v-list-item :v-ripple="false"  :to="'/team'" :color="appStore.primary_color" class="p-1" style="text-decoration: none;" v-if="mini">
             <v-list-item-icon class="d-flex align-items-center">
                 <v-icon id="billing_icon">mdi-account-group</v-icon>
             </v-list-item-icon>
         </v-list-item>
 
-        <v-list-item color="#f05628" :v-ripple="false" href="/profile" class="p-1 pl-5" style="text-decoration: none;"  v-if="!mini" >
+        <v-list-item :color="appStore.primary_color" :v-ripple="false" href="/profile" class="p-1 pl-5" style="text-decoration: none;"  v-if="!mini" >
           <v-list-item-icon class="d-flex align-items-center">
             <v-icon>mdi-account</v-icon>
           </v-list-item-icon>
@@ -159,7 +159,7 @@
           </v-list-item-content>
         </v-list-item>
 
-        <v-list-item color="#f05628" :v-ripple="false" href="/profile" class="p-1" style="text-decoration: none;" v-if="mini" >
+        <v-list-item :color="appStore.primary_color" :v-ripple="false" href="/profile" class="p-1" style="text-decoration: none;" v-if="mini" >
           <v-list-item-icon class="d-flex align-items-center">
             <v-icon>mdi-account</v-icon>
           </v-list-item-icon>
@@ -167,7 +167,7 @@
 
         
 
-        <v-list-item color="#f05628" :v-ripple="false" href="/billing" class="p-1 pl-5" style="text-decoration: none;" v-if="!mini && checkIfUserIsOwnerOfCurrentTeam">
+        <v-list-item :color="appStore.primary_color" :v-ripple="false" href="/billing" class="p-1 pl-5" style="text-decoration: none;" v-if="!mini && checkIfUserIsOwnerOfCurrentTeam">
           <v-list-item-icon class="d-flex align-items-center">
             <v-icon>mdi-currency-usd</v-icon>
           </v-list-item-icon>
@@ -177,13 +177,13 @@
           </v-list-item-content>
         </v-list-item>
 
-        <v-list-item href="/billing" :v-ripple="false" color="#f05628" class="p-1" style="text-decoration: none;" v-if="mini  && checkIfUserIsOwnerOfCurrentTeam">
+        <v-list-item href="/billing" :v-ripple="false" :color="appStore.primary_color" class="p-1" style="text-decoration: none;" v-if="mini  && checkIfUserIsOwnerOfCurrentTeam">
             <v-list-item-icon class="d-flex align-items-center">
                 <v-icon id="billing_icon">mdi-currency-usd</v-icon>
             </v-list-item-icon>
         </v-list-item>
 
-        <v-list-item color="#f05628" :v-ripple="false" href="/support" class="p-1 pl-5" style="text-decoration: none;"  v-if="!mini" >
+        <v-list-item :color="appStore.primary_color" :v-ripple="false" href="/support" class="p-1 pl-5" style="text-decoration: none;"  v-if="!mini" >
           <v-list-item-icon class="d-flex align-items-center">
             <v-icon>mdi-headset</v-icon>
           </v-list-item-icon>
@@ -193,7 +193,7 @@
           </v-list-item-content>
         </v-list-item>
 
-        <v-list-item color="#f05628" :v-ripple="false" href="/support" class="p-1" style="text-decoration: none;" v-if="mini" >
+        <v-list-item :color="appStore.primary_color" :v-ripple="false" href="/support" class="p-1" style="text-decoration: none;" v-if="mini" >
             <v-list-item-icon class="d-flex align-items-center">
                 <v-icon>mdi-headset</v-icon>
             </v-list-item-icon>
@@ -203,7 +203,7 @@
             <v-divider style="color: #28323b"></v-divider>
         </div>
 
-        <v-list-item color="#f05628" :v-ripple="false" href="/logout" class="p-1 pl-5" style="text-decoration: none;"  v-if="!mini">
+        <v-list-item :color="appStore.primary_color" :v-ripple="false" href="/logout" class="p-1 pl-5" style="text-decoration: none;"  v-if="!mini">
           <v-list-item-icon class="d-flex align-items-center">
             <v-icon>mdi-logout</v-icon>
           </v-list-item-icon>
@@ -213,7 +213,7 @@
           </v-list-item-content>
         </v-list-item>
 
-        <v-list-item color="#f05628" :v-ripple="false" href="/logout" v-ripple="false" class="p-1" style="text-decoration: none;" v-if="mini">
+        <v-list-item :color="appStore.primary_color" :v-ripple="false" href="/logout" v-ripple="false" class="p-1" style="text-decoration: none;" v-if="mini">
           <v-list-item-icon class="d-flex align-items-center">
             <v-icon>mdi-logout-variant</v-icon>
           </v-list-item-icon>
@@ -229,13 +229,13 @@
         <v-icon @click="collapseSidebar()" class="d-none d-md-block" style="color: #28323b;">{{ mini ? 'mdi-forwardburger' : 'mdi-backburger'}}</v-icon>
         <!-- <v-icon style="color: white;">mdi-magnify</v-icon> -->
         <v-spacer></v-spacer>
-                  <v-list-item class="navbar" style="padding-right: 0px !important;">
+                  <v-list-item class="navbar" style="padding-right: 0px !important;" v-if="userStore.user">
                           <v-list-item-content style="text-align: right;">
-                              <v-list-item-title style="color: #28323b ; font-size: 0.8125rem; font-weight: 700;">{{user.name}}</v-list-item-title>
+                              <v-list-item-title style="color: #28323b ; font-size: 0.8125rem; font-weight: 700;">{{userStore.user.name}}</v-list-item-title>
                               <v-list-item-subtitle style="color: #28323b ; font-size: 0.8125rem;" >
                                 <v-menu offset-y allow-overflow style="min-width: 150px;">
                                 <template v-slot:activator="{ on, attrs }">
-                                  <span v-bind="attrs" v-on="on" v-ripple="false">{{currentCompany.name}}</span>
+                                  <span v-bind="attrs" v-on="on" v-ripple="false">{{userStore.user.current_team.name}}</span>
                                 </template>
                               <v-list class="p-0" dense>
                                 <!-- heading -->
@@ -244,22 +244,22 @@
                                     <v-list-item-title style="font-weight: 700;">Your Teams</v-list-item-title>
                                   </v-list-item-content>
                                 </v-list-item>
-                                    <v-list-item v-for="(item, i) in this.userCompanyList" :key="i">
+                                    <v-list-item v-for="(item, i) in this.userStore.user.teams" :key="i">
                                       <v-list-item-title v-if="item.pivot.invite == 0 && item.pivot.active == 1" class="pr-5" @click="switchTeam(item)" style="cursor: pointer;">{{ item.name }}
-                                        <v-chip v-if="item.owner_id == user.id" class="ml-2" color="#f05628" text-color="white" small label>Owner</v-chip>
-                                        <v-chip v-if="item.owner_id != user.id && item.pivot.invite == 0 && item.pivot.active == 1" color="#f0562820" class="ml-2" text-color="#f05628" small label>Member</v-chip>
+                                        <v-chip v-if="item.owner_id == userStore.user.id" class="ml-2" :color="appStore.primary_color" text-color="white" small label>Owner</v-chip>
+                                        <v-chip v-if="item.owner_id != userStore.user.id && item.pivot.invite == 0 && item.pivot.active == 1" :color="appStore.primary_color + '20'" class="ml-2" :text-color="appStore.primary_color" small label>Member</v-chip>
                                       </v-list-item-title>
                                       <v-list-item-title v-if="item.pivot.invite == 1" class="pr-5" @click="invitationModal(item)" style="cursor: pointer;">{{ item.name }}
                                         <v-chip class="ml-2" color="info" text-color="white" small label>Invited</v-chip>
                                       </v-list-item-title>
-                                      <v-list-item-title v-if="item.owner_id != user.id && item.pivot.invite == 0 && item.pivot.active == 0" class="pr-5" @click="deactivatedInfoModal(item)" style="cursor: pointer;">{{ item.name }}
+                                      <v-list-item-title v-if="item.owner_id != userStore.user.id && item.pivot.invite == 0 && item.pivot.active == 0" class="pr-5" @click="deactivatedInfoModal(item)" style="cursor: pointer;">{{ item.name }}
                                         <v-chip  color="error" class="ml-2" text-color="white" small label>De-Activated</v-chip>
                                       </v-list-item-title>
                                       <!-- edit icon -->
-                                      <v-list-item-action v-if="item.owner_id == user.id">
+                                      <v-list-item-action v-if="item.owner_id == userStore.user.id">
                                         <v-icon @click="editTeamDialog=true; editItem = item" style="cursor: pointer;">mdi-pencil-outline</v-icon>
                                       </v-list-item-action>
-                                      <v-list-item-action v-if="item.owner_id != user.id && item.pivot.invite == 0">
+                                      <v-list-item-action v-if="item.owner_id != userStore.user.id && item.pivot.invite == 0">
                                         <v-icon @click="leaveTeamDialog=true; leaveItem = item" style="cursor: pointer;">mdi-exit-run</v-icon>
                                       </v-list-item-action>
                                     </v-list-item>
@@ -299,7 +299,7 @@
               </v-row>
               <v-row class="pt-0">
                   <v-col cols="12" class="pt-0">
-                      <v-text-field color="#f05628" dense v-model="teamName" height="40px" elevation=0 single-line hide-details style="width: 100%;">
+                      <v-text-field :color="appStore.primary_color" dense v-model="teamName" height="40px" elevation=0 single-line hide-details style="width: 100%;">
                           <template v-slot:label>
                               <strong>Enter your new team name</strong> ex. {{ user.name }}'s Team
                           </template>
@@ -309,10 +309,10 @@
           </v-card-text>
           <v-card-actions class="pt-0 pb-4">
           <v-spacer></v-spacer>
-          <v-btn @click="createTeamDialog = false" outlined elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+          <v-btn @click="createTeamDialog = false" outlined elevation=0 :color="appStore.primary_color" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
               <span>Close</span>
           </v-btn>
-          <v-btn @click="createTeam()" class="px-4" elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+          <v-btn @click="createTeam()" class="px-4" elevation=0 :color="appStore.primary_color" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
               <span style="color: #FFFFFF;">+ Create Team</span>
           </v-btn>
           </v-card-actions>
@@ -338,7 +338,7 @@
               </v-row>
               <v-row class="pt-0">
                   <v-col cols="12" class="pt-0">
-                      <v-text-field color="#f05628" dense v-model="editItem.name" height="40px" elevation=0 single-line hide-details style="width: 100%;">
+                      <v-text-field :color="appStore.primary_color" dense v-model="editItem.name" height="40px" elevation=0 single-line hide-details style="width: 100%;">
                           <template v-slot:label>
                               <strong>Enter your team name</strong> ex. {{ user.name }}'s Team
                           </template>
@@ -348,10 +348,10 @@
           </v-card-text>
           <v-card-actions class="pt-0 pb-4">
           <v-spacer></v-spacer>
-          <v-btn @click="editTeamDialog = false" outlined elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+          <v-btn @click="editTeamDialog = false" outlined elevation=0 :color="appStore.primary_color" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
               <span>Close</span>
           </v-btn>
-          <v-btn @click="editTeam()" elevation=0 class="px-4" color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+          <v-btn @click="editTeam()" elevation=0 class="px-4" :color="appStore.primary_color" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
               <span style="color: #FFFFFF;">Save Changes</span>
           </v-btn>
           </v-card-actions>
@@ -407,7 +407,7 @@
           </v-card-text>
           <v-card-actions class="pt-0 pb-4">
           <v-spacer></v-spacer>
-          <v-btn @click="invitationModalDialog = false" outlined elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+          <v-btn @click="invitationModalDialog = false" outlined elevation=0 :color="appStore.primary_color" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
               <span>Close</span>
           </v-btn>
           <v-btn @click="denyTeam()" class="px-4" elevation=0 color="error" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
@@ -430,9 +430,17 @@
 
 <script>
 
+import { useAppStore } from '../store/appStore.js';
+import { useUserStore } from '../store/userStore.js';
 
 export default {
     name: 'App',
+
+    setup() {
+        const appStore = useAppStore();
+        const userStore = useUserStore();
+        return {appStore, userStore};
+    },
 
     data(){
     return{
@@ -440,6 +448,7 @@ export default {
           teams: [],
         },
         plan: '',
+        teams: [],
         teamName: '',
         drawer: null,
         mini: false,
@@ -456,8 +465,6 @@ export default {
         currentCompany: {
           name: '',
         },
-
-        avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
 
         // dummy data for websites
         websites: [
@@ -480,22 +487,19 @@ export default {
 
     }},
     mounted() {
-        this.getUser();
+      this.loading = true;
+      // fetch user data
+      // if user isn't in store, fetch it
+      if(this.userStore.user == ""){
+        this.userStore.fetchUser();
+      }
+
+      if(this.appStore.logo == ""){
+        this.appStore.setBranding();
+      }
+      this.loading = false;
     },
     methods:{
-        getUser(){
-            this.loading = true;
-
-            let route = '../api/app/';
-            this.$http.get(route, {withCredentials: true}).then((res) => {
-                this.user = res.data[0];
-                this.currentCompany = this.user.current_team;
-                this.userCompanyList = this.user.teams;
-            })
-            .finally(() => {
-            this.loading = false;
-            });
-        },
         collapseSidebar(){
             this.mini = !this.mini;
         },
@@ -578,26 +582,45 @@ export default {
             this.loading = false;
           });
         },
+        removeHash (str) { return str.replace('#', ''); },
     },
     computed:{
       userAvatar(){
-        return "https://ui-avatars.com/api/?background=f05628&color=fff&bold=true&name=" + this.user.name;
+        return "https://ui-avatars.com/api/?background=" + this.removeHash(this.appStore.primary_color) + "&color=fff&bold=true&name=" + this.userStore.user.name;
       },
       checkIfUserOwnsAnyTeam(){
-        let company = this.userCompanyList.find(company => company.owner_id == this.user.id);
+        if(this.userStore.user == ""){
+          this.teams = []
+        } else {
+          this.teams = this.userStore.user.teams;
+        }
+        if (this.teams.length == 0) {
+          return false;
+        }
+        let company = this.teams.find(company => company.owner_id == this.userStore.user.id);
         if (company == undefined) {
           return false;
         }
         return true;
       },
       checkIfUserIsOwnerOfCurrentTeam(){
-        if (this.currentCompany.owner_id == null) {
+        // check if current team exists
+        if (this.owner_id == this.userStore.user.id) {
+            return true;
+        } else {
             return false;
         }
-        if (this.currentCompany.owner_id == this.user.id) {
-          return true;
+      },
+      owner_id(){
+        if(this.userStore.user == ""){
+          return 0;
+        } else {
+          let company = this.userStore.user.teams.find(company => company.id == this.currentCompanyID);
+          if (company == undefined) {
+            return 0;
+          }
+          return company.owner_id;
         }
-        return false;
       },
     }
 };

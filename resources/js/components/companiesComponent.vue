@@ -65,8 +65,8 @@
                         </template>
                     </v-text-field>
                 </div>
-                <div class="d-flex align-items-end" v-if="leads.length > tableOptions.itemsPerPage">
-                    <span style="color: #28323b; font-size: 0.8125rem;">Showing <b>{{ tableOptions.itemsPerPage }} of your leads</b> out of {{leads.length}}</span>
+                <div class="d-flex align-items-end" v-if="leadStore.leads.length > tableOptions.itemsPerPage">
+                    <span style="color: #28323b; font-size: 0.8125rem;">Showing <b>{{ tableOptions.itemsPerPage }} of your leads</b> out of {{leadStore.leads.length}}</span>
                 </div>
                 <div class="d-flex align-items-end" v-else>
                     <span style="color: #28323b; font-size: 0.8125rem;"><b>Showing all of your leads</b></span>
@@ -78,7 +78,7 @@
                         <!-- data table -->
                         <v-data-table
                         :headers="headers"
-                        :items="leads"
+                        :items="leadStore.leads"
                         :search="search"
                         :options.sync="tableOptions"
                         :footer-props="footerOptions"
@@ -94,18 +94,21 @@
                             <v-progress-linear color="#f05628" indeterminate></v-progress-linear>
                         </template>
                         <template v-slot:item.name="{ item }">
-                        <div v-if="item" class="d-flex align-items-center">
+                        <div v-if="item" class="d-flex align-items-center" style="width: fit-content">
                                 <!-- website icon -->
-                                <v-avatar class="mr-1" size="24" color="info" v-if="!item.logo">
+                                <v-avatar class="mr-1" size="30" color="info" v-if="!item.logo">
                                     <!-- 0.75 size -->
                                     <v-icon color="white" style="font-size: 0.95rem;">mdi-web</v-icon>
                                 </v-avatar>
                                 <!-- show favicon -->
-                                <div class="mr-1" style="height: 24px; width: 24px;" v-else>
+                                <div class="mr-1" style="height: 30px; width: 30px;" v-else>
                                     <!-- 0.75 size -->
-                                    <img :src="getFaviconURL(item.logo)" style="width: 24px; height: 24px; border-radius: 4px;">
+                                    <img :src="getFaviconURL(item.logo)" style="width: 30px; height: 30px; border-radius: 4px;">
                                 </div>
-                                <span class="ml-1" style="color: #28323b; font-size: 0.8125rem;">{{ item.name }}</span>
+                                <div class="d-flex flex-wrap" style="width: fit-content">
+                                    <span class="ml-1 w-100" style="color: #28323b; font-size: 0.8125rem;">{{ item.name }}</span>
+                                    <a :href="formatDomain(item.domain)" target="_blank" class="ml-1" style="color: #28323b; font-size: 0.75rem; opacity: 0.75;">{{ item.domain }}</a>
+                                </div>
                         </div>
                         </template>
                         <template v-slot:no-data>
@@ -128,26 +131,41 @@
                             <span v-if="item.total_duration !== null" style="color: #28323b; font-size: 0.8125rem;">{{item.total_duration + ' secs'}}</span>
                         </template>
                         <template v-slot:item.details="{ item }">
-                                    <v-btn @click="dialog = true;" icon v-on="on">
+                                    <v-btn @click="dialog = true; leadItem = item" icon v-on="on">
                                         <v-icon>mdi-chevron-right</v-icon>
                                     </v-btn>
                         </template>
                         <!-- website -->
                         <template v-slot:item.website_name="{ item }">
                             <div v-if="item">
-                                <span class="ml-1" style="color: #28323b; font-size: 0.8125rem;">{{ item.website_name}}</span>
+                                <span  style="color: #28323b; font-size: 0.8125rem;">{{ item.website_name}}</span>
                             </div>
                         </template>
                         <!-- location -->
                         <template v-slot:item.location="{ item }">
                             <div v-if="item">
-                                <span class="ml-1" style="color: #28323b; font-size: 0.8125rem;">{{ item.location }}</span>
+                                <span  style="color: #28323b; font-size: 0.8125rem;">{{ item.location }}</span>
                             </div>
                         </template>
                         <!-- visits -->
                         <template v-slot:item.visit_count="{ item }">
                             <div v-if="item">
-                                <span class="ml-1" style="color: #28323b; font-size: 0.8125rem;">{{ item.visit_count }}</span>
+                                <span style="color: #28323b; font-size: 0.8125rem;">{{ item.visit_count }}</span>
+                            </div>
+                        </template>
+                        <!-- lead score - linear bar -->
+                        <template v-slot:item.lead_score="{ item }">
+                            <div class="d-flex align-items-center justify-content-start" v-if="item">
+                                <span class="mr-1" style="color: #28323b; font-size: 0.8125rem; width: 25px; text-align: right;">{{ item.lead_score }}</span>
+                                <v-progress-linear
+                                :value="item.lead_score"
+                                :color="getLeadScoreColor(item.lead_score)"
+                                height="0.5rem"
+                                :id="item.id"
+                                rounded
+                                class="mr-3"
+                                style="width: 50px;"
+                                ></v-progress-linear>
                             </div>
                         </template>
                         </v-data-table>
@@ -172,7 +190,7 @@
                 >
                 <v-card style="border-radius: 8px; box-shadow: 0px 0px 5px 0px rgba(40,50,59,.1); min-height: 100%; border-radius: 0px !important;">
                     <v-card-title style="border-bottom: solid 1px lightgrey; margin-bottom: 1rem; height: 64px;">
-                        <v-btn @click="dialog=false" icon tile class="mr-3" v-on="on">
+                        <v-btn @click="dialog=false" icon tile class="mr-3">
                             <v-icon>mdi-arrow-collapse-right</v-icon>
                         </v-btn>
                         <b><span style="font-size: 1rem; color: #28323b;">Lead Details</span></b>
@@ -180,41 +198,37 @@
                     <v-card-text>
                         <v-row>
                             <v-col cols="12">
-                                <div style="margin-top: 1rem; border: thin solid rgba(0, 0, 0, 0.12); border-radius: 8px; box-shadow: rgba(40, 50, 59, 0.1) 0px 0px 5px 0px !important;">
+                                <div style="margin-top: 1rem; border: thin solid whitesmoke; border-radius: 8px;">
                                     <div class="d-flex justify-content-between">
                                         <div class="d-flex align-items-start justify-content-between" style="margin: 1rem; width: 100%;">
-                                            <div class="m-0 p-0 d-flex">
-                                            <v-avatar size="60" color="info" v-if="!leads[0].logo">
+                                            <div class="m-0 p-0 d-flex" style="max-width: 75%;">
+                                            <v-avatar size="45" color="info" v-if="!leadItem.logo">
                                                 <!-- 0.75 size -->
                                                 <v-icon color="white" style="font-size: 0.95rem;">mdi-company</v-icon>
                                             </v-avatar>
                                             <!-- show favicon -->
-                                            <div class="mr-1" style="height: 60px; width: 60px;" v-else>
+                                            <div class="mr-1" style="height: 45px; width: 45px;" v-else>
                                                 <!-- 0.75 size -->
-                                                <img :src="getFaviconURL(leads[0].logo)" style="width: 60px; height: 60px; border-radius: 4px;">
+                                                <img :src="getFaviconURL(leadItem.logo)" style="width: 45px; height: 45px; border-radius: 4px;">
                                             </div>
                                             <div class="d-flex flex-wrap align-self-center">
-                                                <span class="ml-1 align-self-end" style="width: 100%; color: #28323b; font-weight: bold;">{{ leads[0].name }}</span>
-                                                <span class="ml-1 align-self-start" style="line-height: 12px; width: 100%; color: #28323b; font-size: 0.8125rem;">{{ leads[0].name }}</span>
+                                                <span class="ml-1 align-self-end" style="width: 100%; color: #28323b; font-weight: bold; font-size: 1.5rem;">{{ leadItem.name }}</span>
+                                                <span class="ml-1 align-self-start" style="width: 100%; color: #28323b; font-size: 0.8125rem;">{{ leadItem.domain }}</span>
                                             </div>
                                             </div>
                                             <!-- put in top right of parent element -->
                                             <div>
-                                                <v-btn class="leadIcons" @click="dialog = true;" icon v-on="on" style="">
+                                                <v-btn class="leadIcons" @click="dialog = true;" icon style="">
                                                     <v-icon style="font-size: 1rem;">mdi-tag-plus-outline</v-icon>
                                                 </v-btn>
                                                 <!--  email button -->
-                                                <v-btn class="leadIcons" @click="dialog = true;" icon v-on="on">
+                                                <v-btn class="leadIcons" @click="dialog = true;" icon>
                                                     <v-icon style="font-size: 1rem;">mdi-account-plus-outline</v-icon>
-                                                </v-btn>
-                                                <!--  phone button -->
-                                                <v-btn class="leadIcons" @click="dialog = true;" icon v-on="on">
-                                                    <v-icon style="font-size: 1rem;">mdi-account-search-outline</v-icon>
                                                 </v-btn>
                                                 <!-- more -->
                                                 <v-menu offset-y>
                                                     <template v-slot:activator="{ on }">
-                                                        <v-btn class="leadIcons mr-0" icon v-on="on">
+                                                        <v-btn class="leadIcons mr-0" icon>
                                                             <v-icon style="font-size: 1rem;">mdi-dots-vertical</v-icon>
                                                         </v-btn>
                                                     </template>
@@ -235,40 +249,51 @@
                                         </div>
 
                                     </div>
-                                    <div class="d-flex justify-content-between flex-wrap" style="border-top: thin solid rgba(0, 0, 0, 0.12);">
-                                        <div class="d-flex flex-wrap" style="padding: 1rem; width: 33.33%; border-right: thin solid rgba(0, 0, 0, 0.12);">
-                                            <span style="width: 100%; color: rgb(40, 50, 59); font-size: 0.8125rem;">
+                                    <div class="d-flex justify-content-between flex-wrap" style="border-top: thin solid whitesmoke;">
+                                        <div class="d-flex flex-wrap align-content-start" style="padding: 1rem; width: 33.33%; border-right: thin solid whitesmoke;">
+                                            <span style="width: 100%; color: rgb(40, 50, 59); font-size: 0.8125rem; height: 22px; opacity: 0.75;">
                                                 Industry
                                             </span>
-                                            <span style="width: 100%; color: rgb(40, 50, 59); font-size: 0.8125rem;">
-                                                <b>{{ leads[0].industry }}</b>
+                                            <span style="width: 100%; color: rgb(40, 50, 59); font-size: 0.8125rem; ">
+                                                {{ leadItem.industry }}
                                             </span>
                                         </div>
-                                        <div class="d-flex flex-wrap" style="padding: 1rem; width: 33.33%; border-right: thin solid rgba(0, 0, 0, 0.12);">
-                                            <span style="width: 100%; color: rgb(40, 50, 59); font-size: 0.8125rem;">
+                                        <div class="d-flex flex-wrap align-content-start" style="padding: 1rem; width: 33.33%; border-right: thin solid whitesmoke;">
+                                            <span style="width: 100%; color: rgb(40, 50, 59); font-size: 0.8125rem; height: 22px; opacity: 0.75;">
                                                 Company Size
                                             </span>
                                             <span style="width: 100%; color: rgb(40, 50, 59); font-size: 0.8125rem;">
-                                                <b>{{ leads[0].companySize }}</b>
+                                                {{ leadItem.size }}
                                             </span>
                                         </div>
-                                        <div class="d-flex flex-wrap" style="padding: 1rem; width: 33.33%;">
-                                            <span style="width: 100%; color: rgb(40, 50, 59); font-size: 0.8125rem;">
+                                        <div class="d-flex flex-wrap align-content-start" style="padding: 1rem; width: 33.33%;">
+                                            <span style="width: 100%; color: rgb(40, 50, 59); font-size: 0.8125rem; height: 22px;">
                                                 Lead Score
                                             </span>
-                                            <span style="width: 100%; color: rgb(40, 50, 59); font-size: 0.8125rem;">
-                                                <b>{{ leads[0].leadScore }}</b>
+                                            <span class="d-flex align-items-center" style="width: 100%; color: rgb(40, 50, 59); font-size: 0.8125rem;">
+                                                <span class="mr-2" style="opacity: 0.75;">{{ leadItem.lead_score }}</span>
+                                                <!-- progress circular -->
+                                                <v-progress-linear
+                                                :value="leadItem.lead_score"
+                                                :color="getLeadScoreColor(leadItem.lead_score)"
+                                                height="0.5rem"
+                                                rounded
+                                                class="mr-3"
+                                                style="width: 50px;"
+                                                ></v-progress-linear>
                                             </span>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="d-flex align-items-center justify-content-between" style="font-size: 0.8125rem; margin-top: 1rem;">
-                                    <div>Website: <b>{{ leads[0].website.name }}</b></div>
-                                    <div class="d-flex align-items-center "><div class="mr-1" style="background-color: #4CAF50; border-radius: 50%; height: 10px; width: 10px;"></div>Last Seen: {{ leads[0].lastSeen }}</div>
+                                <div class="d-flex align-items-center justify-content-between" v-if="leadItem.website" style="font-size: 0.8125rem; margin-top: 1rem;">
+                                    <div>Website: {{ leadItem.website.name }}</div>
+                                    <!-- <div class="mr-1" style="background-color: #4CAF50; border-radius: 50%; height: 10px; width: 10px;"></div> -->
+                                    <div class="d-flex align-items-center ">Last Seen: {{ leadItem.last_seen }}</div>
                                 </div>
-                                <v-divider style="color: rgba(0, 0, 0, 0.12);"></v-divider>
-                                <div class="d-flex">
-                                    <v-btn-toggle variant="outlined" v-model="toggle" mandatory color="#f05628" style="width: 100%;" group>
+                                <!-- divider -->
+                                <v-divider class="my-3" style="width: 100%; color: whitesmoke;"></v-divider>
+                                <div class="d-flex mb-6">
+                                    <v-btn-toggle variant="outlined" v-model="toggle" active-class="transparent" mandatory color="#f05628" style="width: 100%;" group>
                                     <v-btn elevation="0" :value="0" active-class="transparent" class="m-0 mr-1 flex-grow-1 button-background" style="border-radius: 0px; font-size: 0.75rem; font-weight: 700; text-decoration: none; text-transform: none !important; letter-spacing: 0; text-indent: 0; height: 36px; ">
                                         Activity
                                     </v-btn>
@@ -276,7 +301,7 @@
                                         Contacts
                                     </v-btn>
                                     <v-btn elevation="0" :value="2" active-class="transparent" class="m-0 mx-1 flex-grow-1 button-background" style="border-radius: 0px; font-size: 0.75rem; font-weight: 700; text-decoration: none; text-transform: none !important; letter-spacing: 0; text-indent: 0; height: 36px; ">
-                                        More Info
+                                        Company Details
                                     </v-btn>
                                     <v-btn elevation="0" :value="3" active-class="transparent" class="m-0 ml-1 flex-grow-1 button-background" style="border-radius: 0px; font-size: 0.75rem; font-weight: 700; text-decoration: none; text-transform: none !important; letter-spacing: 0; text-indent: 0; height: 36px; ">
                                         Your Notes
@@ -288,17 +313,17 @@
                                 </div>
                                 <div class="d-flex mt-3" style="border-radius: 8px;" v-if="toggle == 0">
                                     <!-- 3 metrics blocks -->
-                                    <div class="col-4 flex-grow-1 d-flex flex-wrap" style="border: thin solid rgba(0, 0, 0, 0.12); padding: 1rem; border-radius: 8px 0px 0px 8px;">
+                                    <div class="col-4 flex-grow-1 d-flex flex-wrap" style="border: thin solid whitesmoke; padding: 1rem; border-radius: 8px 0px 0px 8px;">
                                         <span style="width:100%; font-size: 0.8125rem; color: #28323b;">Visits</span>
-                                        <span style="font-size: 3rem; color: #28323b; font-weight: 700; line-height: 3rem;">{{ leads[0].visit_count }}</span>
+                                        <span style="font-size: 2.5rem; color: #28323b; font-weight: 700; line-height: 3rem;">{{ leadItem.visit_count }}</span>
                                     </div>
-                                    <div class="col-4 flex-grow-1" style="border-top: thin solid rgba(0, 0, 0, 0.12); border-bottom: thin solid rgba(0, 0, 0, 0.12); padding: 1rem;">
+                                    <div class="col-4 flex-grow-1 d-flex flex-wrap" style="border-top: thin solid whitesmoke; border-bottom: thin solid whitesmoke; padding: 1rem;">
                                         <span style="width:100%; font-size: 0.8125rem; color: #28323b;">Visitors</span>
-                                        <span style="font-size: 3rem; color: #28323b; font-weight: 700; line-height: 3rem;">{{ leads[0].visitors }}</span>
+                                        <span style="font-size: 2.5rem; color: #28323b; font-weight: 700; line-height: 3rem;">{{ leadItem.unique_visitors }}</span>
                                     </div>
-                                    <div class="col-4 flex-grow-1" style="border: thin solid rgba(0, 0, 0, 0.12); padding: 1rem; border-radius: 0px 8px 8px 0px;">
+                                    <div class="col-4 flex-grow-1 d-flex flex-wrap" style="border: thin solid whitesmoke; padding: 1rem; border-radius: 0px 8px 8px 0px;">
                                         <span style="width:100%; font-size: 0.8125rem; color: #28323b;">Total Duration</span>
-                                        <span style="font-size: 3rem; color: #28323b; font-weight: 700; line-height: 3rem;">{{ leads[0].totalDuration }}</span>
+                                        <span style="font-size: 2.5rem; color: #28323b; font-weight: 700; line-height: 3rem;">{{ formatActivityTime(leadItem.total_duration) }}</span>
                                     </div>   
                                 </div>
                                 <div style="margin-top: 1rem;" v-if="toggle == 0">
@@ -308,25 +333,18 @@
                                     <v-card style="margin-top: 1rem; border-radius: 8px;" elevation="0">
                                             <div>
                                                 <div>
-                                                    <div class="d-flex align-items-center" style="padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 0.5rem; border: thin solid rgba(0, 0, 0, 0.12); border-radius: 8px 8px 0px 0px;">
-                                                        <div>
-                                                            <span style="font-size: 0.8125rem; text-decoration: underline; font-weight: bold; color: #2196F3; cursor: pointer;">/Pricing</span>
-                                                            <v-icon style="font-size:  0.8125rem; color: #2196F3; cursor: pointer;">mdi-open-in-new</v-icon>
+                                                    <!-- for each top_sources on lead item -->
+                                                    <div v-for="(value, key) in leadItem.top_pages" :key="value.id" class="d-flex justify-content-between" style="padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 0.5rem; padding-right: 0.5rem; border: thin solid whitesmoke; border-radius: 0px;">
+                                                        <div class="d-flex align-items-center"  style="width: fit-content !important" >
+                                                        <!-- the key of the source object -->
+                                                            <span style="font-size: 0.8125rem; color: #28323b; font-weight: 600; text-decoration: underline; color: #2196F3;">{{ key }}<v-icon class="ml-2" style="color: #2196F3 !important; font-size: 0.9rem; ">mdi-open-in-new</v-icon></span>
+                                                        </div>
+                                                        <div class="d-flex align-items-end mr-1">
+                                                        <!-- the key of the source object -->
+                                                            <span style="font-size: 0.8125rem; color: #28323b;">{{ value }} Visits</span>
                                                         </div>
                                                     </div>
-                                                    <div class="d-flex align-items-center" style="padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 0.5rem; border: thin solid rgba(0, 0, 0, 0.12); border-radius: 0px 0px 0px 0px; border-bottom: 0px; border-top: 0px;">
-                                                        <div>
-                                                            <span style="font-size: 0.8125rem; text-decoration: underline; font-weight: bold; color: #2196F3; cursor: pointer;">/Demo</span>
-                                                            <v-icon style="font-size:  0.8125rem; color: #2196F3; cursor: pointer;">mdi-open-in-new</v-icon>
-                                                        </div>
-                                                    </div>
-                                                    <div class="d-flex align-items-center" style="padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 0.5rem; border: thin solid rgba(0, 0, 0, 0.12); border-radius: 0px 0px 8px 8px;">
-                                                        <div>
-                                                            <span style="font-size: 0.8125rem; text-decoration: underline; font-weight: bold; color: #2196F3; cursor: pointer;">/Contact-Us</span>
-                                                            <!-- icon for new tab -->
-                                                            <v-icon style="font-size:  0.8125rem; color: #2196F3; cursor: pointer;">mdi-open-in-new</v-icon>
-                                                        </div>
-                                                    </div>
+
                                                 </div>
                                             </div>
                                     </v-card> 
@@ -338,21 +356,18 @@
                                     <v-card style="margin-top: 1rem; border-radius: 8px;" elevation="0">
                                             <div>
                                                 <div>
-                                                    <div class="d-flex align-items-center" style="padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 0.5rem; border: thin solid rgba(0, 0, 0, 0.12); border-radius: 8px 8px 0px 0px;">
-                                                        <div>
-                                                            <span style="font-size: 0.8125rem; font-weight: bold; color: #28323b;">Google</span>
+                                                    <!-- for each top_sources on lead item -->
+                                                    <div v-for="(value, key) in leadItem.top_sources" :key="value.id" class="d-flex justify-content-between" style="padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 0.5rem; padding-right: 0.5rem; border: thin solid whitesmoke; border-radius: 0px;">
+                                                        <div class="d-flex align-items-center"  style="width: fit-content !important" >
+                                                        <!-- the key of the source object -->
+                                                            <span style="font-size: 0.8125rem; color: #28323b; font-weight: 600;">{{ key }}</span>
+                                                        </div>
+                                                        <div class="d-flex align-items-end mr-1">
+                                                        <!-- the key of the source object -->
+                                                            <span style="font-size: 0.8125rem; color: #28323b;">{{ value }} Visits</span>
                                                         </div>
                                                     </div>
-                                                    <div class="d-flex align-items-center" style="padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 0.5rem; border: thin solid rgba(0, 0, 0, 0.12); border-radius: 0px 0px 0px 0px; border-bottom: 0px; border-top: 0px;">
-                                                        <div>
-                                                            <span style="font-size: 0.8125rem; font-weight: bold; color: #28323b;">Facebook</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="d-flex align-items-center" style="padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 0.5rem; border: thin solid rgba(0, 0, 0, 0.12); border-radius: 0px 0px 8px 8px;">
-                                                        <div>
-                                                            <span style="font-size: 0.8125rem; font-weight: bold; color: #28323b;">Direct</span>
-                                                        </div>
-                                                    </div>
+
                                                 </div>
                                             </div>
                                     </v-card> 
@@ -360,12 +375,125 @@
 
                                 <div style="margin-top: 1rem;" v-if="toggle == 1">
                                     <b><span style="font-size: 1rem; color: #28323b;">Find Contacts</span></b>
+                                    <!-- graphic and button centered on screen -->
+                                    <div v-if="!contactsExist" class="d-flex align-items-center justify-content-center flex-wrap" style="margin-top: 3rem; width: 100%;">
+                                        <div class="d-flex align-items-center justify-content-center" style="width: 100%;">
+                                            <v-img src="https://cdn.vuetifyjs.com/images/cards/docks.jpg" max-width="300" max-height="300" contain></v-img>
+                                        </div>
+                                        <!-- copy -->
+                                        <div class="d-flex align-items-center justify-content-center" style="width: 100%; margin-top: 1rem;">
+                                            <span style="font-size: 0.8125rem; color: #28323b;">Search for contacts who work at this company.</span>
+                                        </div>
+                                        <v-btn @click="searchContacts()" elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0; margin-top: 1rem;">
+                                            <span style="color: #FFFFFF;">Search for Contacts</span>
+                                        </v-btn>
+                                    </div>
+                                    <!-- if contacts exit list them with avataar name and email -->
+                                    <div v-if="contactsExist" class="mt-3">
+                                        <div class="pb-3" style="font-size: 0.8125rem; color: #28323b;">These are the contacts we found for <strong>{{ leadItem.domain }}</strong></div>
+                                        <div v-for="(contact, index) in leadItem.contacts" :key="contact.id" class="d-flex justify-content-between" style="padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 0.5rem; border: thin solid whitesmoke; border-radius: 0px;">
+                                            <div class="d-flex align-items-center" :id="'contact-' + index" style="width: 40% !important" >
+                                                <div>
+                                                    <v-avatar size="30" rounded class="mr-2">
+                                                        <img :src="contactAvatar(contact)">
+                                                    </v-avatar>
+                                                </div>
+                                                <div class="d-flex flex-wrap" style="width: fit-content">
+                                                    <span v-if="contact.first_name && contact.last_name" class="w-100" style="line-height: 1; font-size: 0.8125rem; color: #28323b;">{{contact.first_name + " " + contact.last_name}}</span>
+                                                    <span v-else class="w-100" style="line-height: 1; font-size: 0.8125rem; color: #28323b;">- -</span>
+                                                    <span style="font-size: 0.75rem; opacity: 0.75; color: #28323b; line-height: 1.2;">{{contact.value}}</span><div v-if="contact.phone_number" style="font-size: 0.75rem; opacity: 0.75; color: #28323b; line-height: 1.2;" class="mx-1">|</div><span v-if="contact.phone_number" style="font-size: 0.75rem; opacity: 0.75; color: #28323b; line-height: 1.2;">{{ contact.phone_number }}</span>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex align-items-center" style="width: 40% !important">
+                                                <div  class="d-flex flex-wrap" style="width: fit-content">
+                                                    <span v-if="contact.seniority || contact.position" class="w-100" style="line-height: 1; font-size: 0.8125rem; color: #28323b;">{{titleCase(contact.seniority + " " + contact.position)}}</span>
+                                                    <span v-else class="w-100" style="line-height: 1; font-size: 0.8125rem; color: #28323b;">Position Unknown</span>
+                                                    <span v-if="contact.department" style="font-size: 0.75rem; opacity: 0.75; color: #28323b; line-height: 1.2;">{{ titleCase(contact.department)}}</span>
+                                                    <span v-if="!contact.department" class="w-100" style="line-height: 1; font-size: 0.8125rem; color: #28323b; opacity: 0.75;">Department Unknown</span>
+                                                </div>
+                                            </div>
+                                            <!-- social icons -->
+                                            <div class="d-flex align-items-center pr-3">
+                                                <div @click="goTo(contact.linkedin)" class="m-1 p-1" :style="'background-color:' + (contact.linkedin ? '#0077B5;' : '#D3D3D3;') + 'border-radius: 4px; cursor: ' + (contact.linkedin ? 'pointer;' : 'unset;')">
+                                                    <v-icon style="font-size: 1rem; color: #ffffff;">mdi-linkedin</v-icon>
+                                                </div>
+                                                <div @click="goTo(contact.twitter, 'twitter')" class="m-1 p-1 " :style="'background-color: '+ (contact.twitter ? '#1C9CEA;' : '#D3D3D3;') + 'border-radius: 4px; cursor: ' + (contact.twitter ? ' pointer;' : ' unset;')">
+                                                    <v-icon style="font-size: 1rem; color: #ffffff;">mdi-twitter</v-icon>
+                                                </div>
+                                            </div>  
+                                        </div>
+                                    </div>
                                 </div>
                                 <div style="margin-top: 1rem;" v-if="toggle == 2">
-                                    <b><span style="font-size: 1rem; color: #28323b;">Company Information</span></b>
+                                    <b><span style="font-size: 1rem; color: #28323b;">Company Details</span></b>
+                                    <div class="mt-3">
+                                        <!-- company name title -->
+                                        <div style="font-size: 0.8125rem; color: #28323b;"><b>{{ leadItem.name }}</b></div>
+
+                                        <!-- compnay descripiton title -->
+                                        <div style="font-size: 0.8125rem; color: #28323b;">{{ leadItem.description }}</div>
+                                    </div>
+                                    <div class="mt-6">
+                                        <!-- company socials title -->
+                                        <div style="font-size: 0.8125rem; color: #28323b;"><b>Website</b></div>
+                                        <div class="d-flex align-items-center">
+                                            <div @click="goTo(leadItem.domain)" style="font-size: 0.8125rem; color: #28323b; text-decoration: underline;">{{ leadItem.domain }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-6">
+                                        <!-- company socials title -->
+                                        <div style="font-size: 0.8125rem; color: #28323b;"><b>Social Media</b></div>
+                                        <div class="d-flex align-items-center">
+                                            <div @click="goTo(leadItem.linkedin_url)" class="m-1 p-1 ml-0" :style="'background-color:' + (leadItem.linkedin_url ? '#0077B5;' : '#D3D3D3;') + 'border-radius: 4px; cursor: ' + (leadItem.linkedin ? 'pointer;' : 'unset;')">
+                                                <v-icon style="font-size: 1rem; color: #ffffff;">mdi-linkedin</v-icon>
+                                            </div>
+                                            <div @click="goTo(leadItem.twitter_url)" class="m-1 p-1 " :style="'background-color: '+ (leadItem.twitter_url ? '#1C9CEA;' : '#D3D3D3;') + 'border-radius: 4px; cursor: ' + (leadItem.twitter ? ' pointer;' : ' unset;')">
+                                                <v-icon style="font-size: 1rem; color: #ffffff;">mdi-twitter</v-icon>
+                                            </div>
+                                            <div @click="goTo(leadItem.facebook_url)" class="m-1 p-1 " :style="'background-color: '+ (leadItem.facebook_url ? '#3B5998;' : '#D3D3D3;') + 'border-radius: 4px; cursor: ' + (leadItem.facebook ? ' pointer;' : ' unset;')">
+                                                <v-icon style="font-size: 1rem; color: #ffffff;">mdi-facebook</v-icon>
+                                            </div>
+                                            <div @click="goTo(leadItem.instagram_url)" class="m-1 p-1 " :style="'background-color: '+ (leadItem.instagram_url ? '#E1306C;' : '#D3D3D3;') + 'border-radius: 4px; cursor: ' + (leadItem.instagram ? ' pointer;' : ' unset;')">
+                                                <v-icon style="font-size: 1rem; color: #ffffff;">mdi-instagram</v-icon>
+                                            </div>
+                                            <!-- youtube -->
+                                            <div @click="goTo(leadItem.youtube_url)" class="m-1 p-1 " :style="'background-color: '+ (leadItem.youtube_url ? '#FF0000;' : '#D3D3D3;') + 'border-radius: 4px; cursor: ' + (leadItem.youtube ? ' pointer;' : ' unset;')">
+                                                <v-icon style="font-size: 1rem; color: #ffffff;">mdi-youtube</v-icon>
+                                            </div>
+                                            <!-- tiktok -->
+                                            <div @click="goTo(leadItem.tiktok_url)" class="m-1 p-1 " :style="'background-color: '+ (leadItem.tiktok_url ? '#000000;' : '#D3D3D3;') + 'border-radius: 4px; cursor: ' + (leadItem.tiktok ? ' pointer;' : ' unset;')">
+                                                <v-icon style="font-size: 1rem; color: #ffffff;">mdi-music-note</v-icon>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-6">
+                                        <!-- company socials title -->
+                                        <div style="font-size: 0.8125rem; color: #28323b;"><b>Address</b></div>
+                                        <div class="d-flex flex-wrap align-items-center">
+                                            <div class="w-100" style="font-size: 0.8125rem; color: #28323b;">{{ leadItem.address }}</div>
+                                            <!-- city -->
+                                            <div class="w-100" style="font-size: 0.8125rem; color: #28323b;">{{ leadItem.city }}</div>
+                                            <!-- state -->
+                                            <div class="w-100" style="font-size: 0.8125rem; color: #28323b;">{{ leadItem.state }}</div>
+                                            <!-- zip -->
+                                            <div class="w-100" style="font-size: 0.8125rem; color: #28323b;">{{ leadItem.zip }}</div>
+                                        </div>
+                                    </div>
+
+
+                                    
                                 </div>
                                 <div style="margin-top: 1rem;" v-if="toggle == 3">
                                     <b><span style="font-size: 1rem; color: #28323b;">Your Notes</span></b>
+                                    <div class="d-flex align-items-center justify-content-center flex-wrap" style="margin-top: 3rem; width: 100%;">
+                                        <div class="d-flex align-items-center justify-content-center" style="width: 100%;">
+                                            <v-img src="https://cdn.vuetifyjs.com/images/cards/docks.jpg" max-width="300" max-height="300" contain></v-img>
+                                        </div>
+                                        <!-- copy -->
+                                        <div class="d-flex align-items-center justify-content-center" style="width: 100%; margin-top: 1rem;">
+                                            <span style="font-size: 0.8125rem; color: #28323b;">Notes are coming soon!</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </v-col>
                         </v-row>
@@ -376,10 +504,43 @@
 </template>
 
 <script>
+import { useAppStore } from '../store/appStore';
+import { useUserStore } from '../store/userStore';
+import { useTeamStore } from '../store/teamStore';
+import { useLeadStore } from '../store/leadStore';
     export default {
+        setup(){
+            const appStore = useAppStore();
+            const userStore = useUserStore();
+            const teamStore = useTeamStore();
+            const leadStore = useLeadStore();
+            return { appStore, userStore, teamStore, leadStore };
+        },
         mounted() {
-            console.log('Component mounted.')
-            this.getUserDetails();
+            if(this.leadStore.leads.length == 0) {
+                if (this.userStore.user == "") {
+                    this.userStore.fetchUser().then(() => {
+                        this.leadStore.fetchLeads(this.userStore.user.current_team.id);
+                    });
+                } else {
+                    this.leadStore.fetchLeads(this.userStore.user.current_team.id);
+                }
+            }
+        },
+        // once loaded, edit the css
+        updated() {
+            if(this.leadStore.leads.length > 0) {
+                this.$nextTick(() => {
+                    // once leads are loaded, set the color of the lead score if its 100 using it's id
+                    this.leadStore.leads.forEach(lead => {
+                        if(lead.lead_score == 100) {
+                            console.log(lead.id);
+                            // add the rainbow class
+                            document.getElementById(lead.id).classList.add("rainbow");
+                        }
+                    });
+                });
+            }
         },
         data(){
             return {
@@ -391,21 +552,22 @@
                         sortable: false,
                         value: 'name',
                     },
-                    { text: 'Visits', value: 'visit_count' },
-                    { text: 'Website', value: 'website_name' },
                     { text: 'Location', value: 'location' },
-                    { text: 'Lead Score', value: 'LeadScore' },
-                    { text: 'Last Seen', value: 'last_seen' },
+                    { text: 'Visited', value: 'website_name'},
+                    { text: 'Num. visits', value: 'visit_count' },
+                    { text: 'Lead Score', value: 'lead_score' },
+                    // { text: 'Last Seen', value: 'last_seen' },
                     { text: '', value: 'details', sortable: false, align: 'end' },
                     
                 ],
                 search: '',
-                dialog: true,
+                dialog: false,
                 user: {
                     current_team: {},
                 },
                 loading: false,
-                leads: [],
+                leadItem: {},
+
                 tableOptions: {
                     page: 0,
                     itemsPerPage: 10,
@@ -413,34 +575,13 @@
                 footerOptions:
                 {
                 itemsPerPageOptions: [10, 25, 50, 100], // this is the proper name - not "items-per-page options" like what you're using
-                }       
-
+                },
+                contactsExist: false,
             }
         },
         methods:{
-            getUserDetails(){
-                this.loading = true;
-                let route = '../api/app/';
-                this.$http.get(route, {withCredentials: true}).then((res) => {
-                    this.user = res.data[0];
-                    this.getLeads();
-                })
-            },
-            getLeads(){
-                this.loading = true;
-                // append id from user object to route
-                let route = '../api/teams/leads/{team_id}';
+            //  let route = '../api/teams/leads/{team_id}';
 
-                // replace team_id with id from user object
-                route = route.replace('{team_id}', this.user.current_team_id);
-                
-                this.$http.get(route, {withCredentials: true}).then((res) => {
-                    this.leads = res.data;
-                })
-                .finally(() => {
-                    this.loading = false;
-                });
-            },
             getFaviconURL(url) {
                 // remove the public and replace it with storage
                 url = url.replace('public', 'storage');
@@ -477,6 +618,87 @@
                     return Math.floor(interval) + " mins";
                 }
                 return Math.floor(seconds) + " secs";
+            },
+            getLeadScoreColor(score){
+                if(score < 50){
+                    return 'red';
+                } else if(score < 75){
+                    return 'orange';
+                } else if(score < 100){
+                    return 'green';
+                } else {
+                    // return bright green
+                    return '#00E676';
+                }
+            },
+            // rand is not a function
+            rand(min, max) {
+                return Math.floor(Math.random() * (max - min + 1)) + min;
+            },
+            formatDomain(url) {
+                // format the url to use in href
+                let new_url = url.replace('https://', '').replace('http://', '').replace('www.', '').split(/[/?#]/)[0];
+                // add the http://
+                new_url = 'https://' + new_url;
+                // return the url
+                return new_url;
+            },
+            searchContacts(){
+                // search the contacts
+                // pass the current lead domain
+                this.leadStore.fetchContacts(this.leadItem.domain).then(() => {
+                    // open the dialog
+                    this.leadItem.contacts = this.leadStore.contacts;
+                    this.contactsExist = true;
+                });
+            },
+            contactAvatar(contact){
+                // return the avatar
+                return "https://ui-avatars.com/api/?background=" + this.removeHash(this.appStore.primary_color) + "&color=fff&bold=true&name=" + contact.first_name + "+" + contact.last_name;
+            },
+            removeHash(color){
+                // remove the hash
+                return color.replace('#', '');
+            },
+            goTo(link, website = null){
+                // go to the link
+                if(website != null){
+                    if (website == 'twitter') {
+                        // add the twitter url
+                        link = 'https://www.twitter.com/' + link;
+                    }
+                }
+                // if not https:// or http:// add it
+                if(!link.includes('https://') && !link.includes('http://')){
+                    link = 'https://' + link;
+                }
+                window.open(link, '_blank');
+            },
+            titleCase(str) {
+                // make the first letter of each word uppercase
+                return str.toLowerCase().split(' ').map(function(word) {
+                    return word.replace(word[0], word[0].toUpperCase());
+                }).join(' ');
+            },
+            formatActivityTime(seconds){
+                // format seconds into minutes or hours
+                if(seconds < 60){
+                    return seconds + 's';
+                } else if(seconds < 3600){
+                    return Math.floor(seconds / 60) + 'mins';
+                } else {
+                    return Math.floor(seconds / 3600) + 'hrs';
+                }
+            },
+
+        },
+        computed: {
+            rainbowColor() {
+                // change color every 100ms
+                setInterval(() => {
+                    // return a hex from color array in sequence
+                    this.appStore.colorArray[this.appStore.colorIndex++ % this.appStore.colorArray.length];
+                }, 100);
             },
         }
         
@@ -588,6 +810,16 @@
 .v-btn-toggle--group > .v-btn.v-btn.transparent{
     background-color: transparent !important;
 }
+
+.v-btn-toggle--group > .v-btn.v-btn.button-background{
+    background-color: #FFFFFF !important;
+}
+
+.v-btn-toggle--group > .v-btn.v-btn.transparent{
+    background-color: transparent !important;
+
+}
+
 
 
 </style>

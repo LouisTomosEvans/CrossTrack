@@ -9,13 +9,15 @@ import App from './components/App.vue';
 import VueRouter from 'vue-router';
 import Alpine from 'alpinejs';
 import ApexCharts from 'apexcharts';
+import VueCompositionAPI from '@vue/composition-api';
+import pinia from './pinia.js'
 
 window.Alpine = Alpine;
 
 Alpine.start();
 
 Vue.use(VueRouter);
-
+Vue.use(VueCompositionAPI);
 Vue.use(Vuetify);
 
 Vue.component('app', App);
@@ -41,14 +43,13 @@ Vue.component('team-component', teamComponent);
 import websiteComponent from './components/websiteComponent.vue'
 Vue.component('website-component', websiteComponent);
 
-
 import loadingScreenComponent from './components/loadingScreenComponent.vue'
 Vue.component('loading-screen', loadingScreenComponent);
 
 const routes = [
     { path: '/', component: dashboardComponent },
     { path: '/companies', component: companiesComponent },
-    { path: '/segments', component: segmentsComponent },
+    { path: '/segments', component: segmentsComponent, name: 'segments' },
     { path: '/team', component: teamComponent },
     { path: '/websites', component: websiteComponent },
     {path: '/:catchAll(.*)', component: dashboardComponent }
@@ -64,6 +65,7 @@ const app = document.getElementById('app');
 if (app) {
     new Vue({
         router,
+        pinia,
         vuetify: new Vuetify(),
     }).$mount(app);
 }

@@ -105,8 +105,8 @@
                         </template>
                     </v-text-field>
                 </div>
-                <div class="d-flex align-items-end" v-if="websites.length > tableOptions.itemsPerPage">
-                    <span style="color: #28323b; font-size: 0.8125rem;">Showing <b>{{ tableOptions.itemsPerPage }} of your websites</b> out of {{websites.length}}</span>
+                <div class="d-flex align-items-end" v-if="websiteStore.websites.length > tableOptions.itemsPerPage">
+                    <span style="color: #28323b; font-size: 0.8125rem;">Showing <b>{{ tableOptions.itemsPerPage }} of your websites</b> out of {{websiteStore.websites.length}}</span>
                 </div>
                 <div class="d-flex align-items-end" v-else>
                     <span style="color: #28323b; font-size: 0.8125rem;"><b>Showing all of your websites</b></span>
@@ -118,7 +118,7 @@
                         <!-- data table -->
                         <v-data-table
                         :headers="headers"
-                        :items="websites"
+                        :items="websiteStore.websites"
                         :search="search"
                         :options.sync="tableOptions"
                         :footer-props="footerOptions"
@@ -199,7 +199,7 @@
                                     <v-list-item-title style="font-weight: 700;">Quick Actions</v-list-item-title>
                                   </v-list-item-content>
                                 </v-list-item>
-                                <v-list-item  style="cursor: pointer;" link :href="item.domain">
+                                <v-list-item  style="cursor: pointer;" link target="_blank" :href="formatWebsiteRedirect(item.domain)">
                                   <v-list-item-content>
                                     <v-list-item-title>
                                         Go To Website
@@ -444,10 +444,32 @@
 </template>
 
 <script>
+import { useAppStore } from '../store/appStore.js';
+import { useUserStore } from '../store/userStore.js';
+import { useWebsiteStore } from '../store/websiteStore.js';
+
     export default {
+        setup() {
+            const appStore = useAppStore();
+            const userStore = useUserStore();
+            const websiteStore = useWebsiteStore();
+
+            return {
+                appStore,
+                userStore,
+                websiteStore,
+            }
+        },
         mounted() {
-            this.getUserDetails();
-            console.log('Component mounted.')
+            if(this.websiteStore.websites.length == 0) {
+                if (this.userStore.user == "") {
+                    this.userStore.fetchUser().then(() => {
+                        this.websiteStore.fetchWebsites(this.userStore.user.current_team.id);
+                    });
+                } else {
+                    this.websiteStore.fetchWebsites(this.userStore.user.current_team.id);
+                }
+            }
         },
         data(){
             return {
@@ -507,29 +529,6 @@
             },
         },
         methods: {
-            getUserDetails(){
-                this.loading = true;
-                let route = '../api/app/';
-                this.$http.get(route, {withCredentials: true}).then((res) => {
-                    this.user = res.data[0];
-                    this.getWebsites();
-                })
-            },
-            getWebsites(){
-                this.loading = true;
-                // append id from user object to route
-                let route = '../api/teams/websites/{team_id}';
-
-                // replace team_id with id from user object
-                route = route.replace('{team_id}', this.user.current_team_id);
-                
-                this.$http.get(route, {withCredentials: true}).then((res) => {
-                    this.websites = res.data;
-                })
-                .finally(() => {
-                    this.loading = false;
-                });
-            },
             addWebsite(){
                 this.loading = true;
                 let route = '../api/teams/websites/{team_id}';
@@ -612,7 +611,7 @@
             },
             getTrackingSnippet(){
                 let route = '../api/teams/websites/{team_id}/{website_id}/tracking-snippet';
-                route = route.replace('{team_id}', this.user.current_team_id);
+                route = route.replace('{team_id}', this.userStore.user.current_team_id);
                 route = route.replace('{website_id}', this.trackingItem.id);
                 this.$http.get(route, {withCredentials: true}).then((res) => {
                     let tracking_snippet = res.data.trackingSnippet;
@@ -730,6 +729,18 @@
                 url = url.replace('public', 'storage');
                 // return the url
                 return url;
+            },
+            formatWebsiteRedirect(redirect){
+                // check if the redirect is a full url
+                if(redirect.includes('http')){
+                    // return the redirect
+                    return redirect;
+                }
+                // add the http to the redirect
+                redirect = 'https://' + redirect;
+
+                // return the url
+                return redirect;
             },
             
         }

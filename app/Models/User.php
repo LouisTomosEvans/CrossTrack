@@ -331,4 +331,14 @@ class User extends Authenticatable
 
         return $this;
     }
+
+    public function companyLeads()
+    {
+        return $this->belongsToMany(CompanyLeads::class, 'lead_user');
+    }
+
+    public function segmentations()
+    {
+        return $this->belongsToMany(Segmentation::class, 'segmentation_user');
+    }
 }

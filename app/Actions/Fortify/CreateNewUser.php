@@ -52,7 +52,7 @@ class CreateNewUser implements CreatesNewUsers
             }
         } else {
             $team = Team::create([
-                'name' => $input['name'],
+                'company_name' => $input['company_name'],
                 'owner_id' => $user->id,
             ]);
 

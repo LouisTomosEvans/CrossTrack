@@ -110,7 +110,7 @@
                         <!-- data table -->
                         <v-data-table
                         :headers="headers"
-                        :items="users"
+                        :items="teamStore.team"
                         :search="search"
                         :options.sync="tableOptions"
                         :footer-props="footerOptions"
@@ -355,10 +355,31 @@
 </template>
 
 <script>
+    import { useAppStore } from '../store/appStore';
+    import { useUserStore } from '../store/userStore';
+    import { useTeamStore } from '../store/teamStore';
     export default {
+        setup() {
+            const appStore = useAppStore();
+            const userStore = useUserStore();
+            const teamStore = useTeamStore();
+
+            return {
+                appStore,
+                userStore,
+                teamStore,
+            }
+        },
         mounted() {
-            this.getUserDetails();
-            console.log('Component mounted.')
+            if(this.teamStore.team.length == 0) {
+                if (this.userStore.user == "") {
+                    this.userStore.fetchUser().then(() => {
+                        this.teamStore.fetchTeam(this.userStore.user.current_team.id);
+                    });
+                } else {
+                    this.teamStore.fetchTeam(this.userStore.user.current_team.id);
+                }
+            }
         },
         data(){
             return {
@@ -392,7 +413,8 @@
                 footerOptions:
                 {
                 itemsPerPageOptions: [10, 25, 50, 100], // this is the proper name - not "items-per-page options" like what you're using
-                }       
+                },
+                editDetailsDialog: false,       
             }
         },
         computed: {
@@ -410,29 +432,6 @@
             },
         },
         methods: {
-            getUserDetails(){
-                this.loading = true;
-                let route = '../api/app/';
-                this.$http.get(route, {withCredentials: true}).then((res) => {
-                    this.user = res.data[0];
-                    this.getTeamMembers();
-                })
-            },
-            getTeamMembers(){
-                this.loading = true;
-                // append id from user object to route
-                let route = '../api/teams/members/{team_id}';
-
-                // replace team_id with id from user object
-                route = route.replace('{team_id}', this.user.current_team_id);
-                
-                this.$http.get(route, {withCredentials: true}).then((res) => {
-                    this.users = res.data;
-                })
-                .finally(() => {
-                    this.loading = false;
-                });
-            },
             addTeamMember(){
                 this.loading = true;
                 let route = '../api/teams/members/{team_id}';
@@ -493,7 +492,7 @@
             // get random color for avatar
             getColor(name) {
                 // list of bright orange colors
-                const colors = ['#FF5722', '#FF9800', '#FFC107', '#FFEB3B', '#FFC107', '#FF9800', '#FF5722'];
+                const colors = ['#f05628'];
                 
                 // get legth of name
                 const nameLength = name.length;

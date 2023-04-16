@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Visits;
 
 class TrackingController extends Controller
 {
@@ -132,7 +133,7 @@ class TrackingController extends Controller
                         browser_version: navigator.userAgent
                       };
                       var request = new XMLHttpRequest();
-                      request.open('POST', 'https://example.com/tracking', true);
+                      request.open('POST', 'https://leadrhino.com/tracking', true);
                       request.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
                       request.send(JSON.stringify(data));
                     }).catch(function(error) {
@@ -164,7 +165,7 @@ class TrackingController extends Controller
                           operating_system: navigator.platform,
                           browser_version: navigator.userAgent
                         };
-                        navigator.sendBeacon('https://example.com/tracking', JSON.stringify(data));
+                        navigator.sendBeacon('https://leadrhino.io/tracking', JSON.stringify(data));
                       }).catch(function(error) {
                         console.error('Error getting IP address:', error);
                       });
@@ -185,5 +186,45 @@ class TrackingController extends Controller
 
         
         return response($trackingScript, 200)->header('Content-Type', 'application/javascript')->header('Cache-Control', 'no-cache, no-store, must-revalidate');
+    }
+
+    public function tracking(Request $request)
+    {
+        // get domain from request
+        $domain = $request->header('origin');
+
+        $data = $request->all();
+        $data['user_agent'] = $request->header('User-Agent');
+        $data['ip_address'] = $data['ip_address'] ?? $request->ip();
+        $data['session_duration'] = $data['session_duration'] ?? 0;
+        $data['query_string_params'] = json_encode($data['query_string_params']);
+        $data['screen_size'] = json_encode($data['screen_size']);
+        $data['device_type'] = $data['device_type'] ?? 'unknown';
+        $data['operating_system'] = $data['operating_system'] ?? 'unknown';
+        $data['browser_version'] = $data['browser_version'] ?? 'unknown';
+        $data['referrer'] = $data['referrer'] ?? 'unknown';
+        $data['url'] = $data['url'] ?? 'unknown';
+        $data['title'] = $data['title'] ?? 'unknown';
+        $website_id = $data['website_id'] ?? 'unknown';
+        $data['created_at'] = Carbon::now();
+        $data['updated_at'] = Carbon::now();
+
+        // get website from tracking code
+        $website = Website::where('tracking_code', $website_id)->first();
+        if ($website) {
+            $data['website_id'] = $website->id;
+        } else {
+            // error if website not found abort(404);
+            abort(404, 'Website not found');
+        }
+
+        // check the route of the website domain is the same as the request domain add fuzziness for http/https
+        if (!str_contains($website->domain, $domain) || !str_contains($domain, $website->domain)) {
+            // error if website domain does not match request domain
+            abort(404, 'Traffic not from correct domain');
+        }
+        
+        Visits::create($data);
+        return response()->json(['success' => true]);
     }
 }

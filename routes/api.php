@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AppController;
 use App\Http\Controllers\TeamMemberController;
 use App\Http\Controllers\CompanyLeadsController;
+use App\Http\Controllers\ContactController;
 
 
 
@@ -63,12 +64,21 @@ Route::group(['prefix' => 'teams'], function()
     Route::middleware(['auth:sanctum', 'verified'])->delete('websites/{id}/{website_id}', [App\Http\Controllers\WebsiteController::class, 'destroy'])->name('teams.website.delete');
     Route::middleware(['auth:sanctum', 'verified'])->get('websites/{id}/{website_id}/tracking-snippet', [App\Http\Controllers\WebsiteController::class, 'trackingSnippet'])->name('teams.website.trackingSnippet');
 
+    // segments
+    Route::middleware(['auth:sanctum', 'verified'])->get('segments', [App\Http\Controllers\SegmentationController::class, 'index'])->name('segments.show');
+    // add segment
+    Route::middleware(['auth:sanctum', 'verified'])->post('segments', [App\Http\Controllers\SegmentationController::class, 'store'])->name('segments.store');
+    // edit segment
+    Route::middleware(['auth:sanctum', 'verified'])->put('segments/{id}', [App\Http\Controllers\SegmentationController::class, 'update'])->name('segments.update');
+    // delete segment
+    Route::middleware(['auth:sanctum', 'verified'])->delete('segments/{id}', [App\Http\Controllers\SegmentationController::class, 'destroy'])->name('segments.destroy');
+
     // leads
     Route::middleware(['auth:sanctum', 'verified'])->get('leads/{id}', [App\Http\Controllers\CompanyLeadsController::class, 'index'])->name('leads.show');
-
-
-
 });
+
+Route::middleware(['auth:sanctum', 'verified'])->post('/contacts', [ContactController::class, 'getContactsByDomain']);
+
 
 Route::middleware(['auth:sanctum', 'verified'])->delete('members/leave/{id}', [App\Http\Controllers\TeamMemberController::class, 'leaveTeam'])->name('teams.members.leave');
 Route::get('teams/accept/{token}', [App\Http\Controllers\AuthController::class, 'acceptInvite'])->name('teams.accept_invite');

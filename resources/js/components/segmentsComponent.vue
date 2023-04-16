@@ -8,11 +8,392 @@
                     <span style="color: #28323b; font-size: 0.8125rem;">Welcome to the Lead Segmentation section! Here, you can create and manage segments of your leads. You can easily classify your leads into different categories, based on criteria like geography, industry, size and behaviour. This is a great way to ensure you are targeting the right people with the right message.</span>
                 </div>
                 <div class="m-0 p-0 d-flex align-content-center">
-                    <v-btn elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+                    <v-btn @click="dialog = true" elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
                         <span style="color: #FFFFFF;">+ Add Segment</span>
                     </v-btn>
                 </div>
             </div>
+            <v-dialog
+                v-model="dialog"
+                persistent
+                max-width="750px"
+                >
+                <v-card style="border-radius: 8px; box-shadow: 0px 0px 5px 0px rgba(40,50,59,.1);">
+                    <v-card-title style="border-bottom: solid 1px lightgrey; margin-bottom: 1rem;">
+                        <b><span style="font-size: 1rem; color: #28323b;">Add Segment</span></b>
+                    </v-card-title>
+                    <v-card-text>
+                        <v-row>
+                            <v-col cols="12">
+                                <span style="color: #28323b; font-size: 0.8125rem;">Adding a new segment to your account has never been easier. Simply enter the name you want to call it, the criteria and click the "Add Segment" button, and you're good to go! This will allow you to gain valuable insights into your website's traffic and audience.</span>
+                            </v-col>
+                        </v-row>
+                        <v-row class="pt-0">
+                            <v-col cols="12" class="pt-0 pb-0">
+                                <!-- title -->
+                                <span style="color: #28323b; font-size: 0.8125rem; font-weight: 600;">1. Name your new segment.</span>
+                            </v-col>
+                            <v-col cols="6" class="pt-0">
+                                <v-text-field color="#f05628" dense v-model="name" height="40px" elevation=0 single-line hide-details style="width: 100%;">
+                                    <template v-slot:label>
+                                        Enter your segment name ex. Tech Start-ups
+                                    </template>
+                                </v-text-field>
+                            </v-col>
+                        </v-row>
+                        <v-row class="pt-3">
+                            <v-col cols="12" class="pt-0">
+                                <!-- title -->
+                                <span style="color: #28323b; font-size: 0.8125rem; font-weight: 600;">2. Select the website you want to use to create your segment.</span>
+                            </v-col>
+                            <v-col cols="4" class="pt-0">
+                                <!-- drop down for category -->
+                                <v-select
+                                    color="#f05628"
+                                    :items="websiteStore.websites"
+                                    v-model="website"
+                                    placeholder="Select a website"
+                                    dense
+                                    elevation=0
+                                    style="width: 100%;"
+                                    item-text="name"
+                                    item-value="id"
+                                    >
+                                </v-select>
+                            </v-col>
+                        </v-row>
+                        <v-row class="pt-0">
+                            <v-col cols="12" class="pt-0">
+                                <!-- title -->
+                                <span style="color: #28323b; font-size: 0.8125rem; font-weight: 600;">3. Select the criteria you want to use to create your segment.</span>
+                            </v-col>
+                            <div class="d-flex flex-wrap m-0 p-0"  v-for="criteria in criterias">
+                                
+                                <v-col cols="12" class="pt-0">
+                                <!-- drop down for category -->
+                                <v-select
+                                    color="#f05628"
+                                    :items="links"
+                                    v-model="criteria.link"
+                                    v-if="criteria.link != null"
+                                    placeholder="Select a category"
+                                    dense
+                                    elevation=0
+                                    style="width: 16%;"
+                                    item-text="title"
+                                    item-value="value"
+                                    >
+                                </v-select>
+                            </v-col>
+                                <v-col cols="4" class="pt-0">
+                                <!-- drop down for category -->
+                                <v-select
+                                    color="#f05628"
+                                    :items="categories"
+                                    v-model="criteria.category"
+                                    placeholder="Select a category"
+                                    dense
+                                    elevation=0
+                                    style="width: 100%;"
+                                    item-text="title"
+                                    item-value="value"
+                                    >
+                                </v-select>
+                            </v-col>
+                            <v-col cols="4" class="pt-0">
+                                <!-- drop down for logical operator -->
+                                <v-select
+                                    color="#f05628"
+                                    :items="logicalOperatorSelector(criteria.category)"
+                                    v-model="criteria.logical_operator"
+                                    placeholder="Select a logical operator"
+                                    dense
+                                    elevation=0
+                                    style="width: 100%;"
+                                    item-text="title"
+                                    item-value="value"
+                                    >
+                                </v-select>
+                            </v-col>
+                            <v-col cols="4" class="pt-0">
+                                <!-- drop down for country -->
+                                <v-select
+                                    color="#f05628"
+                                    :items="valueSelector(criteria.category)"
+                                    v-model="criteria.value"
+                                    placeholder="Select a value"
+                                    dense
+                                    elevation=0
+                                    style="width: 100%;"
+                                    item-text="title"
+                                    item-value="value"
+                                    >
+                                </v-select>
+                            </v-col>
+                            </div>
+                            <!-- add another criteria -->
+                            <v-col cols="12" class="pt-0 d-flex justify-content-end mt-0 pt-0">
+                                <v-btn @click="addCriteria()" outlined text elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+                                    <span>+ Add another criteria</span>
+                                </v-btn>
+                            </v-col>
+                        </v-row>
+                        <v-row class="pt-0">
+                            <v-col cols="12" class="pt-0">
+                                <!-- title -->
+                                <span style="color: #28323b; font-size: 0.8125rem; font-weight: 600;">4. Automatically assign segment leads to these users.</span>
+                            </v-col>
+                            <v-col cols="8" class="pt-0">
+                                <!-- drop down for category -->
+                                <v-combobox
+                                    color="#f05628"
+                                    :items="teamStore.members"
+                                    v-model="users"
+                                    placeholder="Select users to assign to segment"
+                                    dense
+                                    elevation=0
+                                    style="width: 100%;"
+                                    item-text="name"
+                                    item-value="id"
+                                    multiple
+                                    small chips
+                                    >
+                                    <template v-slot:selection="data">
+                                        <v-chip
+                                            v-bind="data.attrs"
+                                            :input-value="data.selected"
+                                            close
+                                            style="background-color: #f05628;"
+                                            class="mb-1"
+                                            @click:close="data.parent.selectItem(data.item)"
+                                        >
+                                            <span style="font-size: 0.8125rem; color: white; font-weight: 600;">
+                                                {{ data.item.name }}
+                                            </span>
+                                            
+                                        </v-chip>
+                                    </template>
+                                </v-combobox>
+                            </v-col>
+                        </v-row>
+                    </v-card-text>
+                    <v-card-actions class="pt-0 pb-4">
+                    <v-spacer></v-spacer>
+                    <v-btn @click="dialog = false" outlined elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+                        <span>Close</span>
+                    </v-btn>
+                    <v-btn @click="submitSegment()" class="px-4" elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+                        <span style="color: #FFFFFF;" >+ Add Segment</span>
+                    </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+            <v-dialog
+                v-model="editDetailsDialog"
+                persistent
+                max-width="750px"
+                >
+                <v-card style="border-radius: 8px; box-shadow: 0px 0px 5px 0px rgba(40,50,59,.1);">
+                    <v-card-title style="border-bottom: solid 1px lightgrey; margin-bottom: 1rem;">
+                        <b><span style="font-size: 1rem; color: #28323b;">Add Segment</span></b>
+                    </v-card-title>
+                    <v-card-text>
+                        <v-row>
+                            <v-col cols="12">
+                                <span style="color: #28323b; font-size: 0.8125rem;">Adding a new segment to your account has never been easier. Simply enter the name you want to call it, the criteria and click the "Add Segment" button, and you're good to go! This will allow you to gain valuable insights into your website's traffic and audience.</span>
+                            </v-col>
+                        </v-row>
+                        <v-row class="pt-0">
+                            <v-col cols="12" class="pt-0 pb-0">
+                                <!-- title -->
+                                <span style="color: #28323b; font-size: 0.8125rem; font-weight: 600;">1. Name your new segment.</span>
+                            </v-col>
+                            <v-col cols="6" class="pt-0">
+                                <v-text-field color="#f05628" dense v-model="editItem.name" height="40px" elevation=0 single-line hide-details style="width: 100%;">
+                                    <template v-slot:label>
+                                        Enter your segment name ex. Tech Start-ups
+                                    </template>
+                                </v-text-field>
+                            </v-col>
+                        </v-row>
+                        <v-row class="pt-3">
+                            <v-col cols="12" class="pt-0">
+                                <!-- title -->
+                                <span style="color: #28323b; font-size: 0.8125rem; font-weight: 600;">2. Select the website you want to use to create your segment.</span>
+                            </v-col>
+                            <v-col cols="4" class="pt-0">
+                                <!-- drop down for category -->
+                                <v-select
+                                    color="#f05628"
+                                    :items="websiteStore.websites"
+                                    v-model="editItem.website"
+                                    placeholder="Select a website"
+                                    dense
+                                    elevation=0
+                                    style="width: 100%;"
+                                    item-text="name"
+                                    item-value="id"
+                                    >
+                                </v-select>
+                            </v-col>
+                        </v-row>
+                        <v-row class="pt-0">
+                            <v-col cols="12" class="pt-0">
+                                <!-- title -->
+                                <span style="color: #28323b; font-size: 0.8125rem; font-weight: 600;">3. Select the criteria you want to use to create your segment.</span>
+                            </v-col>
+                            <div class="d-flex flex-wrap m-0 p-0"  v-for="criteria in editItem.criteria">
+                                
+                                <v-col cols="12" class="pt-0">
+                                <!-- drop down for category -->
+                                <v-select
+                                    color="#f05628"
+                                    :items="links"
+                                    v-model="criteria.link"
+                                    v-if="criteria.link != null"
+                                    placeholder="Select a category"
+                                    dense
+                                    elevation=0
+                                    style="width: 16%;"
+                                    item-text="title"
+                                    item-value="value"
+                                    >
+                                </v-select>
+                            </v-col>
+                                <v-col cols="4" class="pt-0">
+                                <!-- drop down for category -->
+                                <v-select
+                                    color="#f05628"
+                                    :items="categories"
+                                    v-model="criteria.category"
+                                    placeholder="Select a category"
+                                    dense
+                                    elevation=0
+                                    style="width: 100%;"
+                                    item-text="title"
+                                    item-value="value"
+                                    >
+                                </v-select>
+                            </v-col>
+                            <v-col cols="4" class="pt-0">
+                                <!-- drop down for logical operator -->
+                                <v-select
+                                    color="#f05628"
+                                    :items="logicalOperatorSelector(criteria.category)"
+                                    v-model="criteria.logical_operator"
+                                    placeholder="Select a logical operator"
+                                    dense
+                                    elevation=0
+                                    style="width: 100%;"
+                                    item-text="title"
+                                    item-value="value"
+                                    >
+                                </v-select>
+                            </v-col>
+                            <v-col cols="4" class="pt-0">
+                                <!-- drop down for country -->
+                                <v-select
+                                    color="#f05628"
+                                    :items="valueSelector(criteria.category)"
+                                    v-model="criteria.value"
+                                    placeholder="Select a value"
+                                    dense
+                                    elevation=0
+                                    style="width: 100%;"
+                                    item-text="title"
+                                    item-value="value"
+                                    >
+                                </v-select>
+                            </v-col>
+                            </div>
+                            <!-- add another criteria -->
+                            <v-col cols="12" class="pt-0 d-flex justify-content-end mt-0 pt-0">
+                                <v-btn @click="addEditCriteria()" outlined text elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+                                    <span>+ Add another criteria</span>
+                                </v-btn>
+                            </v-col>
+                        </v-row>
+                        <v-row class="pt-0">
+                            <v-col cols="12" class="pt-0">
+                                <!-- title -->
+                                <span style="color: #28323b; font-size: 0.8125rem; font-weight: 600;">4. Automatically assign segment leads to these users.</span>
+                            </v-col>
+                            <v-col cols="8" class="pt-0">
+                                <!-- drop down for category -->
+                                <v-combobox
+                                    color="#f05628"
+                                    :items="teamStore.members"
+                                    v-model="editItem.users"
+                                    placeholder="Select users to assign to segment"
+                                    dense
+                                    elevation=0
+                                    style="width: 100%;"
+                                    item-text="name"
+                                    item-value="id"
+                                    multiple
+                                    small chips
+                                    >
+                                    <template v-slot:selection="data">
+                                        <v-chip
+                                            v-bind="data.attrs"
+                                            :input-value="data.selected"
+                                            close
+                                            style="background-color: #f05628;"
+                                            class="mb-1"
+                                            @click:close="data.parent.selectItem(data.item)"
+                                        >
+                                            <span style="font-size: 0.8125rem; color: white; font-weight: 600;">
+                                                {{ data.item.name }}
+                                            </span>
+                                            
+                                        </v-chip>
+                                    </template>
+                                </v-combobox>
+                            </v-col>
+                        </v-row>
+                    </v-card-text>
+                    <v-card-actions class="pt-0 pb-4">
+                    <v-spacer></v-spacer>
+                    <v-btn @click="editDetailsDialog = false" outlined elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+                        <span>Close</span>
+                    </v-btn>
+                    <v-btn @click="editSegment()" class="px-4" elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+                        <span style="color: #FFFFFF;" >Save Changes</span>
+                    </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+
+            <v-dialog
+                v-model="deleteSegmentDialog"
+                persistent
+                max-width="550px"
+                >
+                <v-card style="border-radius: 8px; box-shadow: 0px 0px 5px 0px rgba(40,50,59,.1);">
+                    <v-card-title style="border-bottom: solid 1px lightgrey; margin-bottom: 1rem;">
+                        <b><span style="font-size: 1rem; color: #28323b;">Delete Segment</span></b>
+                    </v-card-title>
+                    <v-card-text>
+                        <v-row>
+                            <v-col cols="12">
+                                <span style="color: #28323b; font-size: 0.8125rem;">
+                                    Are you sure you want to delete this segment from your account? You will no longer automatically assign leads to your team members based on this segment.
+                                </span>
+                            </v-col>
+                        </v-row>
+                    </v-card-text>
+                    <v-card-actions class="pt-0 pb-4">
+                    <v-spacer></v-spacer>
+                    <v-btn @click="deleteSegmentDialog = false" outlined elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+                        <span>Close</span>
+                    </v-btn>
+                    <v-btn @click="deleteSegment()" elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+                        <span style="color: #FFFFFF;" class="px-4">Delete Segment</span>
+                    </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+
             <div class="col-12 d-flex justify-content-between" style="padding-top: 0.5rem;">
                 <!-- <v-btn-toggle color="#f05628" group style="background-color: white; border-radius: 8px; box-shadow: 0px 0px 5px 0px rgba(40,50,59,.1);" class="d-flex" dense outlined mandatory>
                     <v-btn elevation=0 style="font-size: 0.7rem; font-weight: 700; text-decoration: none; background-color: white; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
@@ -69,27 +450,106 @@
                         <!-- data table -->
                         <v-data-table
                         :headers="headers"
-                        :items="desserts"
+                        :items="segmentStore.segments"
                         :search="search"
                         class="elevation-0"
                         color="#f05628"
                         style="border-radius: 8px;  border: thin solid rgba(0,0,0,.12);"
                         >
-                        <template v-slot:item.actions="{ item }">
-                            <v-icon
-                            small
-                            class="mr-2"
-                            @click="editItem(item)"
-                            >
-                            mdi-pencil
-                            </v-icon>
-                            <v-icon
-                            small
-                            @click="deleteItem(item)"
-                            >
-                            mdi-delete
-                            </v-icon>
+                        <template v-slot:item.website.name="{ item }">
+                            <div v-if="item" class="d-flex align-items-center">
+                                <!-- website icon -->
+                                <v-avatar class="mr-1" size="24" color="info" v-if="!item.website.favicon">
+                                    <!-- 0.75 size -->
+                                    <v-icon color="white" style="font-size: 0.95rem;">mdi-web</v-icon>
+                                </v-avatar>
+                                <!-- show favicon -->
+                                <div class="mr-1" style="height: 24px; width: 24px;" v-else>
+                                    <!-- 0.75 size -->
+                                    <img :src="getFaviconURL(item.website.favicon)" style="width: 24px; height: 24px; border-radius: 4px;">
+                                </div>
+                                <span class="ml-1" style="color: #28323b; font-size: 0.8125rem;">{{ item.website.name }}</span>
+                            </div>
                         </template>
+                        <template v-slot:item.name="{ item }">
+                            <span style="color: #28323b; font-size: 0.8125rem;">{{ item.name }}</span>
+                        </template>
+
+                        <template v-slot:item.created_at="{ item }">
+                            <span style="color: #28323b; font-size: 0.8125rem;">{{ formatDate(item.created_at) }}</span>
+                        </template>
+
+                        <template v-slot:item.criteria="{ item }">
+                            <span style="color: #28323b; font-size: 0.8125rem;">{{ formatCriteria(item.criteria) }}</span>
+                        </template>
+
+                        <template v-slot:item.users="{ item }">
+                            <!-- for each users disply their avatar -->
+                            <div v-if="item.users" class="d-flex align-items-center">
+
+                                <div v-for="(user, index) in item.users" :key="user.id" class="avatar-container" :class="{'avatar-overlap': index > 0}" :style="{left: index > 0 ? (-10 * index) + 'px' : ''}">
+                                    <!-- show avatar -->
+                                    <v-tooltip bottom>
+                                        <template v-slot:activator="{ on, attrs }">
+                                            <div class="avatar" v-bind="attrs" v-on="on">
+                                                <!-- 0.75 size -->
+                                                <img alt="Avatar" :src="getAvatar(user.name)">
+                                            </div>
+                                        </template>
+                                        <span>{{ user.name }}</span>
+                                    </v-tooltip>
+                                </div>
+                            </div>
+                        </template>
+
+                        <template v-slot:item.actions="{ item }">
+                            <v-menu offset-y nudge-left="150px">
+                                <template v-slot:activator="{ on }">
+                                    <v-btn icon v-on="on">
+                                        <v-icon>mdi-dots-vertical</v-icon>
+                                    </v-btn>
+                                </template>
+                                <v-list dense class="mt-0 p-0">
+                                <!-- heading -->
+                                <v-list-item v-if="item" style="background-color: #F5F5F5;">
+                                  <v-list-item-content>
+                                    <v-list-item-title style="font-weight: 700;">Quick Actions</v-list-item-title>
+                                  </v-list-item-content>
+                                </v-list-item>
+                                <v-list-item  style="cursor: pointer;" link target="_blank">
+                                  <v-list-item-content>
+                                    <v-list-item-title>
+                                        View Leads
+                                    </v-list-item-title>
+                                  </v-list-item-content>
+                                </v-list-item>
+                                <v-list-item  style="cursor: pointer;" link target="_blank" :href="formatWebsiteRedirect(item.website.domain)">
+                                  <v-list-item-content>
+                                    <v-list-item-title>
+                                        Go To Website
+                                        <v-icon style="font-size: 0.8125rem; margin-left: 4px;">mdi-open-in-new</v-icon>
+                                    </v-list-item-title>
+                                  </v-list-item-content>
+                                </v-list-item>
+                                <v-list-item  style="cursor: pointer;" @click="editDetailsDialog = true; editItem = item">
+                                  <v-list-item-content>
+                                    <v-list-item-title>
+                                        Edit Segment
+                                    </v-list-item-title>
+                                  </v-list-item-content>
+                                </v-list-item>
+                                <!-- divider -->
+                                <v-divider class="my-1"></v-divider>
+                                <v-list-item v-if="item" style="cursor: pointer;" @click="deleteSegmentDialog = true; editItem = item">
+                                  <v-list-item-content>
+                                    <v-list-item-title style="color: #FF5252; text-decoration: underline;">Delete Segment</v-list-item-title>
+                                  </v-list-item-content>
+                                </v-list-item>
+                                </v-list>
+                                
+                            </v-menu>
+                        </template>
+
                         <template v-slot:no-data>
                             <div class="my-12">
                                 <v-icon color="warning">mdi-alert</v-icon>
@@ -109,266 +569,89 @@
 </template>
 
 <script>
-    import VueApexCharts from 'vue-apexcharts';
+    import { useAppStore } from '../store/appStore';
+    import { useUserStore } from '../store/userStore';
+    import { useWebsiteStore } from '../store/websiteStore';
+    import { useTeamStore } from '../store/teamStore';
+    import { useSegmentStore } from '../store/segmentStore';
     export default {
-        components: {
-            apexchart: VueApexCharts,
+        setup(){
+            const appStore = useAppStore();
+            const userStore = useUserStore();
+            const websiteStore = useWebsiteStore();
+            const teamStore = useTeamStore();
+            const segmentStore = useSegmentStore();
+            return { appStore, userStore, websiteStore, teamStore, segmentStore };
         },
         mounted() {
             console.log('Component mounted.')
+            // fetch segment data if not already fetched
+            if(this.segmentStore.segments.length == 0) {
+                this.segmentStore.fetchSegments();
+            }
+            // fetch website data if not already fetched
+            if(this.websiteStore.websites.length == 0) {
+                if (this.userStore.user == "") {
+                    this.userStore.fetchUser().then(() => {
+                        this.websiteStore.fetchWebsites(this.userStore.user.current_team.id);
+                    });
+                } else {
+                    this.websiteStore.fetchWebsites(this.userStore.user.current_team.id);
+                }
+            }
+            // fetch team
+            if (this.userStore.user == "") {
+                this.userStore.fetchUser().then(() => {
+                    this.teamStore.fetchTeam(this.userStore.user.current_team.id);
+                });
+            } else {
+                this.teamStore.fetchTeam(this.userStore.user.current_team.id);
+            }
+
         },
         data(){
             return {
-                splineSeries: [{
-                    name: 'series1',
-                    data: [31, 40, 28, 51, 42, 109, 100]
-                }],
-                splineChartOptions: {
-                    chart: {
-                    height: 150,
-                    type: 'area',
-                    sparkline: {
-                        enabled: true,
-                    }
-                    },
-                    stroke: {
-                        curve: 'smooth'
-                    }
-                },  
-                series: [{
-                    name: 'Companies Identified',
-                    type: 'column',
-                    data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30]
-                }, {
-                    name: 'Unique Visitors',
-                    type: 'area',
-                    data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43]
-                }, {
-                    name: 'Returning Visitors',
-                    type: 'line',
-                    data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39]
-                }],
-                chartOptions: {
-                    chart: {
-                    height: 350,
-                    type: 'line',
-                    stacked: false,
-                    },
-                    stroke: {
-                    width: [0, 2, 5],
-                    curve: 'smooth'
-                    },
-                    plotOptions: {
-                    bar: {
-                        columnWidth: '10%'
-                    }
-                    },
-                    
-                    fill: {
-                    opacity: [0.85, 0.25, 1],
-                    gradient: {
-                        inverseColors: false,
-                        shade: 'light',
-                        type: "vertical",
-                        opacityFrom: 0.85,
-                        opacityTo: 0.55,
-                        stops: [0, 100, 100, 100]
-                    }
-                    },
-                    labels: ['01/01/2003', '02/01/2003', '03/01/2003', '04/01/2003', '05/01/2003', '06/01/2003', '07/01/2003',
-                    '08/01/2003', '09/01/2003', '10/01/2003', '11/01/2003'
-                    ],
-                    markers: {
-                    size: 0
-                    },
-                    xaxis: {
-                    type: 'datetime'
-                    },
-                    yaxis: {
-                    title: {
-                        text: 'Points',
-                    },
-                    min: 0
-                    },
-                    tooltip: {
-                    shared: true,
-                    intersect: false,
-                    y: {
-                        formatter: function (y) {
-                        if (typeof y !== "undefined") {
-                            return y.toFixed(0) + " points";
-                        }
-                        return y;
-                    
-                        }
-                    }
-                    }
-                },
-                pieseries: [44, 55, 13, 43, 22],
-                piechartOptions: {
-                    chart: {
-                    width: 380,
-                    type: 'pie',
-                    },
-                    fill: {
-                        colors: ['#9ccca6', '#fcc693', '#baebfd', '#95aba3', '#fcb3c0']
-                    },
-                    legend: {
-                        position: 'bottom'
-                    },
-                    labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
-                    responsive: [{
-                    breakpoint: 480,
-                    options: {
-                        chart: {
-                        width: 200
-                        },
-                        legend: {
-                        position: 'bottom'
-                        },
-                        dataLabels: {
-                            style: {
-                                colors: ['#9ccca6', '#fcc693', '#baebfd','#95aba3', '#fcb3c0']
-                            }
-                        },
-                    }
-                    }]
-                },
-                tableData: [
+                search: '',
+                website: null,
+                editDetailsDialog: false,
+                editItem: {
+                    "criterias": [
                     {
-                        number: 159,
-                        type: 'New Subs',
-                        proportion: '34.23%',
-                        money: '+£534.23',
-                    },
-                    {
-                        number: 159,
-                        type: 'New Subs',
-                        proportion: '34.23%',
-                        money: '+£534.23',
-                    },
-                    {
-                        number: 159,
-                        type: 'New Subs',
-                        proportion: '34.23%',
-                        money: '+£534.23',
-                    },
-                    {
-                        number: 159,
-                        type: 'New Subs',
-                        proportion: '34.23%',
-                        money: '+£534.23',
-                    },
-                    {
-                        number: 159,
-                        type: 'New Subs',
-                        proportion: '34.23%',
-                        money: '+£534.23',
-                    },
-                    {
-                        number: null,
-                        type: null,
-                        proportion: 'Total:',
-                        money: '+£4534.23',
-                    },
+                        "category": null,
+                        "logical_operator": null,
+                        "value": null,
+                        "link": null,
+                    }
                 ],
-                lineSeries: [{
-                data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
-                }],
-                lineChartOptions: {
-                    chart: {
-                    height: 350,
-                    type: 'line',
-                    zoom: {
-                        enabled: false
-                    }
-                    },
-                    dataLabels: {
-                    enabled: false
-                    },
-                    stroke: {
-                    curve: 'straight'
-                    },
-                    grid: {
-                    row: {
-                        colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
-                        opacity: 0.5
-                    },
-                    },
-                    xaxis: {
-                    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
-                    }
                 },
-                refferalSeries: [{
-                    name: 'PRODUCT A',
-                    data: [44, 55, 41, 67, 22, 43]
-                }, {
-                    name: 'PRODUCT B',
-                    data: [13, 23, 20, 8, 13, 27]
-                }, {
-                    name: 'PRODUCT C',
-                    data: [11, 17, 15, 15, 21, 14]
-                }, {
-                    name: 'PRODUCT D',
-                    data: [21, 7, 25, 13, 22, 8]
-                }],
-                refferalChartOptions: {
-                    chart: {
-                    type: 'bar',
-                    height: 350,
-                    stacked: true,
-                    toolbar: {
-                        show: true
-                    },
-                    zoom: {
-                        enabled: true
+                deleteSegmentDialog: false,
+                users: [],
+                criterias: [
+                    {
+                        "category": null,
+                        "logical_operator": null,
+                        "value": null,
+                        "link": null,
                     }
-                    },
-                    responsive: [{
-                    breakpoint: 480,
-                    options: {
-                        legend: {
-                        position: 'bottom',
-                        offsetX: -10,
-                        offsetY: 0
-                        }
-                    }
-                    }],
-                    plotOptions: {
-                    bar: {
-                        horizontal: false,
-                        borderRadius: 10
-                    },
-                    },
-                    xaxis: {
-                    type: 'datetime',
-                    categories: ['01/01/2011 GMT', '01/02/2011 GMT', '01/03/2011 GMT', '01/04/2011 GMT',
-                        '01/05/2011 GMT', '01/06/2011 GMT'
-                    ],
-                    },
-                    legend: {
-                    position: 'right',
-                    offsetY: 40
-                    },
-                    fill: {
-                    opacity: 1
-                    }
-                },
+                ],
+                dialog: false,
+                selectedCategory: null,
                 headers: [
                     {
-                        text: 'Company',
+                        text: 'Name',
                         align: 'start',
                         sortable: false,
-                        value: 'number',
+                        value: 'name',
                     },
-                    { text: 'Visits', value: 'Visits' },
-                    { text: 'Visitors', value: 'Visitors' },
-                    { text: 'Pages Visited', value: 'Pages Visited' },
-                    { text: 'Duration', value: 'Duration' },
-                    { text: 'Location', value: 'Location' },
-                    { text: 'Lead Score', value: 'LeadScore' },
-                    { text: 'Last Seen', value: 'LastSeen' },
+                    { text: 'Website', value: 'website.name' },
+                    { text: 'Criteria', value: 'criteria' },
+                    { text: 'Assigned to', value: 'users' },
+                    { text: 'Created at', value: 'created_at' },
+                    { text: '', value: 'actions', sortable: false },
                     
+                ],
+                links: [
+                    'and', 'or'
                 ],
                 items: [
                     {
@@ -395,9 +678,458 @@
                         icon: 'mdi mdi-account-multiple',
                         color: 'warning',
                     },
-                ],  
-
+                ],
+                categories: [
+                    {
+                        title: "Industry",
+                        value: "industry",
+                    },
+                    {
+                        title: "Location",
+                        value: "location",
+                    },
+                    {
+                        title: "Company size",
+                        value: "company_size",
+                    },
+                    {
+                        title: "Lead score",
+                        value: "lead_score",
+                    },
+                    {
+                        title: "Visits",
+                        value: "visits",
+                    },
+                    {
+                        title: "Visitors",
+                        value: "visitors",
+                    },
+                    {
+                        title: "Pages Visited",
+                        value: "pages_visited",
+                    },
+                    {
+                        title: "Duration",
+                        value: "duration",
+                    },
+                ],
+                industryLogicalOperators: [
+                    {
+                        title: "is",
+                        value: "equals",
+                    },
+                    {
+                        title: "is not",
+                        value: "not_equals",
+                    }
+                ],
+                industryValues: [
+                    {
+                        title: "Technology",
+                        value: "technology",
+                    },
+                    {
+                        title: "Healthcare",
+                        value: "healthcare",
+                    },
+                    {
+                        title: "Finance",
+                        value: "finance",
+                    },
+                    {
+                        title: "Education",
+                        value: "education",
+                    },
+                    {
+                        title: "Retail",
+                        value: "retail",
+                    },
+                    {
+                        title: "Manufacturing",
+                        value: "manufacturing",
+                    },
+                    {
+                        title: "Agriculture",
+                        value: "agriculture",
+                    },
+                    {
+                        title: "Other",
+                        value: "other",
+                    },
+                ],
+                companySizeLogicalOperators: [
+                    {
+                        title: "is greater than",
+                        value: "gt",
+                    },
+                    {
+                        title: "is less than",
+                        value: "lt",
+                    },
+                    {
+                        title: "equals",
+                        value: "equals",
+                    },
+                    {
+                        title: "does not equal",
+                        value: "not_equals",
+                    },
+                ],
+                companySizeValues: [
+                    {
+                        title: "1-10",
+                        value: "1-10",
+                    },
+                    {
+                        title: "11-50",
+                        value: "11-50",
+                    },
+                    {
+                        title: "51-100",
+                        value: "51-100",
+                    },
+                    {
+                        title: "101-500",
+                        value: "101-500",
+                    },
+                    {
+                        title: "501-1000",
+                        value: "501-1000",
+                    },
+                    {
+                        title: "1001-5000",
+                        value: "1001-5000",
+                    },
+                    {
+                        title: "5001-10000",
+                        value: "5001-10000",
+                    },
+                    {
+                        title: "10001+",
+                        value: "10001+",
+                    },
+                ],
+                leadScoreLogicalOperators: [
+                    {
+                        title: "Greater than",
+                        value: "gt",
+                    },
+                    {
+                        title: "Less than",
+                        value: "lt",
+                    },
+                    {
+                        title: "Equals",
+                        value: "equals",
+                    },
+                    {
+                        title: "Not equals",
+                        value: "not_equals",
+                    },
+                    {
+                        title: "Between",
+                        value: "between",
+                    },
+                ],
+                visitsLogicalOperators: [
+                    {
+                        title: "Greater than",
+                        value: "gt",
+                    },
+                    {
+                        title: "Less than",
+                        value: "lt",
+                    },
+                    {
+                        title: "Equals",
+                        value: "equals",
+                    },
+                    {
+                        title: "Not equals",
+                        value: "not_equals",
+                    },
+                    {
+                        title: "Between",
+                        value: "between",
+                    },
+                ],
+                visitorsLogicalOperators: [
+                    {
+                        title: "Greater than",
+                        value: "gt",
+                    },
+                    {
+                        title: "Less than",
+                        value: "lt",
+                    },
+                    {
+                        title: "Equals",
+                        value: "equals",
+                    },
+                    {
+                        title: "Not equals",
+                        value: "not_equals",
+                    },
+                    {
+                        title: "Between",
+                        value: "between",
+                    },
+                ],
+                pagesVisitedLogicalOperators: [
+                    {
+                        title: "Greater than",
+                        value: "gt",
+                    },
+                    {
+                        title: "Less than",
+                        value: "lt",
+                    },
+                    {
+                        title: "Equals",
+                        value: "equals",
+                    },
+                    {
+                        title: "Not equals",
+                        value: "not_equals",
+                    },
+                    {
+                        title: "Between",
+                        value: "between",
+                    },
+                ],
+                durationLogicalOperators: [
+                    {
+                        title: "Greater than",
+                        value: "gt",
+                    },
+                    {
+                        title: "Less than",
+                        value: "lt",
+                    },
+                    {
+                        title: "Between",
+                        value: "between",
+                    },
+                ],
+            
             }
+        },
+        methods: {
+            logicalOperatorSelector: function (category) {
+                if (category == "industry") {
+                    return this.industryLogicalOperators;
+                } else if (category == "company_size") {
+                    return this.companySizeLogicalOperators;
+                } else if (category == "lead_score") {
+                    return this.leadScoreLogicalOperators;
+                } else if (category == "visits") {
+                    return this.visitsLogicalOperators;
+                } else if (category == "visitors") {
+                    return this.visitorsLogicalOperators;
+                } else if (category == "pages_visited") {
+                    return this.pagesVisitedLogicalOperators;
+                } else if (category == "duration") {
+                    return this.durationLogicalOperators;
+                }
+            },
+            valueSelector: function (category) {
+                if (category == "industry") {
+                    return this.industryValues;
+                } else if (category == "company_size") {
+                    return this.companySizeValues;
+                } 
+            },
+            addCriteria: function () {
+                this.criterias.push({
+                    category: null,
+                    logical_operator: null,
+                    value: null,
+                    link: 'and'
+                });
+            },
+            addEditCriteria: function (index) {
+                this.editItem.criteria.push({
+                    category: null,
+                    logical_operator: null,
+                    value: null,
+                    link: 'and'
+                });
+            },
+            getAvatar: function (name) {
+                return "https://ui-avatars.com/api/?background=" + this.removeHash(this.appStore.primary_color) + "&color=fff&bold=true&name=" + name;
+            },
+            removeHash: function (hex) {
+                return hex.replace('#', '');
+            },
+            submitSegment: function () {
+                this.$http.post('/api/teams/segments', {
+                    name: this.name,
+                    website: this.website,
+                    criterias: this.criterias,
+                    users: this.users,
+                }).then(response => {
+                    this.segmentStore.fetchSegments();
+                    this.dialog = false;
+                    this.name = '';
+                    this.website = null;
+                    criterias = [
+                    {
+                        "category": null,
+                        "logical_operator": null,
+                        "value": null,
+                        "link": null,
+                    }
+                    ],
+                    this.users = [];
+                }, response => {
+                    console.log(response);
+                });
+            },
+            editSegment: function () {
+                this.$http.put('/api/teams/segments/' + this.editItem.id, {
+                    segment: this.editItem
+                }).then(response => {
+                    this.segmentStore.fetchSegments();
+                    this.editDetailsDialog = false;
+                    this.editItem = {
+                        name: '',
+                        website: null,
+                        criteria: [
+                            {
+                                "category": null,
+                                "logical_operator": null,
+                                "value": null,
+                                "link": null,
+                            }
+                        ],
+                        users: [],
+                    }
+                }, response => {
+                    console.log(response);
+                });
+            },
+            deleteSegment: function () {
+                this.$http.delete('/api/teams/segments/' + this.editItem.id).then(response => {
+                    this.segmentStore.fetchSegments();
+                    this.deleteSegmentDialog = false;
+                    this.editItem = {
+                        name: '',
+                        website: null,
+                        criteria: [
+                            {
+                                "category": null,
+                                "logical_operator": null,
+                                "value": null,
+                                "link": null,
+                            }
+                        ],
+                        users: [],
+                    }
+                }, response => {
+                    console.log(response);
+                });
+            },
+            formatDate(date){
+                let d = new Date(date);
+                let month = '' + (d.getMonth() + 1);
+                let day = '' + d.getDate();
+                let year = d.getFullYear();
+                if (month.length < 2) month = '0' + month;
+                if (day.length < 2) day = '0' + day;
+                let hours = d.getHours();
+                if (hours < 10) hours = '0' + hours;
+                let minutes = d.getMinutes();
+                if (minutes < 10) minutes = '0' + minutes;
+                let seconds = d.getSeconds();
+                if (seconds < 10) seconds = '0' + seconds;
+
+
+                return [year, month, day].join('/') + ' ' + [hours, minutes, seconds].join(':');
+            },
+            getFaviconURL(url) {
+                // remove the public and replace it with storage
+                url = url.replace('public', 'storage');
+                // return the url
+                return url;
+            },
+            formatCriteria: function (criteria) {
+                let criteriaString = '';
+                // loop through the criterias
+                for (let i = 0; i < criteria.length; i++) {
+                    // if the category is industry
+                    if (criteria[i].category == 'industry') {
+                        // loop through the industry values
+                        for (let j = 0; j < this.industryValues.length; j++) {
+                            // if the value is equal to the value in the criteria
+                            if (criteria[i].value == this.industryValues[j].value) {
+                                // add the title to the criteria string
+                                criteriaString += "Industry";
+                                // find logical operator title from the logical operator value
+                                for (let k = 0; k < this.industryLogicalOperators.length; k++) {
+                                    if (criteria[i].logical_operator == this.industryLogicalOperators[k].value) {
+                                        criteriaString += ' ' + this.industryLogicalOperators[k].title + ' ';
+                                    }
+                                }
+
+                                // add the value to the criteria string
+                                criteriaString += this.industryValues[j].title;
+                            }
+                        }
+                    }
+                    // if the category is company size
+                    if (criteria[i].category == 'company_size') {
+                        // loop through the industry values
+                        for (let j = 0; j < this.companySizeValues.length; j++) {
+                            // if the value is equal to the value in the criteria
+                            if (criteria[i].value == this.companySizeValues[j].value) {
+                                // add the title to the criteria string
+                                criteriaString += "Company Size";
+                                // find logical operator title from the logical operator value
+                                for (let k = 0; k < this.companySizeLogicalOperators.length; k++) {
+                                    if (criteria[i].logical_operator == this.companySizeLogicalOperators[k].value) {
+                                        criteriaString += ' ' + this.companySizeLogicalOperators[k].title + ' ';
+                                    }
+                                }
+
+                                // add the value to the criteria string
+                                criteriaString += this.companySizeValues[j].title;
+                            }
+                        }
+                    }
+
+                    // add the next criteria link
+                    if (criteria[i + 1]) {
+                        criteriaString += ' ' + criteria[i + 1].link + ' ';
+                    }
+                }
+                return criteriaString;
+                
+            },
+            readableLogicalOperator: function (logicalOperator) {
+                if (logicalOperator == 'gt') {
+                    return '>';
+                } else if (logicalOperator == 'lt') {
+                    return '<';
+                } else if (logicalOperator == 'equals') {
+                    return '=';
+                } else if (logicalOperator == 'not_equals') {
+                    return '!=';
+                } else if (logicalOperator == 'between') {
+                    return 'between';
+                }
+            },
+            formatWebsiteRedirect(redirect){
+                // check if the redirect is a full url
+                if(redirect.includes('http')){
+                    // return the redirect
+                    return redirect;
+                }
+                // add the http to the redirect
+                redirect = 'https://' + redirect;
+
+                // return the url
+                return redirect;
+            },
         }
     }
 </script>
@@ -467,6 +1199,34 @@
 
 .v-data-table__wrapper{
     border-radius: 8px;
+}
+
+.v-select .v-label {
+    font-size: 0.8125rem !important;
+}
+
+.v-input{
+    font-size: 0.825rem !important;
+}
+
+.avatar-container {
+    position: relative;
+}
+.avatar {
+    height: 24px;
+    width: 24px;
+    border-radius: 50% !important;
+    border: 2px solid white;
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50% !important;
+}
+
+.avatar-overlap-increasing {
+    position: relative;
 }
 
 </style>

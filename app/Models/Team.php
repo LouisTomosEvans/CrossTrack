@@ -35,5 +35,16 @@ class Team extends Model
         return $this->hasMany(Website::class);
     }
 
+    public function integrationSettings()
+    {
+        return $this->hasMany(TeamIntegrationSettings::class);
+    }
+
+    public function segments()
+    {
+        // has many through websites
+        return $this->hasManyThrough(Segmentation::class, Website::class);
+    }
+
 
 }

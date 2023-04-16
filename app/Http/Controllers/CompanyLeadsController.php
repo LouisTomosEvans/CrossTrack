@@ -29,6 +29,18 @@ class CompanyLeadsController extends Controller
             $lead->visit_count = $lead->visits->count();
             $lead->last_seen = $lead->visits->sortByDesc('timestamp')->first()->timestamp;
             $lead->location = $lead->city . ', ' . $lead->country;
+            $lead->unique_visitors = $lead->visits->unique('visitor_id')->count();
+            $lead->total_duration = $lead->visits->sum('session_duration');
+            // rand score for now
+            $lead->lead_score = rand(1, 100);
+            // top pages visited
+            $lead->top_pages = $lead->visits->groupBy('url')->map(function ($item) {
+                return $item->count();
+            })->sortDesc()->take(3)->toArray();
+            // top sources
+            $lead->top_sources = $lead->visits->groupBy('referrer')->map(function ($item) {
+                return $item->count();
+            })->sortDesc()->take(3)->toArray();
         }
 
         // return the leads

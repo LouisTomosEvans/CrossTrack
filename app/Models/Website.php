@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Team;
+use App\Models\CompanyLeads;
+use App\Models\Segmentation;
 
 class Website extends Model
 {
@@ -27,5 +30,10 @@ class Website extends Model
     public function companyLeads()
     {
         return $this->hasMany(CompanyLeads::class);
+    }
+
+    public function segmentations()
+    {
+        return $this->hasMany(Segmentation::class);
     }
 }

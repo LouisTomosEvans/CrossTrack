@@ -4,10 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Tags\HasTags;
+use App\Models\Website;
+use App\Models\Visits;
+use App\Models\Note;
+use App\Models\User;
+
 
 class CompanyLeads extends Model
 {
     use HasFactory;
+    use HasTags;
 
     protected $fillable = [
         'name',
@@ -42,6 +49,16 @@ class CompanyLeads extends Model
     public function visits()
     {
         return $this->hasMany(Visits::class);
+    }
+
+    public function notes()
+    {
+        return $this->morphMany(Note::class, 'noteable');
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'lead_user');
     }
 
 }
