@@ -133,7 +133,7 @@ class TrackingController extends Controller
                         browser_version: navigator.userAgent
                       };
                       var request = new XMLHttpRequest();
-                      request.open('POST', 'https://leadrhino.com/tracking', true);
+                      request.open('POST', 'https://app.leadrhino.io/tracking', true);
                       request.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
                       request.send(JSON.stringify(data));
                     }).catch(function(error) {
@@ -165,7 +165,7 @@ class TrackingController extends Controller
                           operating_system: navigator.platform,
                           browser_version: navigator.userAgent
                         };
-                        navigator.sendBeacon('https://leadrhino.io/tracking', JSON.stringify(data));
+                        navigator.sendBeacon('https://app.leadrhino.io/tracking', JSON.stringify(data));
                       }).catch(function(error) {
                         console.error('Error getting IP address:', error);
                       });
