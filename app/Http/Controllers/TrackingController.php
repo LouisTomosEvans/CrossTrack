@@ -22,62 +22,53 @@ class TrackingController extends Controller
 
         $trackingScript = <<<SCRIPT
         (function() {
-            // function to generate a random UUID
             function generateUUID() {
                 var d = new Date().getTime();
                 var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-                var r = (d + Math.random() * 16) % 16 | 0;
-                d = Math.floor(d / 16);
-                return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+                  var r = (d + Math.random() * 16) % 16 | 0;
+                  d = Math.floor(d / 16);
+                  return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
                 });
                 return uuid;
             }
-            
-            // function to check if user agent belongs to a bot or crawler
             function isBot() {
                 var botRegex = /bot|crawl|slurp|spider/i;
                 return botRegex.test(navigator.userAgent);
             }
-            
-            // function to check if browser is headless
             function isHeadless() {
                 return !window.chrome || !window.chrome.webstore || !window.chrome.webstore.install;
             }
-            
-            // function to get visitor ID
             function getVisitorId() {
                 var visitorId = null;
                 if (!isBot() && !isHeadless()) {
-                var cookies = document.cookie.split(';');
-                for (var i = 0; i < cookies.length; i++) {
-                    var cookie = cookies[i].trim();
-                    if (cookie.indexOf('visitor_id=') === 0) {
-                    visitorId = cookie.substring('visitor_id='.length, cookie.length);
-                    break;
-                    }
-                }
-                if (!visitorId) {
-                    visitorId = generateUUID();
-                    var date = new Date();
-                    date.setTime(date.getTime() + (30 * 24 * 60 * 60 * 1000)); // cookie expires in 30 days
-                    var expires = "expires="+date.toUTCString();
-                    document.cookie = "visitor_id=" + visitorId + ";" + expires + ";path=/";
-                }
+                  var cookies = document.cookie.split(';');
+                  for (var i = 0; i < cookies.length; i++) {
+                      var cookie = cookies[i].trim();
+                      if (cookie.indexOf('visitor_id=') === 0) {
+                        visitorId = cookie.substring('visitor_id='.length, cookie.length);
+                        break;
+                      }
+                  }
+                  if (!visitorId) {
+                      visitorId = generateUUID();
+                      var date = new Date();
+                      date.setTime(date.getTime() + (30 * 24 * 60 * 60 * 1000)); // cookie expires in 30 days
+                      var expires = "expires="+date.toUTCString();
+                      document.cookie = "visitor_id=" + visitorId + ";" + expires + ";path=/";
+                  }
                 }
                 return visitorId;
             }
-            
-            // function to get IP address
             function getIpAddress() {
                 return new Promise(function(resolve, reject) {
-                var xhr = new XMLHttpRequest();
-                xhr.open('GET', 'https://api.ipify.org?format=json', true);
-                xhr.onload = function() {
+                  var xhr = new XMLHttpRequest();
+                  xhr.open('GET', 'https://api.ipify.org?format=json', true);
+                  xhr.onload = function() {
                     if (xhr.status === 200) {
-                    var response = JSON.parse(xhr.responseText);
-                    resolve(response.ip);
+                      var response = JSON.parse(xhr.responseText);
+                      resolve(response.ip);
                     } else {
-                    reject(xhr.statusText);
+                      reject(xhr.statusText);
                     }
                 };
                 xhr.onerror = function() {
@@ -86,15 +77,11 @@ class TrackingController extends Controller
                 xhr.send();
                 });
             }
-            
-            // function to get session duration
             function getSessionDuration() {
                 var duration = Math.floor((Date.now() - (sessionStorage.getItem('start_time') || Date.now())) / 1000);
                 sessionStorage.setItem('start_time', Date.now());
                 return duration;
             }
-            
-            // function to extract query string parameters
             function getQueryStringParams() {
                 var params = {};
                 var search = window.location.search.substring(1);
@@ -109,8 +96,6 @@ class TrackingController extends Controller
                 }
                 return params;
             }
-            
-            // function to send tracking data to server
             function sendTrackingData() {
               var visitorId = getVisitorId();
               if (visitorId) {
@@ -144,8 +129,6 @@ class TrackingController extends Controller
                 });
               }
             }
-                
-            // send tracking data using beacon API if available, fallback to XHR
             if (navigator.sendBeacon) {
               window.addEventListener('unload', function() {
                 var visitorId = getVisitorId();
