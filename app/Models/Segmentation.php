@@ -8,7 +8,7 @@ use App\Models\Team;
 use App\Models\User;
 use App\Models\Website;
 use Spatie\Tags\HasTags;
-use App\Constants\IndustryConstants;
+use App\Constants\IndustrySectors;
 
 
 class Segmentation extends Model
@@ -80,11 +80,11 @@ class Segmentation extends Model
                 }
                 // if category is industry, we need to check the industry constants file for the value
                 if ($field === 'industry') {
-                    $sectors = IndustryConstants::SECTORS;
+                    $sectors = IndustrySectors::SECTORS;
                     // get sector where $value = key
                     $sector = array_search($value, $sectors);
                     // get the industries in that sector
-                    $industries = IndustryConstants::industries[$sector];
+                    $industries = IndustrySectors::industries[$sector];
                     // add all industries as orWhere to the query
                     foreach ($industries as $industry) {
                         $query->orWhere($field, 'LIKE', $industry);
