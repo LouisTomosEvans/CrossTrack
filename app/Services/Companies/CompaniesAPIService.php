@@ -10,7 +10,7 @@ class CompaniesAPIService
     public function __construct()
     {
         $this->client = new Client([
-            'base_uri' => 'https://api.thecompaniesapi.com ',
+            'base_uri' => 'https://api.thecompaniesapi.com',
         ]);
     }
 
