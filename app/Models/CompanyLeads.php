@@ -39,6 +39,10 @@ class CompanyLeads extends Model
         'instagram_url',
         'youtube_url',
         'tiktok_url',
+        'website_id',
+        'timezone',
+        'timezone_offset',
+        'local_time',
     ];
 
     public function website()
