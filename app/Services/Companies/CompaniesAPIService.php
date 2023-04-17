@@ -23,7 +23,7 @@ class CompaniesAPIService
             $response = $this->client->get("/v1/companies/{$domain}?token={$apiKey}&{$additionalParams}");
         } else {
             $additionalParams = '';
-            $response = $this->client->get("/companies/{$domain}?token={$apiKey}");
+            $response = $this->client->get("/v1/companies/{$domain}?token={$apiKey}");
         }
 
         return json_decode($response->getBody()->getContents(), true);
