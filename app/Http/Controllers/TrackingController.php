@@ -267,7 +267,7 @@ class TrackingController extends Controller
               }
 
               // if company does not exist create new company lead
-              $companyLead = CompanyLead::create([
+              $companyLead = CompanyLeads::create([
                 'name' => $company['name'],
                 'domain' => $company['domain'],
                 'description' => $hunterData['data']['description'] ?? null,
