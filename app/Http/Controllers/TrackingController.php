@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Visits;
 use App\Models\Website;
 use App\Models\Segmentation;
-use App\Http\Services\IPLookUp\IPRegistryService;
+use App\Services\IPLookUp\IPRegistryService;
 // carbon
 use Carbon\Carbon;
 
