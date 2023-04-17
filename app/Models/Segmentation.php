@@ -81,17 +81,13 @@ class Segmentation extends Model
                 // if category is industry, we need to check the industry constants file for the value
                 if ($field === 'industry') {
                     $sectors = IndustrySectors::SECTORS;
-                    dump($sectors);
-                    dump($value);
 
                     // find industry value in sectors nad get industries linked to it
                     $industries = [];
-                    foreach ($sectors as $sector) {
-                        if ($sector[$value]) {
-                            $industries = $sector['industries'];
-                        }
+                    if ($sectors[$value]) {
+                        $industries = $sector['industries'];
                     }
-                    dump($industries);
+
                     // add all industries as orWhere to the query
                     foreach ($industries as $industry) {
                         $query->orWhere($field, 'LIKE', $industry);
