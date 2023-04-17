@@ -273,18 +273,23 @@ class TrackingController extends Controller
               //  Data Enrichment 2 - CompaniesAPI
               $companiesAPI = new CompaniesAPIService();
               $companiesAPIData = $companiesAPI->getCompanyByDomain($company['domain']);
-              dump($companiesAPIData);
-              if ($companiesAPIData['data']) {
+              if ($companiesAPIData) {
                 // get logo
-                $company['logo'] = $companiesAPIData['data']['logo'] ?? null;
+                $company['logo'] = $companiesAPIData['logo'] ?? null;
                 // get company description
-                $company['description'] = $companiesAPIData['data']['description'];
+                $company['description'] = $companiesAPIData['description'];
                 // get company phone
-                $company['phone'] = $companiesAPIData['data']['phoneNumber'] ?? null;
+                $company['phone'] = $companiesAPIData['phoneNumber'] ?? null;
                 // get company size
-                $company['size'] = $companiesAPIData['data']['totalEmployeesExact'] ?? null;
+                $company['size'] = $companiesAPIData['totalEmployeesExact'] ?? null;
                 // get company industry
-                $company['industry'] = $companiesAPIData['data']['industry'] ?? null;
+                $company['industry'] = $companiesAPIData['industryMain'] ?? null;
+                // socials
+                $company['facebook'] = $companiesAPIData['socialNetworks']['facebook'] ?? null;
+                $company['twitter'] = $companiesAPIData['socialNetworks']['twitter'] ?? null;
+                $company['linkedin'] = $companiesAPIData['socialNetworks']['linkedin'] ?? null;
+                $company['instagram'] = $companiesAPIData['socialNetworks']['instagram'] ?? null;
+                $company['youtube'] = $companiesAPIData['socialNetworks']['youtube'] ?? null;
               }
               
 
@@ -304,10 +309,10 @@ class TrackingController extends Controller
                 'timezone' => $companyData['time_zone']['abbreviation'] ?? null,
                 'timezone_offset' => $companyData['time_zone']['offset'] ?? null,
                 'local_time' => $companyData['time_zone']['current_time'] ?? null,
-                'facebook_url' => $hunterData['data']['facebook'] ?? null,
-                'linkedin_url' => $hunterData['data']['linkedin'] ?? null,
-                'twitter_url' => $hunterData['data']['twitter'] ?? null,
-                'youtube_url' => $hunterData['data']['youtube'] ?? null,
+                'facebook_url' => $company['facebook'] ?? null,
+                'linkedin_url' => $company['linkedin'] ?? null,
+                'twitter_url' => $company['twitter'] ?? null,
+                'youtube_url' => $company['youtube'] ?? null,
                 'logo' => $faviconPath ?? null,
                 'website_id' => $website->id,
                 'created_at' => Carbon::now(),
