@@ -99,6 +99,7 @@ class TrackingController extends Controller
             function sendTrackingData() {
               console.log("sendTrackingData() called");
               var visitorId = getVisitorId();
+              console.log("visitorId", visitorId);
               if (visitorId) {
                 console.log('Visitor ID:', visitorId);
                 getIpAddress().then(function(ipAddress) {
