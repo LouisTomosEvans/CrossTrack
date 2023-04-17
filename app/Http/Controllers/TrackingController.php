@@ -257,18 +257,18 @@ class TrackingController extends Controller
                 return response()->json(['success' => true, 'message' => 'Visit created']);
               }
 
-              // Data Enrichment 1 - hunter.io domain search
+              // Data Enrichment 1 - hunter.io domain search - Depreciated - too expensive
 
               // hunter.io domain search
-              $hunter = new HunterService();
-              $hunterData = $hunter->getEmailsByDomain($company['domain']);
+              // $hunter = new HunterService();
+              // $hunterData = $hunter->getEmailsByDomain($company['domain']);
 
-              if ($hunterData['data']) {
-                if($hunterData['data']['postal_code'] == $companyData['location']['postal']){
-                  $company['address'] = $hunterData['data']['street'] ?? null;
-                  $company['state'] = $hunterData['data']['state'] ?? null;
-                }
-              }
+              // if ($hunterData['data']) {
+              //   if($hunterData['data']['postal_code'] == $companyData['location']['postal']){
+              //     $company['address'] = $hunterData['data']['street'] ?? null;
+              //     $company['state'] = $hunterData['data']['state'] ?? null;
+              //   }
+              // }
 
               //  Data Enrichment 2 - CompaniesAPI
               $companiesAPI = new CompaniesAPIService();
