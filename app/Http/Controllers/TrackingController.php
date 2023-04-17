@@ -41,6 +41,7 @@ class TrackingController extends Controller
             function getVisitorId() {
                 var visitorId = null;
                 if (!isBot() && !isHeadless()) {
+                  console.log('not a bot');
                   var cookies = document.cookie.split(';');
                   for (var i = 0; i < cookies.length; i++) {
                       var cookie = cookies[i].trim();
@@ -51,6 +52,7 @@ class TrackingController extends Controller
                   }
                   if (!visitorId) {
                       visitorId = generateUUID();
+                      console.log('visitorId by geneateUUID', visitorId);
                       var date = new Date();
                       date.setTime(date.getTime() + (30 * 24 * 60 * 60 * 1000)); // cookie expires in 30 days
                       var expires = "expires="+date.toUTCString();
