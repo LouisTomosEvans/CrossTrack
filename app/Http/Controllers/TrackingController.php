@@ -8,7 +8,7 @@ use App\Models\Website;
 use App\Models\Segmentation;
 use App\Services\IPLookUp\IPRegistryService;
 use App\Services\Contact\HunterService;
-use App\Models\CompanyLead;
+use App\Models\CompanyLeads;
 
 // carbon
 use Carbon\Carbon;
@@ -246,7 +246,7 @@ class TrackingController extends Controller
               return response()->json(['success' => false, 'message' => 'Company name or domain is missing']);
             } else {
               // check if company already exists where website_id and domain match
-              $companyLead = CompanyLead::where('website_id', $website->id)->where('domain', $company['domain'])->first();
+              $companyLead = CompanyLeads::where('website_id', $website->id)->where('domain', $company['domain'])->first();
               if ($companyLead) {
                 // create visits and associate with company lead
                 $visit = Visits::create($data);
