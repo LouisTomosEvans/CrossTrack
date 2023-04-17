@@ -293,7 +293,7 @@ class TrackingController extends Controller
 
               // create visits and associate with company lead
               $visit = Visits::create($data);
-              $visit->company_lead_id = $companyLead->id;
+              $visit->company_leads_id = $companyLead->id;
               $visit->save();
               return response()->json(['success' => true]);
             }
