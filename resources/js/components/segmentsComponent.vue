@@ -724,38 +724,102 @@
                     }
                 ],
                 industryValues: [
-                    {
-                        title: "Technology",
-                        value: "technology",
-                    },
-                    {
-                        title: "Healthcare",
-                        value: "healthcare",
-                    },
-                    {
-                        title: "Finance",
-                        value: "finance",
-                    },
-                    {
-                        title: "Education",
-                        value: "education",
-                    },
-                    {
-                        title: "Retail",
-                        value: "retail",
-                    },
-                    {
-                        title: "Manufacturing",
-                        value: "manufacturing",
-                    },
-                    {
-                        title: "Agriculture",
-                        value: "agriculture",
-                    },
-                    {
-                        title: "Other",
-                        value: "other",
-                    },
+                {
+                title: "Education",
+                value: "education",
+                },
+                {
+                title: "Construction",
+                value: "construction",
+                },
+                {
+                title: "Design",
+                value: "design",
+                },
+                {
+                title: "Corporate Services",
+                value: "corporate_services",
+                },
+                {
+                title: "Retail",
+                value: "retail",
+                },
+                {
+                title: "Energy & Mining",
+                value: "energy_mining",
+                },
+                {
+                title: "Manufacturing",
+                value: "manufacturing",
+                },
+                {
+                title: "Finance",
+                value: "finance",
+                },
+                {
+                title: "Recreation & Travel",
+                value: "recreation_travel",
+                },
+                {
+                title: "Arts",
+                value: "arts",
+                },
+                {
+                title: "Health Care",
+                value: "health_care",
+                },
+                {
+                title: "Hardware & Networking",
+                value: "hardware_networking",
+                },
+                {
+                title: "Real Estate",
+                value: "real_estate",
+                },
+                {
+                title: "Legal",
+                value: "legal",
+                },
+                {
+                title: "Consumer Goods",
+                value: "consumer_goods",
+                },
+                {
+                title: "Agriculture",
+                value: "agriculture",
+                },
+                {
+                title: "Media & Communications",
+                value: "media_communications",
+                },
+                {
+                title: "Nonprofit",
+                value: "nonprofit",
+                },
+                {
+                title: "Software & IT Services",
+                value: "software_it_services",
+                },
+                {
+                title: "Transportation & Logistics",
+                value: "transportation_logistics",
+                },
+                {
+                title: "Entertainment",
+                value: "entertainment",
+                },
+                {
+                title: "Wellness & Fitness",
+                value: "wellness_fitness",
+                },
+                {
+                title: "Public Safety",
+                value: "public_safety",
+                },
+                {
+                title: "Public Administration",
+                value: "public_administration",
+                },
                 ],
                 companySizeLogicalOperators: [
                     {

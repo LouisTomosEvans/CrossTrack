@@ -30,6 +30,12 @@ class TrackingController extends Controller
             abort(403);
         }
 
+        // TO DO: minimist the js in this string
+        // TO DO: add a check to see if the tracking code is valid
+        // TO DO: add a better debounce function
+        // TO DO: add a check to see if traffic is headless was causing error
+        // TO DO: add a check to stop ddos attacks
+
         $trackingScript = <<<SCRIPT
         (function() {
             function generateUUID() {
@@ -225,6 +231,10 @@ class TrackingController extends Controller
         $data['timestamp'] = Carbon::now();
         $data['updated_at'] = Carbon::now();
 
+        // make this more secure by checking request origin against website domain
+        // TO DO: check request origin against website domain
+
+
         // get website from tracking code
         $website = Website::where('tracking_code', $website_id)->first();
         if ($website) {
@@ -234,10 +244,11 @@ class TrackingController extends Controller
             abort(404, 'Website not found');
         }
 
-
         // get company from ip using IPRegistry Service
         $ipRegistry = new IPRegistryService();
         $companyData = $ipRegistry->getCompanyFromIP($data['ip_address']);
+
+        // TO DO: have more than one company lookup service
 
         // get company data 
         $company = $companyData['company'] ?? null;
@@ -257,23 +268,10 @@ class TrackingController extends Controller
                 return response()->json(['success' => true, 'message' => 'Visit created']);
               }
 
-              // Data Enrichment 1 - hunter.io domain search - Depreciated - too expensive
-
-              // hunter.io domain search
-              // $hunter = new HunterService();
-              // $hunterData = $hunter->getEmailsByDomain($company['domain']);
-
-              // if ($hunterData['data']) {
-              //   if($hunterData['data']['postal_code'] == $companyData['location']['postal']){
-              //     $company['address'] = $hunterData['data']['street'] ?? null;
-              //     $company['state'] = $hunterData['data']['state'] ?? null;
-              //   }
-              // }
-
               //  Data Enrichment 2 - CompaniesAPI
               $companiesAPI = new CompaniesAPIService();
               $companiesAPIData = $companiesAPI->getCompanyByDomain($company['domain']);
-              dump($companiesAPIData);
+
               if ($companiesAPIData) {
                 // get logo
                 $company['logo'] = $companiesAPIData['logo'] ?? null;
@@ -304,6 +302,7 @@ class TrackingController extends Controller
                 }
               }
               
+              // TO DO: more and better data enrichment services
 
               // if company does not exist create new company lead
               $companyLead = CompanyLeads::create([
@@ -333,10 +332,33 @@ class TrackingController extends Controller
                 'updated_at' => Carbon::now(),
               ]);
 
+              // TO DO: make this more dynamic in determining if the website is active
+              // set website tracking staus to active if not active
+              if($website->tracking_status == 0){
+                $website->tracking_status = 1;
+                $website->save();
+              }
+
               // create visits and associate with company lead
               $visit = Visits::create($data);
               $visit->company_leads_id = $companyLead->id;
               $visit->save();
+
+              // TO DO: add user alocation based on segment
+              // get all segments for website
+              $segments = Segmentation::where('website_id', $website->id)->get();
+              // for each segment check if lead matches segment
+              foreach ($segments as $segment){
+                // check if lead matches segment
+                $query = CompanyLeads::query(); // Initialize a new Eloquent query builder instance for the CompanyLead model
+                $segment->applyToQuery($query);
+                if ($query->where('id', $companyLead->id)->exists()) {
+                  // assign users associated with segment to lead
+                  $segment->users()->attach($companyLead->id);
+                  dump($segment . ' - Found Match');
+                }
+              }
+
               return response()->json(['success' => true]);
             }
         }
