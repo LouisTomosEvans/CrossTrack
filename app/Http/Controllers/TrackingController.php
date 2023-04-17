@@ -206,14 +206,6 @@ class TrackingController extends Controller
             abort(404, 'Website not found');
         }
 
-        dump($website);
-
-        // check the route of the website domain is the same as the request domain add fuzziness for http/https
-        if (!str_contains($website->domain, $domain)) {
-            // error if website domain does not match request domain
-            abort(404, 'Traffic not from correct domain');
-        }
-        
         Visits::create($data);
         return response()->json(['success' => true]);
     }
