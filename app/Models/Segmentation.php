@@ -84,7 +84,8 @@ class Segmentation extends Model
                     // get sector where $value = key
                     $sector = array_search($value, $sectors);
                     // get the industries in that sector
-                    $industries = IndustrySectors::industries[$sector];
+                    $industries = $sector['industries'];
+                    dump($industries);
                     // add all industries as orWhere to the query
                     foreach ($industries as $industry) {
                         $query->orWhere($field, 'LIKE', $industry);
