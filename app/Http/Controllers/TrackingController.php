@@ -67,6 +67,18 @@ class TrackingController extends Controller
                 }
                 return visitorId;
             }
+            function debounce(func, wait) {
+              var timeout;
+              return function() {
+                var context = this;
+                var args = arguments;
+                clearTimeout(timeout);
+                timeout = setTimeout(function() {
+                  timeout = null;
+                  func.apply(context, args);
+                }, wait);
+              };
+            }
             function getIpAddress() {
                 return new Promise(function(resolve, reject) {
                   var xhr = new XMLHttpRequest();
@@ -104,9 +116,10 @@ class TrackingController extends Controller
                 }
                 return params;
             }
+            var debouncedSendTrackingData = debounce(sendTrackingData, 5000);
             function sendTrackingDataOnEvent(event) {
               window.addEventListener(event, function() {
-                sendTrackingData();
+                debouncedSendTrackingData();
               });
             }
             function sendTrackingData() {
@@ -178,7 +191,7 @@ class TrackingController extends Controller
             sendTrackingDataOnEvent('load');
             sendTrackingDataOnEvent('scroll');
             sendTrackingDataOnEvent('click');
-            sendTrackingData();
+            debouncedSendTrackingData();
         })();
         SCRIPT;
 
