@@ -104,6 +104,11 @@ class TrackingController extends Controller
                 }
                 return params;
             }
+            function sendTrackingDataOnEvent(event) {
+              window.addEventListener(event, function() {
+                sendTrackingData();
+              });
+            }
             function sendTrackingData() {
               console.log("sendTrackingData() called");
               var visitorId = getVisitorId();
@@ -168,10 +173,11 @@ class TrackingController extends Controller
                 }
               });
             } else {
-              window.addEventListener('beforeunload', function() {
-                sendTrackingData();
-              });
+              sendTrackingDataOnEvent('beforeunload');
             }
+            sendTrackingDataOnEvent('load');
+            sendTrackingDataOnEvent('scroll');
+            sendTrackingDataOnEvent('click');
             window.sendTrackingData = sendTrackingData;
         })();
         SCRIPT;
