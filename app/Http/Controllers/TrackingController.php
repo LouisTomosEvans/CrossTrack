@@ -10,6 +10,7 @@ use App\Services\IPLookUp\IPRegistryService;
 use App\Services\Contacts\HunterService;
 use App\Models\CompanyLeads;
 use AshAllenDesign\FaviconFetcher\Facades\Favicon;
+use App\Services\Companies\CompaniesAPIService;
 
 // carbon
 use Carbon\Carbon;
@@ -269,7 +270,21 @@ class TrackingController extends Controller
                 }
               }
 
-              //  Data Enrichment 2 - FullContact
+              //  Data Enrichment 2 - CompaniesAPI
+              $companiesAPI = new CompaniesAPIService();
+              $companiesAPIData = $companiesAPI->getCompanyFromDomain($company['domain']);
+              if ($companiesAPIData['data']) {
+                // get logo
+                $company['logo'] = $companiesAPIData['data']['logo'] ?? null;
+                // get company description
+                $company['description'] = $companiesAPIData['data']['description'];
+                // get company phone
+                $company['phone'] = $companiesAPIData['data']['phoneNumber'] ?? null;
+                // get company size
+                $company['size'] = $companiesAPIData['data']['totalEmployeesExact'] ?? null;
+                // get company industry
+                $company['industry'] = $companiesAPIData['data']['industry'] ?? null;
+              }
               
 
               // if company does not exist create new company lead
