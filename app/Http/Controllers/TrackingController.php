@@ -8,6 +8,8 @@ use App\Models\Website;
 use App\Models\Segmentation;
 use App\Services\IPLookUp\IPRegistryService;
 use App\Services\Contact\HunterService;
+use App\Models\CompanyLead;
+
 // carbon
 use Carbon\Carbon;
 
