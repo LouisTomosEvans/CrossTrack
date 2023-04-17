@@ -18,7 +18,7 @@ return new class extends Migration
             $table->timestamps();
             $table->string('timestamp');
             $table->string('visitor_id');
-            $table->foreignId('company_leads_id')->constrained('websites');
+            $table->foreignId('company_leads_id')->constrained('websites')->nullable();
             $table->string('referrer');
             $table->string('url');
             $table->string('title');
