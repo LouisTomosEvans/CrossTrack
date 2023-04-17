@@ -2,7 +2,7 @@
 
 namespace App\Constants;
 
-class IndustryConstants
+class IndustrySectors
 {
     public const SECTORS = [
         'education' => [
