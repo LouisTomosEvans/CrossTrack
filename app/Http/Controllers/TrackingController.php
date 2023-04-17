@@ -353,8 +353,13 @@ class TrackingController extends Controller
                 $query = CompanyLeads::query(); // Initialize a new Eloquent query builder instance for the CompanyLead model
                 $segment->applyToQuery($query);
                 if ($query->where('id', $companyLead->id)->exists()) {
-                  // assign users associated with segment to lead
-                  $segment->users()->attach($companyLead->id);
+                  // get users associated with segment
+                  $users = $segment->users;
+                  // for each user add lead to user
+                  foreach ($users as $user){
+                    $user->companyLeads()->attach($companyLead->id);
+                  }
+                  
                   dump($segment . ' - Found Match');
                 }
               }
