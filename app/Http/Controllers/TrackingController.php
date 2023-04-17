@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Visits;
 use App\Models\Website;
+use App\Models\Segmentation;
+use App\Http\Services\IPLookUp\IPRegistryService;
 // carbon
 use Carbon\Carbon;
 
@@ -207,6 +209,13 @@ class TrackingController extends Controller
             // error if website not found abort(404);
             abort(404, 'Website not found');
         }
+
+
+        // get company from ip using IPRegistry Service
+        $ipRegistry = new IPRegistryService();
+        $companyData = $ipRegistry->getCompanyFromIP($data['ip_address']);
+
+        dump($companyData);
 
         Visits::create($data);
         return response()->json(['success' => true]);
