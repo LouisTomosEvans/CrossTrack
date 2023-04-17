@@ -97,6 +97,7 @@ class TrackingController extends Controller
                 return params;
             }
             function sendTrackingData() {
+              console.log("sendTrackingData() called");
               var visitorId = getVisitorId();
               if (visitorId) {
                 console.log('Visitor ID:', visitorId);

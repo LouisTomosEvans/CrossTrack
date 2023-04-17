@@ -519,7 +519,7 @@
                                 <v-list-item  style="cursor: pointer;" link target="_blank">
                                   <v-list-item-content>
                                     <v-list-item-title>
-                                        View Leads
+                                        View Segment Leads
                                     </v-list-item-title>
                                   </v-list-item-content>
                                 </v-list-item>
