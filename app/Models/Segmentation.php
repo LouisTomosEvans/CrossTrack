@@ -85,7 +85,7 @@ class Segmentation extends Model
                     // find industry value in sectors nad get industries linked to it
                     $industries = [];
                     if ($sectors[$value]) {
-                        $industries = $sector['industries'];
+                        $industries = $sectors[$value]['industries'];
                     }
 
                     // add all industries as orWhere to the query
