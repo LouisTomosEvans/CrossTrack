@@ -273,6 +273,7 @@ class TrackingController extends Controller
               //  Data Enrichment 2 - CompaniesAPI
               $companiesAPI = new CompaniesAPIService();
               $companiesAPIData = $companiesAPI->getCompanyByDomain($company['domain']);
+              dump($companiesAPIData);
               if ($companiesAPIData) {
                 // get logo
                 $company['logo'] = $companiesAPIData['logo'] ?? null;
