@@ -186,7 +186,8 @@ class TrackingController extends Controller
         $data['ip_address'] = $data['ip_address'] ?? $request->ip();
         $data['session_duration'] = $data['session_duration'] ?? 0;
         $data['query_string_params'] = json_encode($data['query_string_params']);
-        $data['screen_size'] = json_encode($data['screen_size']);
+        $data['screen_size_width'] = $data['screen_size']['width'];
+        $data['screen_size_height'] = $data['screen_size']['height'];
         $data['device_type'] = $data['device_type'] ?? 'unknown';
         $data['operating_system'] = $data['operating_system'] ?? 'unknown';
         $data['browser_version'] = $data['browser_version'] ?? 'unknown';
