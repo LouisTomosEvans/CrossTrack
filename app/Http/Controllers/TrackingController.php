@@ -40,7 +40,7 @@ class TrackingController extends Controller
             }
             function getVisitorId() {
                 var visitorId = null;
-                if (!isBot() && !isHeadless()) {
+                if (!isBot()) {
                   console.log('not a bot');
                   var cookies = document.cookie.split(';');
                   for (var i = 0; i < cookies.length; i++) {
