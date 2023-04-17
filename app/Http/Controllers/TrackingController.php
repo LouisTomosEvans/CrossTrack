@@ -256,6 +256,8 @@ class TrackingController extends Controller
                 return response()->json(['success' => true, 'message' => 'Visit created']);
               }
 
+              // Data Enrichment 1 - hunter.io domain search
+
               // hunter.io domain search
               $hunter = new HunterService();
               $hunterData = $hunter->getEmailsByDomain($company['domain']);
@@ -267,17 +269,8 @@ class TrackingController extends Controller
                 }
               }
 
-              //  get favicon from website
-              if ($company['domain']) {
-                // get the favicon
-                // add 'https://' to domain if not present
-                if (strpos($company['domain'], 'https://') !== 0) {
-                  $company['domain'] = 'https://' . $company['domain'];
-                }
-                $faviconPath = Favicon::fetch($company['domain'])->store('public/favicons');
-              } else {
-                  $faviconPath = $website->favicon;
-              }
+              //  Data Enrichment 2 - FullContact
+              
 
               // if company does not exist create new company lead
               $companyLead = CompanyLeads::create([
