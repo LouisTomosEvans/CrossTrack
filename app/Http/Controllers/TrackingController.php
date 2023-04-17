@@ -7,6 +7,7 @@ use App\Models\Visits;
 use App\Models\Website;
 use App\Models\Segmentation;
 use App\Services\IPLookUp\IPRegistryService;
+use App\Services\Contact\HunterService;
 // carbon
 use Carbon\Carbon;
 
@@ -215,9 +216,66 @@ class TrackingController extends Controller
         $ipRegistry = new IPRegistryService();
         $companyData = $ipRegistry->getCompanyFromIP($data['ip_address']);
 
-        dump($companyData);
+        // get company data 
+        $company = $companyData['company'] ?? null;
+        if ($company['type'] == 'business') {
 
-        Visits::create($data);
-        return response()->json(['success' => true]);
+            // validate company data
+            if(empty($company['name']) || empty($company['domain'])){
+              return response()->json(['success' => false, 'message' => 'Company name or domain is missing']);
+            } else {
+              // check if company already exists where website_id and domain match
+              $companyLead = CompanyLead::where('website_id', $website->id)->where('domain', $company['domain'])->first();
+              if ($companyLead) {
+                // create visits and associate with company lead
+                $visit = Visits::create($data);
+                $visit->company_lead_id = $companyLead->id;
+                $visit->save();
+                return response()->json(['success' => true, 'message' => 'Visit created']);
+              }
+
+              // hunter.io domain search
+              $hunter = new HunterService();
+              $hunterData = $hunter->getEmailsByDomain($company['domain']);
+
+              if ($hunterData['data']) {
+                if($hunterData['data']['postal_code'] == $companyData['location']['postal']){
+                  $company['address'] = $hunterData['data']['street'] ?? null;
+                  $company['state'] = $hunterData['data']['state'] ?? null;
+                }
+              }
+
+              // if company does not exist create new company lead
+              $companyLead = CompanyLead::create([
+                'name' => $company['name'],
+                'domain' => $company['domain'],
+                'description' => $hunterData['data']['description'] ?? null,
+                'phone' => $company['phone'] ?? null,
+                'address' => $company['address'] ?? null,
+                'state' => $company['state'] ?? null,
+                'city' => $companyData['location']['city'] ?? null,
+                'country' => $companyData['location']['country']['code'] ?? null,
+                'zip' => $companyData['location']['postal'] ?? null,
+                'latitude' => $companyData['location']['latitude'] ?? null,
+                'longitude' => $companyData['location']['longitude'] ?? null,
+                'timezone' => $companyData['time_zone']['abbreviation'] ?? null,
+                'timezone_offset' => $companyData['time_zone']['offset'] ?? null,
+                'local_time' => $companyData['time_zone']['current_time'] ?? null,
+                'facebook_url' => $hunterData['data']['facebook'] ?? null,
+                'linkedin_url' => $hunterData['data']['linkedin'] ?? null,
+                'twitter_url' => $hunterData['data']['twitter'] ?? null,
+                'youtube_url' => $hunterData['data']['youtube'] ?? null,
+                'website_id' => $website->id,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+              ]);
+
+              // create visits and associate with company lead
+              $visit = Visits::create($data);
+              $visit->company_lead_id = $companyLead->id;
+              $visit->save();
+              return response()->json(['success' => true]);
+            }
+        }
     }
 }

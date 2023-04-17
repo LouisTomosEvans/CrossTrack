@@ -37,6 +37,9 @@ return new class extends Migration
             $table->string('instagram_url')->nullable();
             $table->string('youtube_url')->nullable();
             $table->string('tiktok_url')->nullable();
+            $table->string('timezone')->nullable();
+            $table->string('timezone_offset')->nullable();
+            $table->string('local_time')->nullable();
             // website id
             $table->foreignId('website_id')->constrained('websites');
 
