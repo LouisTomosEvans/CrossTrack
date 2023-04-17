@@ -136,9 +136,19 @@
                                     </v-btn>
                         </template>
                         <!-- website -->
-                        <template v-slot:item.website_name="{ item }">
-                            <div v-if="item">
-                                <span  style="color: #28323b; font-size: 0.8125rem;">{{ item.website_name}}</span>
+                        <template v-slot:item.website.name="{ item }">
+                            <div v-if="item" class="d-flex align-items-center">
+                                <!-- website icon -->
+                                <v-avatar class="mr-1" size="24" color="info" v-if="!item.website_favicon">
+                                    <!-- 0.75 size -->
+                                    <v-icon color="white" style="font-size: 0.95rem;">mdi-web</v-icon>
+                                </v-avatar>
+                                <!-- show favicon -->
+                                <div class="mr-1" style="height: 24px; width: 24px;" v-else>
+                                    <!-- 0.75 size -->
+                                    <img :src="getFaviconURL(item.website_favicon)" style="width: 24px; height: 24px; border-radius: 4px;">
+                                </div>
+                                <span class="ml-1" style="color: #28323b; font-size: 0.8125rem;">{{ item.website_name }}</span>
                             </div>
                         </template>
                         <!-- location -->
