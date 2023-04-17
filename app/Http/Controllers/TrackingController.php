@@ -291,6 +291,17 @@ class TrackingController extends Controller
                 $company['linkedin'] = $companiesAPIData['socialNetworks']['linkedin'] ?? null;
                 $company['instagram'] = $companiesAPIData['socialNetworks']['instagram'] ?? null;
                 $company['youtube'] = $companiesAPIData['socialNetworks']['youtube'] ?? null;
+
+                if($companiesAPIData['state']){
+                  $company['state'] = $companiesAPIData['state']['name'];
+                }
+                if($companiesAPIData['city']){
+                  $company['city'] = $companiesAPIData['city']['name'];
+                  $company['zip'] = $companiesAPIData['city']['postcode'];
+                }
+                if($companiesAPIData['country']){
+                  $company['country'] = $companiesAPIData['country']['name'];
+                }
               }
               
 
@@ -304,9 +315,9 @@ class TrackingController extends Controller
                 'phone' => $company['phone'] ?? null,
                 'address' => $company['address'] ?? null,
                 'state' => $company['state'] ?? null,
-                'city' => $companyData['location']['city'] ?? null,
-                'country' => $companyData['location']['country']['code'] ?? null,
-                'zip' => $companyData['location']['postal'] ?? null,
+                'city' => $company['city'] ?? null,
+                'country' => $company['country'] ?? null,
+                'zip' => $company['zip'] ?? null,
                 'latitude' => $companyData['location']['latitude'] ?? null,
                 'longitude' => $companyData['location']['longitude'] ?? null,
                 'timezone' => $companyData['time_zone']['abbreviation'] ?? null,
