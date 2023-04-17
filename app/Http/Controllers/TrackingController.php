@@ -195,6 +195,7 @@ class TrackingController extends Controller
         $data['title'] = $data['title'] ?? 'unknown';
         $website_id = $data['website_id'] ?? 'unknown';
         $data['created_at'] = Carbon::now();
+        $data['timestamp'] = Carbon::now();
         $data['updated_at'] = Carbon::now();
 
         // get website from tracking code
