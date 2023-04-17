@@ -7,7 +7,7 @@ use App\Models\Visits;
 use App\Models\Website;
 use App\Models\Segmentation;
 use App\Services\IPLookUp\IPRegistryService;
-use App\Services\Contact\HunterService;
+use App\Services\Contacts\HunterService;
 use App\Models\CompanyLeads;
 
 // carbon
