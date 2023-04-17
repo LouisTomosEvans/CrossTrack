@@ -79,6 +79,8 @@ Route::group(['prefix' => 'teams'], function()
 
 Route::middleware(['auth:sanctum', 'verified'])->post('/contacts', [ContactController::class, 'getContactsByDomain']);
 
+// route for tracking traffic
+Route::post('/tracking', [TrackingController::class, 'tracking'])->name('tracking.traffic');
 
 Route::middleware(['auth:sanctum', 'verified'])->delete('members/leave/{id}', [App\Http\Controllers\TeamMemberController::class, 'leaveTeam'])->name('teams.members.leave');
 Route::get('teams/accept/{token}', [App\Http\Controllers\AuthController::class, 'acceptInvite'])->name('teams.accept_invite');
