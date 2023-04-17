@@ -17,15 +17,13 @@ class IPRegistryService
     public function getCompanyFromIP($ip, $additionalParams = [])
     {
         $apiKey = env('IPREGISTRY_API_KEY');
-
         if(!empty($additionalParams)) {
             $additionalParams = http_build_query($additionalParams);
+            $response = $this->client->get("{$ip}&key={$apiKey}&{$additionalParams}");
         } else {
             $additionalParams = '';
+            $response = $this->client->get("{$ip}&key={$apiKey}");
         }
-
-        $response = $this->client->get("{$ip}&key={$apiKey}&{$additionalParams}");
-
         return json_decode($response->getBody()->getContents(), true);
     }
 }
