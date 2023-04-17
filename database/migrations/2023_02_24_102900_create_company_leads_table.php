@@ -29,7 +29,7 @@ return new class extends Migration
             $table->string('state')->nullable();
             $table->string('zip')->nullable();
             $table->string('country')->nullable();
-            $table->string('description')->nullable();
+            $table->text('description')->nullable();
             $table->string('logo')->nullable();
             $table->string('facebook_url')->nullable();
             $table->string('twitter_url')->nullable();
