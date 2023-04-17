@@ -9,6 +9,7 @@ use App\Models\Segmentation;
 use App\Services\IPLookUp\IPRegistryService;
 use App\Services\Contacts\HunterService;
 use App\Models\CompanyLeads;
+use AshAllenDesign\FaviconFetcher\Facades\Favicon;
 
 // carbon
 use Carbon\Carbon;
@@ -266,6 +267,18 @@ class TrackingController extends Controller
                 }
               }
 
+              //  get favicon from website
+              if ($company['domain']) {
+                // get the favicon
+                // add 'https://' to domain if not present
+                if (strpos($company['domain'], 'https://') !== 0) {
+                  $company['domain'] = 'https://' . $company['domain'];
+                }
+                $faviconPath = Favicon::fetch($company['domain'])->store('public/favicons');
+              } else {
+                  $faviconPath = $website->favicon;
+              }
+
               // if company does not exist create new company lead
               $companyLead = CompanyLeads::create([
                 'name' => $company['name'],
@@ -286,6 +299,7 @@ class TrackingController extends Controller
                 'linkedin_url' => $hunterData['data']['linkedin'] ?? null,
                 'twitter_url' => $hunterData['data']['twitter'] ?? null,
                 'youtube_url' => $hunterData['data']['youtube'] ?? null,
+                'logo' => $faviconPath ?? null,
                 'website_id' => $website->id,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
