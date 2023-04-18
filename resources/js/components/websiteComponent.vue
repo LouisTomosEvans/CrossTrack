@@ -417,7 +417,7 @@
                         </v-row>
                         <v-row class="pt-1">
                             <v-col cols="12" class="pt-0">
-                                <v-textarea color="#f05628" dense rows="2" v-model="trackingSnippet" elevation=0 hide-details style="width: 100%;">
+                                <v-textarea color="#f05628" dense rows="2" v-model="websiteStore.trackingSnippet" elevation=0 hide-details style="width: 100%;">
                                     <template v-slot:label>
                                         <strong>Tracking Snippet</strong>
                                     </template>
@@ -518,11 +518,11 @@ import { useWebsiteStore } from '../store/websiteStore.js';
             checkIfUserIsOwnerOfCurrentTeam(){
                 // check if user is owner of current team
                 // check exists
-                if (this.user.current_team.owner_id == null) {
+                if (this.userStore.user.current_team.owner_id == null) {
                     return false;
                 }
                 // check if user is owner
-                if (this.user.current_team.owner_id == this.user.id) {
+                if (this.userStore.user.current_team.owner_id == this.user.id) {
                     return true;
                 }
                 return false;
@@ -530,19 +530,17 @@ import { useWebsiteStore } from '../store/websiteStore.js';
         },
         methods: {
             addWebsite(){
+                /// Updated Version
                 this.loading = true;
-                let route = '../api/teams/websites/{team_id}';
-                route = route.replace('{team_id}', this.user.current_team_id);
                 let payload = {
                     name: this.name,
                     domain: this.domain,
                 }
-                this.$http.post(route, payload, {withCredentials: true}).then((res) => {
-                    this.getWebsites();
-                    // get tracking snippet
-                    this.trackingSnippet = res.data.trackingSnippet;
+                this.websiteStore.addWebsite(this.userStore.user.current_team_id, payload).then((res) => {
+                    this.websiteStore.fetchWebsites(this.userStore.user.current_team_id);
                     this.dialog = false;
-                    // show tracking pixel dialog
+                    this.name = '';
+                    this.domain = '';
                     this.trackingSnippetDialog = true;
                 })
                 .finally(() => {
@@ -551,39 +549,30 @@ import { useWebsiteStore } from '../store/websiteStore.js';
             },
             deactivateWebsiteFunction(){
                 this.loading = true;
-                let route = '../api/teams/websites/{team_id}/{website_id}';
-                route = route.replace('{team_id}', this.user.current_team_id);
-                route = route.replace('{website_id}', this.deactivateWebsite.id);
-                this.$http.put(route, {withCredentials: true}).then((res) => {
-                    this.getWebsites();
+                this.websiteStore.archiveWebsite(this.userStore.user.current_team_id, this.deactivateWebsite.id).then((res) => {
+                    this.websiteStore.fetchWebsites(this.userStore.user.current_team_id);
                     this.deactivateWebsiteDialog = false;
                     this.deactivateWebsite = {};
                 })
                 .finally(() => {
-                this.loading = false;
+                    this.loading = false;
                 });
             },
             activateWebsiteFunction(){
                 this.loading = true;
-                let route = '../api/teams/websites/{team_id}/{website_id}';
-                route = route.replace('{team_id}', this.user.current_team_id);
-                route = route.replace('{website_id}', this.activateWebsite.id);
-                this.$http.put(route, {withCredentials: true}).then((res) => {
-                    this.getWebsites();
+                this.websiteStore.unarchiveWebsite(this.userStore.user.current_team_id, this.activateWebsite.id).then((res) => {
+                    this.websiteStore.fetchWebsites(this.userStore.user.current_team_id);
                     this.activateWebsiteDialog = false;
                     this.activateWebsite = {};
                 })
                 .finally(() => {
-                this.loading = false;
+                    this.loading = false;
                 });
             },
             deleteWebsiteFunction(){
                 this.loading = true;
-                let route = '../api/teams/websites/{team_id}/{website_id}';
-                route = route.replace('{team_id}', this.user.current_team_id);
-                route = route.replace('{website_id}', this.deleteWebsite.id);
-                this.$http.delete(route, {withCredentials: true}).then((res) => {
-                    this.getWebsites();
+                this.websiteStore.deleteWebsite(this.userStore.user.current_team_id, this.deleteWebsite.id).then((res) => {
+                    this.websiteStore.fetchWebsites(this.userStore.user.current_team_id);
                     this.deleteWebsiteDialog = false;
                     this.deleteWebsite = {};
                 })
@@ -593,15 +582,13 @@ import { useWebsiteStore } from '../store/websiteStore.js';
             },
             editWebsite(){
                 this.loading = true;
-                let route = '../api/teams/websites/{team_id}/{website_id}';
-                route = route.replace('{team_id}', this.user.current_team_id);
-                route = route.replace('{website_id}', this.editItem.id);
                 let payload = {
                     name: this.editItem.name,
                     domain: this.editItem.domain,
                 }
-                this.$http.post(route, payload, {withCredentials: true}).then((res) => {
-                    this.getWebsites();
+                this.loading = true;
+                this.websiteStore.editWebsite(this.userStore.user.current_team_id, this.editItem.id, payload).then((res) => {
+                    this.websiteStore.fetchWebsites(this.userStore.user.current_team_id);
                     this.editDetailsDialog = false;
                     this.editItem = {};
                 })
@@ -632,7 +619,7 @@ import { useWebsiteStore } from '../store/websiteStore.js';
             copyTrackingSnippet(){
                 this.$copyText(this.trackingSnippet);
                 this.trackingSnippetDialog = false;
-                this.snackbarText = 'Tracking Script copied to clipboard';
+                this.snackbarText = 'Tracking script copied to clipboard';
                 this.snackbarColor = 'success';
                 this.snackbar = true;
             },

@@ -78,6 +78,9 @@ Route::group(['prefix' => 'teams'], function()
 
     // leads
     Route::middleware(['auth:sanctum', 'verified'])->get('leads/{id}', [App\Http\Controllers\CompanyLeadsController::class, 'index'])->name('leads.show');
+
+    // Dashboard
+    Route::middleware(['auth:sanctum', 'verified'])->get('dashboard/{id}', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard.show');
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->post('/contacts', [ContactController::class, 'getContactsByDomain']);

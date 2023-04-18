@@ -8,6 +8,7 @@ import axios from 'axios';
 export const useWebsiteStore = defineStore('website', {
     state: () => ({
         websites: [],
+        trackingSnippet: "",
     }),
     getters: {
         getWebsites: (state) => state.websites,
@@ -17,6 +18,37 @@ export const useWebsiteStore = defineStore('website', {
             const api_url = '/api/teams/websites/' + team_id;
             const response = await axios.get(api_url);
             this.websites = response.data;
+        },
+        async archiveWebsite(team_id, website_id) {
+            const api_url = '/api/teams/websites/' + team_id + "/" + website_id;
+            const response = await axios.put(api_url);
+            // fetch the websites again
+            this.fetchWebsites(team_id);
+        },
+        async unarchiveWebsite(team_id, website_id) {
+            const api_url = '/api/teams/websites/' + team_id + "/" + website_id;
+            const response = await axios.put(api_url);
+            // fetch the websites again
+            this.fetchWebsites(team_id);
+        },
+        async deleteWebsite(team_id, website_id) {
+            const api_url = '/api/teams/websites/' + team_id + "/" + website_id;
+            const response = await axios.delete(api_url);
+            // fetch the websites again
+            this.fetchWebsites(team_id);
+        },
+        async editWebsite(team_id, website_id, payload) {
+            const api_url = '/api/teams/websites/' + team_id + "/" + website_id;
+            const response = await axios.post(api_url, payload);
+            // fetch the websites again
+            this.fetchWebsites(team_id);
+        },
+        async addWebsite(team_id, payload) {
+            const api_url = '/api/teams/websites/' + team_id;
+            const response = await axios.post(api_url, payload);
+            // fetch the websites again
+            this.fetchWebsites(team_id);
+            this.trackingSnippet = response.data.trackingSnippet;
         },
     },
 })

@@ -51,7 +51,7 @@
                                         <span style="font-size: 0.75rem; color: dark-gray; opacity: 0.75;">This Month</span>
                                     </div>
                                     <div class="p-0 align-items-end d-flex" style="margin-top: 2rem;">
-                                        <span style="font-size: 3rem; color: #28323b; font-weight:bolder; line-height: 2.3rem;">12</span>
+                                        <span style="font-size: 3rem; color: #28323b; font-weight:bolder; line-height: 2.3rem;">{{ appStore.dashboardData.new_leads_this_month }}</span>
                                         <!-- add badge -->
                                         <span class="badge badge-pill badge-success ml-2" style="font-size: 0.75rem; color: #6ec59e; background-color: #6ec59e20;">+33% vs last month</span>
 
@@ -60,7 +60,7 @@
 
                             <!-- add spark line from apex charts -->
                                 <div id="chart" style="position: absolute; left: 42%; bottom: 1rem; width: calc(58% - 1rem);">
-                                    <apexchart type="area" height="50%" :key="splineSeries.length" :options="splineChartOptions" :series="splineSeries"></apexchart>
+                                    <apexchart type="area" height="50%" v-if="this.appStore.dashboardData.labels" :key="companiesIdentifiedSpline.length" :options="splineChartOptions" :series="companiesIdentifiedSpline"></apexchart>
                                 </div>
                             </div>
                         </div>
@@ -82,7 +82,7 @@
                                         <span style="font-size: 0.75rem; color: dark-gray; opacity: 0.75;">This Month</span>
                                     </div>
                                     <div class="p-0 align-items-end d-flex" style="margin-top: 2rem;">
-                                        <span style="font-size: 3rem; color: #28323b; font-weight:bolder; line-height: 2.3rem;">12</span>
+                                        <span style="font-size: 3rem; color: #28323b; font-weight:bolder; line-height: 2.3rem;">{{ appStore.dashboardData.unique_visitors_this_month }}</span>
                                         <!-- add badge -->
                                         <span class="badge badge-pill badge-success ml-2" style="font-size: 0.75rem; color: #f05628; background-color: #f0562820;">+33% vs last month</span>
 
@@ -91,7 +91,7 @@
 
                             <!-- add spark line from apex charts -->
                                 <div id="chart" style="position: absolute; left: 42%; bottom: 1rem; width: calc(58% - 1rem);">
-                                    <apexchart type="area" height="50%" :options="splineChartOptions" :series="splineSeries"></apexchart>
+                                    <apexchart type="area" height="50%" v-if="this.appStore.dashboardData.labels" :options="splineChartOptions" :series="uniqueVisitorsSpline"></apexchart>
                                 </div>
                             </div>
                         </div>
@@ -113,7 +113,7 @@
                                         <span style="font-size: 0.75rem; color: dark-gray; opacity: 0.75;">This Month</span>
                                     </div>
                                     <div class="p-0 align-items-end d-flex" style="margin-top: 2rem;">
-                                        <span style="font-size: 3rem; color: #28323b; font-weight:bolder; line-height: 2.3rem;">12</span>
+                                        <span style="font-size: 3rem; color: #28323b; font-weight:bolder; line-height: 2.3rem;">{{ appStore.dashboardData.returning_leads_this_month }}</span>
                                         <!-- add badge -->
                                         <span class="badge badge-pill badge-success ml-2" style="font-size: 0.75rem; color: #f05628; background-color: #f0562820;">+33% vs last month</span>
 
@@ -122,7 +122,7 @@
 
                             <!-- add spark line from apex charts -->
                                 <div id="chart" style="position: absolute; left: 42%; bottom: 1rem; width: calc(58% - 1rem);">
-                                    <apexchart type="area" height="50%" :options="splineChartOptions" :series="splineSeries"></apexchart>
+                                    <apexchart type="area" height="50%" v-if="this.appStore.dashboardData.labels" :options="splineChartOptions" :series="returningLeadsSpline"></apexchart>
                                 </div>
                             </div>
                         </div>
@@ -148,7 +148,7 @@
                     
                     <div class="p-3 pt-0">
                         <div id="chart">
-                            <apexchart type="line" height="350" :options="chartOptions" :series="series"></apexchart>
+                            <apexchart type="line" height="350" :options="chartOptions" v-if="this.appStore.dashboardData.labels" :series="series"></apexchart>
                         </div>
                     </div>
                 </v-card>
@@ -172,7 +172,7 @@
                     
                     <div class="p-3 pt-0">
                         <div id="chart">
-                            <apexchart type="bar" height="350" :options="refferalChartOptions" :series="refferalSeries"></apexchart>
+                            <apexchart v-if="this.appStore.dashboardData.top_referrers_this_month_data" type="bar" height="350" :options="refferalChartOptions" :series="refferalSeries"></apexchart>
                         </div>
                     </div>
                 </v-card>
@@ -295,14 +295,196 @@
 </template>
 
 <script>
-    import VueApexCharts from 'vue-apexcharts';
+import { useAppStore } from '../store/appStore';
+import { useUserStore } from '../store/userStore';
+import { useTeamStore } from '../store/teamStore';
+import { useLeadStore } from '../store/leadStore';
+import VueApexCharts from 'vue-apexcharts';
     export default {
         components: {
             apexchart: VueApexCharts,
         },
+        setup() {
+            const appStore = useAppStore();
+            const userStore = useUserStore();
+            const teamStore = useTeamStore();
+            const leadStore = useLeadStore();
+            return {
+                appStore,
+                userStore,
+                teamStore,
+                leadStore,
+            }
+        },
         mounted() {
             console.log('Component mounted.')
-            chart.windowResizeHandler();
+            // chart.windowResizeHandler();
+            //  get data from api
+            // if there is no user got user 
+            if (!this.userStore.user) {
+                this.userStore.fetchUser().then(() => {
+                    this.appStore.setDashboardData(this.userStore.user.current_team_id);
+                });
+            } else {
+                this.appStore.setDashboardData(this.userStore.user.current_team_id).then(() => {
+                    console.log('Dashboard data set.')
+                    // reload chart
+                    // this.chart.windowResizeHandler();
+                });
+            }
+        },
+        computed: {
+            series() {
+                return [{
+                    name: 'Companies Identified',
+                    type: 'column',
+                    data: this.appStore.dashboardData.leads_this_month ?? []
+                }, {
+                    name: 'Unique Visitors',
+                    type: 'area',
+                    data: this.appStore.dashboardData.visits_this_month ?? []
+                }]
+            },
+            companiesIdentifiedSpline() {
+                return [{
+                    name: 'Companies Identified',
+                    data: this.appStore.dashboardData.leads_this_month ?? []
+                }]
+            },
+            uniqueVisitorsSpline() {
+                return [{
+                    name: 'Unique Visitors',
+                    data: this.appStore.dashboardData.visits_this_month ?? []
+                }]
+            },
+            returningLeadsSpline() {
+                return [{
+                    name: 'Returning Companies',
+                    data: this.appStore.dashboardData.returning_leads_this_month_data ?? []
+                }]
+            },
+            chartOptions() {
+                return {
+                        events: {
+                            mounted: (chart) => {
+                            chart.windowResizeHandler();
+                            }
+                        },
+                        animations: {
+                            enabled: false,
+                        },
+                    height: 350,
+                    type: 'area',
+                    stacked: false,
+                    colors: ['#f05628', '#96C5F7'],
+                    zoom: {
+                        enabled: false
+                    },
+                    stroke: {
+                        width: [0, 2, 2],
+                        curve: 'smooth',
+                        colors: ['#f05628','#96C5F7']
+                    },
+                    plotOptions: {
+                    bar: {
+                        columnWidth: '30%'
+                    }
+                    },
+                    stroke: {
+                        curve: 'straight',
+                        colors: ['', '#96C5F7']
+                    },
+                    fill: {
+                        type: ['solid', 'gradient'],
+                        gradient: {
+                            shade: 'light',
+                            type: "vertical",
+                            opacityFrom: 0.70,
+                            opacityTo: 0.1,
+                            stops: [0, 100, 100, 100]
+                        },
+                        colors: ['#f05628', '#96C5F7']
+                    },
+                    labels: this.appStore.dashboardData.labels ?? [],
+                    markers: {
+                    size: 0
+                    },
+                    xaxis: {
+                    type: 'datetime'
+                    },
+                    yaxis: {
+                    title: {
+                        text: 'Points',
+                    },
+                    min: 0
+                    },
+                    tooltip: {
+                    shared: true,
+                    intersect: false,
+                    y: {
+                        formatter: function (y) {
+                        if (typeof y !== "undefined") {
+                            return y.toFixed(0) + " points";
+                        }
+                        return y;
+                    
+                        }
+                    }
+                    }
+                }
+            },
+            refferalChartOptions() {
+                return {
+                    chart: {
+                        animations: {
+                            enabled: false,
+                        },
+                        events: {
+                            mounted: (chart) => {
+                                chart.windowResizeHandler();
+                            }
+                        },
+                    type: 'bar',
+                    height: 350,
+                    stacked: true,
+                    toolbar: {
+                        show: false
+                    },
+                    zoom: {
+                        enabled: false
+                    }
+                    },
+                    responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        legend: {
+                        position: 'bottom',
+                        offsetX: -10,
+                        offsetY: 0
+                        }
+                    }
+                    }],
+                    plotOptions: {
+                    bar: {
+                        horizontal: false,
+                        borderRadius: 10
+                    },
+                    },
+                    xaxis: {
+                        type: 'datetime',
+                        categories: this.appStore.dashboardData.labels ?? [],
+                    },
+                    legend: {
+                        show: false
+                    },
+                    fill: {
+                        colors: ['#e74645', '#F2AC39', '#74D3AE', '#2D7DD2']
+                    },
+                }
+            },
+            refferalSeries() {
+                return this.appStore.dashboardData.top_referrers_this_month_data
+            },
         },
         data(){
             return {
@@ -335,91 +517,6 @@
                         colors: ['#74D3AE']
                     }
                 },  
-                series: [{
-                    name: 'Companies Identified',
-                    type: 'column',
-                    data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30, 44,  27, 13, 22, 37, 21, 44, 22, 30, 44, 27]
-                }, {
-                    name: 'Unique Visitors',
-                    type: 'area',
-                    data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43, 44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43]
-                }],
-                chartOptions: {
-                    chart: {
-                        events: {
-                            mounted: (chart) => {
-                            chart.windowResizeHandler();
-                            }
-                        },
-                        animations: {
-                            enabled: false,
-                        },
-                    height: 350,
-                    type: 'area',
-                    stacked: false,
-                    colors: ['#f05628', '#96C5F7'],
-                    toolbar: {
-                        show: false
-                    },
-                    zoom: {
-                        enabled: false
-                    }
-                    },
-                    stroke: {
-                        width: [0, 2, 2],
-                        curve: 'smooth',
-                        colors: ['#f05628','#96C5F7']
-                    },
-                    plotOptions: {
-                    bar: {
-                        columnWidth: '30%'
-                    }
-                    },
-                    stroke: {
-                        curve: 'straight',
-                        colors: ['', '#96C5F7']
-                    },
-                    fill: {
-                        type: ['solid', 'gradient'],
-                        gradient: {
-                            shade: 'light',
-                            type: "vertical",
-                            opacityFrom: 0.70,
-                            opacityTo: 0.1,
-                            stops: [0, 100, 100, 100]
-                        },
-                        colors: ['#f05628', '#96C5F7']
-                    },
-                    labels: ['01/01/2003', '02/01/2003', '03/01/2003', '04/01/2003', '05/01/2003', '06/01/2003', '07/01/2003',
-                    '08/01/2003', '09/01/2003', '10/01/2003', '11/01/2003', '12/01/2003', '01/01/2004', '02/01/2004', '03/01/2004', '04/01/2004', '05/01/2004', '06/01/2004', '07/01/2004',
-                    '08/01/2004', '09/01/2004', '10/01/2004'
-                    ],
-                    markers: {
-                    size: 0
-                    },
-                    xaxis: {
-                    type: 'datetime'
-                    },
-                    yaxis: {
-                    title: {
-                        text: 'Points',
-                    },
-                    min: 0
-                    },
-                    tooltip: {
-                    shared: true,
-                    intersect: false,
-                    y: {
-                        formatter: function (y) {
-                        if (typeof y !== "undefined") {
-                            return y.toFixed(0) + " points";
-                        }
-                        return y;
-                    
-                        }
-                    }
-                    }
-                },
                 pieseries: [44, 55, 13, 43, 22],
                 piechartOptions: {
                     chart: {
@@ -522,69 +619,6 @@
                     xaxis: {
                     categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
                     }
-                },
-                refferalSeries: [{
-                    name: 'PRODUCT A',
-                    data: [44, 55, 41, 67, 22, 43]
-                }, {
-                    name: 'PRODUCT B',
-                    data: [13, 23, 20, 8, 13, 27]
-                }, {
-                    name: 'PRODUCT C',
-                    data: [11, 17, 15, 15, 21, 14]
-                }, {
-                    name: 'PRODUCT D',
-                    data: [21, 7, 25, 13, 22, 8]
-                }],
-                refferalChartOptions: {
-                    chart: {
-                        animations: {
-                            enabled: false,
-                        },
-                        events: {
-                            mounted: (chart) => {
-                            chart.windowResizeHandler();
-                            }
-                        },
-                    type: 'bar',
-                    height: 350,
-                    stacked: true,
-                    toolbar: {
-                        show: false
-                    },
-                    zoom: {
-                        enabled: false
-                    }
-                    },
-                    responsive: [{
-                    breakpoint: 480,
-                    options: {
-                        legend: {
-                        position: 'bottom',
-                        offsetX: -10,
-                        offsetY: 0
-                        }
-                    }
-                    }],
-                    plotOptions: {
-                    bar: {
-                        horizontal: false,
-                        borderRadius: 10
-                    },
-                    },
-                    xaxis: {
-                        type: 'datetime',
-                        categories: ['01/01/2011 GMT', '01/02/2011 GMT', '01/03/2011 GMT', '01/04/2011 GMT',
-                            '01/05/2011 GMT', '01/06/2011 GMT'
-                        ],
-                    },
-                    legend: {
-                        position: 'right',
-                        offsetY: 40
-                    },
-                    fill: {
-                        colors: ['#e74645', '#F2AC39', '#74D3AE', '#2D7DD2']
-                    },
                 },
                 headers: [
                     {
