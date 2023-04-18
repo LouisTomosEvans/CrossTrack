@@ -126,26 +126,31 @@ class TrackingController extends Controller
                 }
                 return params;
             }
-            var debouncedSendTrackingData = debounce(sendTrackingData, 5000);
+            var debouncedSendTrackingData = debounce(sendTrackingData, 2000);
             function sendTrackingDataOnEvent(event) {
               window.addEventListener(event, function() {
                 debouncedSendTrackingData();
               });
             }
+            function sendTrackingDataOnEvent(event) {
+              if (event === 'load') {
+                window.addEventListener(event, function() {
+                  sendTrackingData();
+                  window.addEventListener(event, debouncedSendTrackingData);
+                });
+              } else {
+                window.addEventListener(event, debouncedSendTrackingData);
+              }
+            }
             function sendTrackingData() {
-              console.log("sendTrackingData() called");
               var visitorId = getVisitorId();
-              console.log("visitorId", visitorId);
               if (visitorId) {
-                console.log('Visitor ID:', visitorId);
-                getIpAddress().then(function(ipAddress) {
                   var data = {
                     visitor_id: visitorId,
                     website_id: '$trackingCode',
                     referrer: document.referrer,
                     url: window.location.href,
                     title: document.title,
-                    ip_address: ipAddress,
                     session_duration: getSessionDuration(),
                     query_string_params: getQueryStringParams(),
                     screen_size: {
@@ -156,14 +161,10 @@ class TrackingController extends Controller
                     operating_system: navigator.platform,
                     browser_version: navigator.userAgent
                   };
-                  console.log('Data:', data);
                   var request = new XMLHttpRequest();
                   request.open('POST', 'https://app.leadrhino.io/api/tracking', true);
                   request.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
                   request.send(JSON.stringify(data));
-                  console.log('XHR request sent');
-                }).catch(function(error) {
-                  console.error('Error getting IP address:', error);
                 });
               }
             }
@@ -171,14 +172,12 @@ class TrackingController extends Controller
               window.addEventListener('unload', function() {
                 var visitorId = getVisitorId();
                 if (visitorId) {
-                  getIpAddress().then(function(ipAddress) {
-                    var data = {
+                  var data = {
                       visitor_id: visitorId,
                       website_id: '$trackingCode',
                       referrer: document.referrer,
                       url: window.location.href,
                       title: document.title,
-                      ip_address: ipAddress,
                       session_duration: getSessionDuration(),
                       query_string_params: getQueryStringParams(),
                       screen_size: {
@@ -190,8 +189,6 @@ class TrackingController extends Controller
                       browser_version: navigator.userAgent
                     };
                     navigator.sendBeacon('https://app.leadrhino.io/api/tracking', JSON.stringify(data));
-                  }).catch(function(error) {
-                    console.error('Error getting IP address:', error);
                   });
                 }
               });
@@ -201,7 +198,6 @@ class TrackingController extends Controller
             sendTrackingDataOnEvent('load');
             sendTrackingDataOnEvent('scroll');
             sendTrackingDataOnEvent('click');
-            debouncedSendTrackingData();
         })();
         SCRIPT;
 
@@ -344,7 +340,6 @@ class TrackingController extends Controller
               $visit->company_leads_id = $companyLead->id;
               $visit->save();
 
-              // TO DO: add user alocation based on segment
               // get all segments for website
               $segments = Segmentation::where('website_id', $website->id)->get();
               // for each segment check if lead matches segment
@@ -358,9 +353,8 @@ class TrackingController extends Controller
                   // for each user add lead to user
                   foreach ($users as $user){
                     $user->companyLeads()->attach($companyLead->id);
+                    // TO DO: Send Notification to user and team via email and other integrations
                   }
-                  
-                  dump($segment . ' - Found Match');
                 }
               }
 
@@ -369,3 +363,174 @@ class TrackingController extends Controller
         }
     }
 }
+
+
+// legacy tracking:
+// $trackingScript = <<<SCRIPT
+// (function() {
+//     function generateUUID() {
+//         var d = new Date().getTime();
+//         var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+//           var r = (d + Math.random() * 16) % 16 | 0;
+//           d = Math.floor(d / 16);
+//           return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+//         });
+//         return uuid;
+//     }
+//     function isBot() {
+//         var botRegex = /bot|crawl|slurp|spider/i;
+//         return botRegex.test(navigator.userAgent);
+//     }
+//     function isHeadless() {
+//         return !window.chrome || !window.chrome.webstore || !window.chrome.webstore.install;
+//     }
+//     function getVisitorId() {
+//         var visitorId = null;
+//         if (!isBot()) {
+//           console.log('not a bot');
+//           var cookies = document.cookie.split(';');
+//           for (var i = 0; i < cookies.length; i++) {
+//               var cookie = cookies[i].trim();
+//               if (cookie.indexOf('visitor_id=') === 0) {
+//                 visitorId = cookie.substring('visitor_id='.length, cookie.length);
+//                 break;
+//               }
+//           }
+//           if (!visitorId) {
+//               visitorId = generateUUID();
+//               console.log('visitorId by geneateUUID', visitorId);
+//               var date = new Date();
+//               date.setTime(date.getTime() + (30 * 24 * 60 * 60 * 1000)); // cookie expires in 30 days
+//               var expires = "expires="+date.toUTCString();
+//               document.cookie = "visitor_id=" + visitorId + ";" + expires + ";path=/";
+//           }
+//         }
+//         return visitorId;
+//     }
+//     function debounce(func, wait) {
+//       var timeout;
+//       return function() {
+//         var context = this;
+//         var args = arguments;
+//         clearTimeout(timeout);
+//         timeout = setTimeout(function() {
+//           timeout = null;
+//           func.apply(context, args);
+//         }, wait);
+//       };
+//     }
+//     function getIpAddress() {
+//         return new Promise(function(resolve, reject) {
+//           var xhr = new XMLHttpRequest();
+//           xhr.open('GET', 'https://api.ipify.org?format=json', true);
+//           xhr.onload = function() {
+//             if (xhr.status === 200) {
+//               var response = JSON.parse(xhr.responseText);
+//               resolve(response.ip);
+//             } else {
+//               reject(xhr.statusText);
+//             }
+//         };
+//         xhr.onerror = function() {
+//             reject(xhr.statusText);
+//         };
+//         xhr.send();
+//         });
+//     }
+//     function getSessionDuration() {
+//         var duration = Math.floor((Date.now() - (sessionStorage.getItem('start_time') || Date.now())) / 1000);
+//         sessionStorage.setItem('start_time', Date.now());
+//         return duration;
+//     }
+//     function getQueryStringParams() {
+//         var params = {};
+//         var search = window.location.search.substring(1);
+//         if (search) {
+//         var parts = search.split('&');
+//         for (var i = 0; i < parts.length; i++) {
+//             var keyValuePair = parts[i].split('=');
+//             if (keyValuePair.length === 2) {
+//             params[keyValuePair[0]] = decodeURIComponent(keyValuePair[1].replace(/\+/g, ' '));
+//             }
+//         }
+//         }
+//         return params;
+//     }
+//     var debouncedSendTrackingData = debounce(sendTrackingData, 5000);
+//     function sendTrackingDataOnEvent(event) {
+//       window.addEventListener(event, function() {
+//         debouncedSendTrackingData();
+//       });
+//     }
+//     function sendTrackingData() {
+//       console.log("sendTrackingData() called");
+//       var visitorId = getVisitorId();
+//       console.log("visitorId", visitorId);
+//       if (visitorId) {
+//         console.log('Visitor ID:', visitorId);
+//         getIpAddress().then(function(ipAddress) {
+//           var data = {
+//             visitor_id: visitorId,
+//             website_id: '$trackingCode',
+//             referrer: document.referrer,
+//             url: window.location.href,
+//             title: document.title,
+//             ip_address: ipAddress,
+//             session_duration: getSessionDuration(),
+//             query_string_params: getQueryStringParams(),
+//             screen_size: {
+//               width: window.screen.width,
+//               height: window.screen.height
+//             },
+//             device_type: /Mobi/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop',
+//             operating_system: navigator.platform,
+//             browser_version: navigator.userAgent
+//           };
+//           console.log('Data:', data);
+//           var request = new XMLHttpRequest();
+//           request.open('POST', 'https://app.leadrhino.io/api/tracking', true);
+//           request.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+//           request.send(JSON.stringify(data));
+//           console.log('XHR request sent');
+//         }).catch(function(error) {
+//           console.error('Error getting IP address:', error);
+//         });
+//       }
+//     }
+//     if (navigator.sendBeacon) {
+//       window.addEventListener('unload', function() {
+//         var visitorId = getVisitorId();
+//         if (visitorId) {
+//           getIpAddress().then(function(ipAddress) {
+//             var data = {
+//               visitor_id: visitorId,
+//               website_id: '$trackingCode',
+//               referrer: document.referrer,
+//               url: window.location.href,
+//               title: document.title,
+//               ip_address: ipAddress,
+//               session_duration: getSessionDuration(),
+//               query_string_params: getQueryStringParams(),
+//               screen_size: {
+//                 width: window.screen.width,
+//                 height: window.screen.height
+//               },
+//               device_type: /Mobi/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop',
+//               operating_system: navigator.platform,
+//               browser_version: navigator.userAgent
+//             };
+//             navigator.sendBeacon('https://app.leadrhino.io/api/tracking', JSON.stringify(data));
+//           }).catch(function(error) {
+//             console.error('Error getting IP address:', error);
+//           });
+//         }
+//       });
+//     } else {
+//       sendTrackingDataOnEvent('beforeunload');
+//     }
+//     sendTrackingDataOnEvent('load');
+//     sendTrackingDataOnEvent('scroll');
+//     sendTrackingDataOnEvent('click');
+//     debouncedSendTrackingData();
+// })();
+// SCRIPT;
