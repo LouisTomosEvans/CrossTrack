@@ -149,7 +149,6 @@ class TrackingController extends Controller
                   request.open('POST', 'https://app.leadrhino.io/api/tracking', true);
                   request.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
                   request.send(JSON.stringify(data));
-                });
               }
             }
             if (navigator.sendBeacon) {
