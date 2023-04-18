@@ -153,9 +153,9 @@
                         </template>
 
                         <!-- last seen + amount of days ago -->
-                        <template v-slot:item.last_active_at="{ item }">
+                        <template v-slot:item.last_event_time="{ item }">
                             <!-- if not null -->
-                            <span v-if="item.last_active_at !== null" style="color: #28323b; font-size: 0.8125rem;">{{ formatLastSeenDate(item.last_active_at) }}</span>
+                            <span v-if="item.last_event_time !== null" style="color: #28323b; font-size: 0.8125rem;">{{ formatLastSeenDate(item.last_event_time) }}</span>
                             <!-- if null -->
                             <span v-else style="color: #28323b; font-size: 0.8125rem;">-</span>
                         </template>
@@ -484,7 +484,7 @@ import { useWebsiteStore } from '../store/websiteStore.js';
                     { text: 'Tracking Status', value: 'tracking_status' },
                     { text: 'Website Status', value: 'active' },
                     { text: 'Date Created', value: 'created_at' },
-                    { text: 'Last Event', value: 'last_active_at' },
+                    { text: 'Last Event', value: 'last_event_time' },
                     { text: '', value: 'actions', sortable: false },
                 ],
                 websites: [],
