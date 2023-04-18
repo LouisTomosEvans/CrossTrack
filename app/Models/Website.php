@@ -18,6 +18,7 @@ class Website extends Model
         'team_id',
         'tracking_code',
         'tracking_status',
+        'last_event_time',
         'favicon',
         'domain',
     ];

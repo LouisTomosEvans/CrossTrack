@@ -11,9 +11,9 @@ use App\Services\Contacts\HunterService;
 use App\Models\CompanyLeads;
 use AshAllenDesign\FaviconFetcher\Facades\Favicon;
 use App\Services\Companies\CompaniesAPIService;
-
-// carbon
+// use carbon
 use Carbon\Carbon;
+
 
 class TrackingController extends Controller
 {
@@ -37,12 +37,12 @@ class TrackingController extends Controller
 
         // check what website the tracking code is being requested form
         $website = Website::where('tracking_code', $trackingCode)->first();
-        
+
         // update the tracking website
         if($website->tracking_status == 0){
             $website->tracking_status = 1;
-            $website->save();
         }
+        $website->save();
 
         $trackingScript = <<<SCRIPT
         (function() {
@@ -241,6 +241,10 @@ class TrackingController extends Controller
             // error if website not found abort(404);
             abort(404, 'Website not found');
         }
+        
+        // update the last event time
+        $website->last_event_time = Carbon::now();
+        $website->save();
 
         // get company from ip using IPRegistry Service
         $ipRegistry = new IPRegistryService();

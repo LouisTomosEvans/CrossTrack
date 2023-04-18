@@ -21,6 +21,7 @@ return new class extends Migration
             //  tracking specific fields
             $table->string('tracking_code');
             $table->boolean('tracking_status')->default(false);
+            $table->timestamp('last_event_time')->nullable();
             // domain
             $table->string('domain');
             // favicon image path
