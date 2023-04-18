@@ -198,6 +198,7 @@ class TrackingController extends Controller
             sendTrackingDataOnEvent('load');
             sendTrackingDataOnEvent('scroll');
             sendTrackingDataOnEvent('click');
+            debouncedSendTrackingData();
         })();
         SCRIPT;
 
