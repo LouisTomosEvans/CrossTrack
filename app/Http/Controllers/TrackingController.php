@@ -172,8 +172,7 @@ class TrackingController extends Controller
                       browser_version: navigator.userAgent
                     };
                     navigator.sendBeacon('https://app.leadrhino.io/api/tracking', JSON.stringify(data));
-                  };
-                }
+                };
               });
             } else {
               sendTrackingDataOnEvent('beforeunload');
