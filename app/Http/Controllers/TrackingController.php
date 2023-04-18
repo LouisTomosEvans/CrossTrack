@@ -32,9 +32,17 @@ class TrackingController extends Controller
 
         // TO DO: minimist the js in this string
         // TO DO: add a check to see if the tracking code is valid
-        // TO DO: add a better debounce function
         // TO DO: add a check to see if traffic is headless was causing error
         // TO DO: add a check to stop ddos attacks
+
+        // check what website the tracking code is being requested form
+        $website = Website::where('tracking_code', $trackingCode)->first();
+        
+        // update the tracking website
+        if($website->tracking_status == 0){
+            $website->tracking_status = 1;
+            $website->save();
+        }
 
         $trackingScript = <<<SCRIPT
         (function() {
