@@ -179,6 +179,7 @@ class TrackingController extends Controller
             } else {
               sendTrackingDataOnEvent('beforeunload');
             }
+            var debouncedSendTrackingData = debounce(sendTrackingData, 2000);
             function sendTrackingDataOnEvent(event) {
               if (event === 'load') {
                 window.addEventListener(event, function() {
@@ -188,12 +189,6 @@ class TrackingController extends Controller
               } else {
                 window.addEventListener(event, debouncedSendTrackingData);
               }
-            }
-            var debouncedSendTrackingData = debounce(sendTrackingData, 2000);
-            function sendTrackingDataOnEvent(event) {
-              window.addEventListener(event, function() {
-                debouncedSendTrackingData();
-              });
             }
             sendTrackingDataOnEvent('load');
             sendTrackingDataOnEvent('scroll');
