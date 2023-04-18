@@ -126,22 +126,6 @@ class TrackingController extends Controller
                 }
                 return params;
             }
-            var debouncedSendTrackingData = debounce(sendTrackingData, 2000);
-            function sendTrackingDataOnEvent(event) {
-              window.addEventListener(event, function() {
-                debouncedSendTrackingData();
-              });
-            }
-            function sendTrackingDataOnEvent(event) {
-              if (event === 'load') {
-                window.addEventListener(event, function() {
-                  sendTrackingData();
-                  window.addEventListener(event, debouncedSendTrackingData);
-                });
-              } else {
-                window.addEventListener(event, debouncedSendTrackingData);
-              }
-            }
             function sendTrackingData() {
               var visitorId = getVisitorId();
               if (visitorId) {
@@ -194,6 +178,22 @@ class TrackingController extends Controller
               });
             } else {
               sendTrackingDataOnEvent('beforeunload');
+            }
+            function sendTrackingDataOnEvent(event) {
+              if (event === 'load') {
+                window.addEventListener(event, function() {
+                  sendTrackingData();
+                  window.addEventListener(event, debouncedSendTrackingData);
+                });
+              } else {
+                window.addEventListener(event, debouncedSendTrackingData);
+              }
+            }
+            var debouncedSendTrackingData = debounce(sendTrackingData, 2000);
+            function sendTrackingDataOnEvent(event) {
+              window.addEventListener(event, function() {
+                debouncedSendTrackingData();
+              });
             }
             sendTrackingDataOnEvent('load');
             sendTrackingDataOnEvent('scroll');
