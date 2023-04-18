@@ -56,7 +56,7 @@ class DashboardController extends Controller
 
 
         // get graph data for visits and company leads this month
-        $dashboardData['visits_this_month'] = $data['visits']->where('timestamp', '>=', now()->startOfMonth())->groupBy(function ($item) {
+        $dashboardData['visits_this_month'] = $data['visits']->where('timestamp', '>=', now()->startOfMonth())->unique('visitor_id')->groupBy(function ($item) {
             // convert time stamp to date type
             return \Carbon\Carbon::parse($item->timestamp)->format('d');
         })->map(function ($item) {
