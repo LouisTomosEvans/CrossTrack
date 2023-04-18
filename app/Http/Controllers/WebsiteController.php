@@ -24,8 +24,7 @@ class WebsiteController extends Controller
         } 
         // get all websites for the current team and cache them
         $websites = auth()->user()->currentTeam->websites;
-        // cache the websites
-        cache()->put('websites', $websites, now()->addMinutes(5));
+
         // return the websites
         return $websites;
     }
