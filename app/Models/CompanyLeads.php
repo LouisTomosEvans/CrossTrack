@@ -134,7 +134,7 @@ class CompanyLeads extends Model
 
         // Update the score in the database
         $this->leadScore()->updateOrCreate(
-            ['company_lead_id' => $this->id],
+            ['company_leads_id' => $this->id],
             ['score' => $score]
         );
     }
