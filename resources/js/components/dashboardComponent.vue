@@ -153,7 +153,7 @@
                     </div>
                 </v-card>
             </div>
-            <div class="col-12">
+            <!-- <div class="col-12">
                 <v-card style="border-radius: 8px; box-shadow: 0px 0px 5px 0px rgba(40,50,59,.1);">
                     <div class="p-3 m-0 justify-content-between d-flex">
                         <b class="d-flex align-items-center"><span style="font-size: 1rem; color: #28323b;">How do you acquire users?</span></b>
@@ -176,7 +176,7 @@
                         </div>
                     </div>
                 </v-card>
-            </div>
+            </div> -->
             <div class="d-flex p-0 m-0">
             <div class="col-6 d-flex ">
                 <v-card style="border-radius: 8px; box-shadow: 0px 0px 5px 0px rgba(40,50,59,.1); width: 100%;">
@@ -365,20 +365,22 @@ import VueApexCharts from 'vue-apexcharts';
             },
             chartOptions() {
                 return {
+                    chart: {
                         events: {
                             mounted: (chart) => {
-                            chart.windowResizeHandler();
+                                chart.windowResizeHandler();
                             }
                         },
                         animations: {
                             enabled: false,
                         },
-                    height: 350,
-                    type: 'area',
-                    stacked: false,
-                    colors: ['#f05628', '#96C5F7'],
-                    zoom: {
-                        enabled: false
+                        height: 350,
+                        type: 'area',
+                        stacked: false,
+                        colors: ['#f05628', '#96C5F7'],
+                        zoom: {
+                            enabled: false
+                        },
                     },
                     stroke: {
                         width: [0, 2, 2],
@@ -433,61 +435,86 @@ import VueApexCharts from 'vue-apexcharts';
                     }
                 }
             },
-            refferalChartOptions() {
-                return {
-                    chart: {
-                        animations: {
-                            enabled: false,
-                        },
-                        events: {
-                            mounted: (chart) => {
-                                chart.windowResizeHandler();
-                            }
-                        },
-                    type: 'bar',
-                    height: 350,
-                    stacked: true,
-                    toolbar: {
-                        show: false
-                    },
-                    zoom: {
-                        enabled: false
-                    }
-                    },
-                    responsive: [{
-                    breakpoint: 480,
-                    options: {
-                        legend: {
-                        position: 'bottom',
-                        offsetX: -10,
-                        offsetY: 0
-                        }
-                    }
-                    }],
-                    plotOptions: {
-                    bar: {
-                        horizontal: false,
-                        borderRadius: 10
-                    },
-                    },
-                    xaxis: {
-                        type: 'datetime',
-                        categories: this.appStore.dashboardData.labels ?? [],
-                    },
-                    legend: {
-                        show: false
-                    },
-                    fill: {
-                        colors: ['#e74645', '#F2AC39', '#74D3AE', '#2D7DD2']
-                    },
-                }
-            },
-            refferalSeries() {
-                return this.appStore.dashboardData.top_referrers_this_month_data
-            },
+            // refferalChartOptions() {
+            //     return {
+            //         chart: {
+            //             animations: {
+            //                 enabled: false,
+            //             },
+            //             events: {
+            //                 mounted: (chart) => {
+            //                     chart.windowResizeHandler();
+            //                 }
+            //             },
+            //             type: 'bar',
+            //             height: 350,
+            //             stacked: true,
+            //             toolbar: {
+            //                 show: false
+            //             },
+            //             zoom: {
+            //                 enabled: false
+            //             }
+            //         },
+            //         responsive: [{
+            //         breakpoint: 480,
+            //         options: {
+            //             legend: {
+            //             position: 'bottom',
+            //             offsetX: -10,
+            //             offsetY: 0
+            //             }
+            //         }
+            //         }],
+            //         plotOptions: {
+            //         bar: {
+            //             horizontal: false,
+            //             borderRadius: 10
+            //         },
+            //         },
+            //         xaxis: {
+            //             type: 'datetime',
+            //             categories: this.appStore.dashboardData.labels ?? [],
+            //         },
+            //         legend: {
+            //             show: false
+            //         },
+            //         fill: {
+            //             colors: ['#e74645', '#F2AC39', '#74D3AE', '#2D7DD2']
+            //         },
+            //     }
+            // },
+            // refferalSeries() {
+            //     return this.appStore.dashboardData.top_referrers_this_month_data
+            // },
         },
         data(){
             return {
+                splineChartOptions: {
+                    chart: {
+                    events: {
+                        mounted: function mounted(chart) {
+                        chart.windowResizeHandler();
+                        }
+                    },
+                    animations: {
+                        enabled: false
+                    },
+                    height: 150,
+                    colors: ['#74D3AE'],
+                    type: 'area',
+                    sparkline: {
+                        enabled: true
+                    }
+                    },
+                    stroke: {
+                    curve: 'straight',
+                    colors: ['#74D3AE']
+                    },
+                    fill: {
+                    colors: ['#74D3AE']
+                    }
+                },
                 pieseries: [44, 55, 13, 43, 22],
                 piechartOptions: {
                     chart: {

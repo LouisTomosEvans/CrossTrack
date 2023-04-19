@@ -90,19 +90,19 @@ class DashboardController extends Controller
         })->sortDesc()->take(5)->toArray();
 
         // get a break down of refferers this month based on unique visitors
-        $dashboardData['top_referrers_this_month'] = $data['visits']->where('timestamp', '>=', now()->startOfMonth())->groupBy('referrer')->map(function ($item) {
-            return $item->unique('visitor_id')->count();
-        })->sortDesc()->toArray();
+        // $dashboardData['top_referrers_this_month'] = $data['visits']->where('timestamp', '>=', now()->startOfMonth())->groupBy('referrer')->map(function ($item) {
+        //     return $item->unique('visitor_id')->count();
+        // })->sortDesc()->toArray();
 
-        // go through top 5 refferers and get the frequency of unique visitors per day this month
-        $dashboardData['top_referrers_this_month_data'] = [];
-        foreach ($dashboardData['top_referrers_this_month'] as $key => $value) {
-            $dashboardData['top_referrers_this_month_data'][$key] = $data['visits']->where('timestamp', '>=', now()->startOfMonth())->where('referrer', $key)->groupBy(function ($item) {
-                return \Carbon\Carbon::parse($item->timestamp)->format('d');
-            })->map(function ($item) {
-                return $item->unique('visitor_id')->count();
-            })->toArray();
-        }
+        // // go through top 5 refferers and get the frequency of unique visitors per day this month
+        // $dashboardData['top_referrers_this_month_data'] = [];
+        // foreach ($dashboardData['top_referrers_this_month'] as $key => $value) {
+        //     $dashboardData['top_referrers_this_month_data'][$key] = $data['visits']->where('timestamp', '>=', now()->startOfMonth())->where('referrer', $key)->groupBy(function ($item) {
+        //         return \Carbon\Carbon::parse($item->timestamp)->format('d');
+        //     })->map(function ($item) {
+        //         return $item->unique('visitor_id')->count();
+        //     })->toArray();
+        // }
 
         $now = new DateTime();
         $daysInMonth = (int)$now->format('j');
@@ -133,21 +133,21 @@ class DashboardController extends Controller
             }
         }
 
-        $referrerData = [];
-        foreach ($dashboardData['top_referrers_this_month_data'] as $referrer => $refData) {
-            $newRefData = array_fill(0, $daysInMonth, 0);
-            foreach ($refData as $day => $count) {
-                $newRefData[$day - 1] = $count;
-            }
-            $referrerData[$referrer] = [
-                'name' => $referrer,
-                'data' => $newRefData
-            ];
-        }
+        // $referrerData = [];
+        // foreach ($dashboardData['top_referrers_this_month_data'] as $referrer => $refData) {
+        //     $newRefData = array_fill(0, $daysInMonth, 0);
+        //     foreach ($refData as $day => $count) {
+        //         $newRefData[$day - 1] = $count;
+        //     }
+        //     $referrerData[$referrer] = [
+        //         'name' => $referrer,
+        //         'data' => $newRefData
+        //     ];
+        // }
         // unset top referrers this month 
-        unset($dashboardData['top_referrers_this_month']);
-        $top_referrers_this_month = array_values($referrerData);
-        $dashboardData['top_referrers_this_month_data'] = $top_referrers_this_month;
+        // unset($dashboardData['top_referrers_this_month']);
+        // $top_referrers_this_month = array_values($referrerData);
+        // $dashboardData['top_referrers_this_month_data'] = $top_referrers_this_month;
         $dashboardData['returning_leads_this_month_data'] = $returning_leads_this_month;
         $dashboardData['leads_this_month'] = $leads_this_month;
         $dashboardData['visits_this_month'] = $visits_this_month;
