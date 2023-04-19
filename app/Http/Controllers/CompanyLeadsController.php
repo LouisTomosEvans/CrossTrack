@@ -43,6 +43,11 @@ class CompanyLeadsController extends Controller
                 return $item->count();
             })->sortDesc()->take(3)->toArray();
 
+            $lead->users = $lead->users->map(function ($user) {
+                $user->name = $user->name;
+                return $user;
+            });
+
         }
 
         // return the leads

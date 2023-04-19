@@ -178,6 +178,26 @@
                                 ></v-progress-linear>
                             </div>
                         </template>
+
+                        <template v-slot:item.users="{ item }">
+                            <!-- for each users disply their avatar -->
+                            <div v-if="item.users" class="d-flex align-items-center">
+
+                                <div v-for="(user, index) in item.users" :key="user.id" class="avatar-container" :class="{'avatar-overlap': index > 0}" :style="{left: index > 0 ? (-10 * index) + 'px' : ''}">
+                                    <!-- show avatar -->
+                                    <v-tooltip bottom>
+                                        <template v-slot:activator="{ on, attrs }">
+                                            <div class="avatar" v-bind="attrs" v-on="on">
+                                                <!-- 0.75 size -->
+                                                <img alt="Avatar" :src="getAvatar(user.name)">
+                                            </div>
+                                        </template>
+                                        <span>{{ user.name }}</span>
+                                    </v-tooltip>
+                                </div>
+                            </div>
+                        </template>
+
                         </v-data-table>
                         <!-- data table -->
 
@@ -562,9 +582,9 @@ import { useLeadStore } from '../store/leadStore';
                         sortable: false,
                         value: 'name',
                     },
-                    { text: 'Location', value: 'location' },
                     { text: 'Visited', value: 'website_name'},
-                    { text: 'Num. visits', value: 'visit_count' },
+                    { text: 'Num. visitors', value: 'unique_visitors' },
+                    { text: 'Assigned to', value: 'users' },
                     { text: 'Lead Score', value: 'lead_score' },
                     // { text: 'Last Seen', value: 'last_seen' },
                     { text: '', value: 'details', sortable: false, align: 'end' },
@@ -640,6 +660,12 @@ import { useLeadStore } from '../store/leadStore';
                     // return bright green
                     return '#00E676';
                 }
+            },
+            getAvatar: function (name) {
+                return "https://ui-avatars.com/api/?background=" + this.removeHash(this.appStore.primary_color) + "&color=fff&bold=true&name=" + name;
+            },
+            removeHash: function (hex) {
+                return hex.replace('#', '');
             },
             // rand is not a function
             rand(min, max) {
@@ -829,6 +855,27 @@ import { useLeadStore } from '../store/leadStore';
     background-color: transparent !important;
 
 }
+
+.avatar-container {
+    position: relative;
+}
+.avatar {
+    height: 24px;
+    width: 24px;
+    border-radius: 50% !important;
+    border: 2px solid white;
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50% !important;
+}
+
+.avatar-overlap-increasing {
+    position: relative;
+}
+
 
 
 
