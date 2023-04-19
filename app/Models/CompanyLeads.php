@@ -93,10 +93,9 @@ class CompanyLeads extends Model
         $interaction_count = $this->visits->where('interaction', '=', 'click')->count();
         $total_page_views = $this->visits->unique('title')->count();
         // contact, pricing, demo
-        $high_value_page_views = $this->visits->where('title', 'LIKE', '%contact%')->orWhere('title', 'LIKE', '%pricing%')->orWhere('title', 'LIKE', '%demo%')->where('interaction', '=', 'load')->count();
-        $high_value_time_spent = $this->visits->where('title', 'LIKE', '%contact%')->orWhere('title', 'LIKE', '%pricing%')->orWhere('title', 'LIKE', '%demo%')->sum('session_duration');
-        $high_value_interactions = $this->visits->where('title', 'LIKE', '%contact%')->orWhere('title', 'LIKE', '%pricing%')->orWhere('title', 'LIKE', '%demo%')->where('interaction', '=', 'click')->count();
-
+        $high_value_page_views = $this->visits->where(function ($query) {$query->where('title', 'LIKE', '%contact%')->orWhere('title', 'LIKE', '%pricing%')->orWhere('title', 'LIKE', '%demo%');})->where('interaction', '=', 'load')->count();
+        $high_value_time_spent = $this->visits->where(function ($query) {$query->where('title', 'LIKE', '%contact%')->orWhere('title', 'LIKE', '%pricing%')->orWhere('title', 'LIKE', '%demo%');})->sum('session_duration');
+        $high_value_interactions = $this->visits->where(function ($query) {$query->where('title', 'LIKE', '%contact%')->orWhere('title', 'LIKE', '%pricing%')->orWhere('title', 'LIKE', '%demo%');})->where('interaction', '=', 'click')->count();
 
         // Calculate the raw lead score using the weights and the stored values
         $rawScore = (
