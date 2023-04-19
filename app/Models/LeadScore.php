@@ -10,6 +10,11 @@ class LeadScore extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'company_leads_id',
+        'score',
+    ]; 
+
     public function companyLead()
     {
         return $this->belongsTo(CompanyLeads::class);
