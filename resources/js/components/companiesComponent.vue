@@ -139,9 +139,9 @@
                         <template v-slot:item.website_name="{ item }">
                             <div v-if="item" class="d-flex align-items-center">
                                 <!-- website icon -->
-                                <v-avatar class="mr-1" size="24" color="info" v-if="!item.website_favicon">
+                                <v-avatar class="mr-1" rounded size="24" color="info" v-if="!item.website_favicon">
                                     <!-- 0.75 size -->
-                                    <v-icon color="white" style="font-size: 0.95rem;">mdi-web</v-icon>
+                                    <v-icon color="white" style="font-size: 0.95rem;">mdi-domain</v-icon>
                                 </v-avatar>
                                 <!-- show favicon -->
                                 <div class="mr-1" style="height: 24px; width: 24px;" v-else>
