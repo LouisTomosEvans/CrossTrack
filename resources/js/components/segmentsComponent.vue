@@ -645,7 +645,7 @@
                     },
                     { text: 'Website', value: 'website.name' },
                     { text: 'Criteria', value: 'criteria' },
-                    { text: 'Assigned to', value: 'users' },
+                    { text: 'Assign segment leads to', value: 'users' },
                     { text: 'Created at', value: 'created_at' },
                     { text: '', value: 'actions', sortable: false },
                     

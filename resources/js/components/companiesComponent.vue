@@ -232,9 +232,9 @@
                                     <div class="d-flex justify-content-between">
                                         <div class="d-flex align-items-start justify-content-between" style="margin: 1rem; width: 100%;">
                                             <div class="m-0 p-0 d-flex" style="max-width: 75%;">
-                                            <v-avatar rounded size="45" color="info" v-if="!leadItem.logo">
+                                            <v-avatar rounded size="45" class="mr-2" color="info" v-if="!leadItem.logo">
                                                 <!-- 0.75 size -->
-                                                <v-icon color="white" style="font-size: 0.95rem;">mdi-web</v-icon>
+                                                <v-icon color="white" style="font-size: 1.2rem;">mdi-domain</v-icon>
                                             </v-avatar>
                                             <!-- show favicon -->
                                             <div class="mr-1" style="height: 45px; width: 45px;" v-else>
