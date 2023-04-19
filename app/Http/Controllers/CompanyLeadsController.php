@@ -26,7 +26,7 @@ class CompanyLeadsController extends Controller
         //  for each lead get website name and visit count, unique visits based on visitor id, unique pages based on url, total duration of visits on the website, company lead location and company lead name
         foreach ($leads as $lead) {
             $lead->website_name = $lead->website->name;
-            $lead->favicon = $lead->website->favicon;
+            $lead->website_favicon = $lead->website->favicon;
             $lead->visit_count = $lead->visits->count();
             $lead->last_seen = $lead->visits->sortByDesc('timestamp')->first()->timestamp;
             $lead->location = $lead->city . ', ' . $lead->country;
@@ -42,6 +42,7 @@ class CompanyLeadsController extends Controller
             $lead->top_sources = $lead->visits->groupBy('referrer')->map(function ($item) {
                 return $item->count();
             })->sortDesc()->take(3)->toArray();
+
         }
 
         // return the leads

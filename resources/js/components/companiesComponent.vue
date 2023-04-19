@@ -136,7 +136,7 @@
                                     </v-btn>
                         </template>
                         <!-- website -->
-                        <template v-slot:item.website.name="{ item }">
+                        <template v-slot:item.website_name="{ item }">
                             <div v-if="item" class="d-flex align-items-center">
                                 <!-- website icon -->
                                 <v-avatar class="mr-1" size="24" color="info" v-if="!item.website_favicon">
