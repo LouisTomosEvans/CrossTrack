@@ -88,14 +88,14 @@ class CompanyLeads extends Model
 
         // Retrieve the total time spent on pages and interaction count for the CompanyLead
         // Adjust the queries according to your data structure and relationships
-        $unique_visitors = $this->companyLead->visits->unique('visitor_id')->count();
-        $total_time_spent = $this->companyLead->visits->sum('session_duration');
-        $interaction_count = $this->companyLead->visits->where('interaction', '=', 'click')->count();
-        $total_page_views = $this->companyLead->visits->unique('title')->count();
+        $unique_visitors = $this->visits->unique('visitor_id')->count();
+        $total_time_spent = $this->visits->sum('session_duration');
+        $interaction_count = $this->visits->where('interaction', '=', 'click')->count();
+        $total_page_views = $this->visits->unique('title')->count();
         // contact, pricing, demo
-        $high_value_page_views = $this->companyLead->visits->where('title', 'LIKE', '%contact%')->orWhere('title', 'LIKE', '%pricing%')->orWhere('title', 'LIKE', '%demo%')->where('interaction', '=', 'load')->count();
-        $high_value_time_spent = $this->companyLead->visits->where('title', 'LIKE', '%contact%')->orWhere('title', 'LIKE', '%pricing%')->orWhere('title', 'LIKE', '%demo%')->sum('session_duration');
-        $high_value_interactions = $this->companyLead->visits->where('title', 'LIKE', '%contact%')->orWhere('title', 'LIKE', '%pricing%')->orWhere('title', 'LIKE', '%demo%')->where('interaction', '=', 'click')->count();
+        $high_value_page_views = $this->visits->where('title', 'LIKE', '%contact%')->orWhere('title', 'LIKE', '%pricing%')->orWhere('title', 'LIKE', '%demo%')->where('interaction', '=', 'load')->count();
+        $high_value_time_spent = $this->visits->where('title', 'LIKE', '%contact%')->orWhere('title', 'LIKE', '%pricing%')->orWhere('title', 'LIKE', '%demo%')->sum('session_duration');
+        $high_value_interactions = $this->visits->where('title', 'LIKE', '%contact%')->orWhere('title', 'LIKE', '%pricing%')->orWhere('title', 'LIKE', '%demo%')->where('interaction', '=', 'click')->count();
 
 
         // Calculate the raw lead score using the weights and the stored values
