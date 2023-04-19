@@ -45,162 +45,7 @@ class TrackingController extends Controller
         $website->save();
 
         $trackingScript = <<<SCRIPT
-        (function() {
-            function generateUUID() {
-                var d = new Date().getTime();
-                var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-                  var r = (d + Math.random() * 16) % 16 | 0;
-                  d = Math.floor(d / 16);
-                  return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
-                });
-                return uuid;
-            }
-            function isBot() {
-                var botRegex = /bot|crawl|slurp|spider/i;
-                return botRegex.test(navigator.userAgent);
-            }
-            function isHeadless() {
-                return !window.chrome || !window.chrome.webstore || !window.chrome.webstore.install;
-            }
-            function getVisitorId() {
-                var visitorId = null;
-                if (!isBot()) {
-                  console.log('not a bot');
-                  var cookies = document.cookie.split(';');
-                  for (var i = 0; i < cookies.length; i++) {
-                      var cookie = cookies[i].trim();
-                      if (cookie.indexOf('visitor_id=') === 0) {
-                        visitorId = cookie.substring('visitor_id='.length, cookie.length);
-                        break;
-                      }
-                  }
-                  if (!visitorId) {
-                      visitorId = generateUUID();
-                      console.log('visitorId by geneateUUID', visitorId);
-                      var date = new Date();
-                      date.setTime(date.getTime() + (30 * 24 * 60 * 60 * 1000)); // cookie expires in 30 days
-                      var expires = "expires="+date.toUTCString();
-                      document.cookie = "visitor_id=" + visitorId + ";" + expires + ";path=/";
-                  }
-                }
-                return visitorId;
-            }
-            function debounce(func, wait) {
-              var timeout;
-              return function() {
-                var context = this;
-                var args = arguments;
-                clearTimeout(timeout);
-                timeout = setTimeout(function() {
-                  timeout = null;
-                  func.apply(context, args);
-                }, wait);
-              };
-            }
-            function getIpAddress() {
-                return new Promise(function(resolve, reject) {
-                  var xhr = new XMLHttpRequest();
-                  xhr.open('GET', 'https://api.ipify.org?format=json', true);
-                  xhr.onload = function() {
-                    if (xhr.status === 200) {
-                      var response = JSON.parse(xhr.responseText);
-                      resolve(response.ip);
-                    } else {
-                      reject(xhr.statusText);
-                    }
-                };
-                xhr.onerror = function() {
-                    reject(xhr.statusText);
-                };
-                xhr.send();
-                });
-            }
-            function getSessionDuration() {
-                var duration = Math.floor((Date.now() - (sessionStorage.getItem('start_time') || Date.now())) / 1000);
-                sessionStorage.setItem('start_time', Date.now());
-                return duration;
-            }
-            function getQueryStringParams() {
-                var params = {};
-                var search = window.location.search.substring(1);
-                if (search) {
-                var parts = search.split('&');
-                for (var i = 0; i < parts.length; i++) {
-                    var keyValuePair = parts[i].split('=');
-                    if (keyValuePair.length === 2) {
-                    params[keyValuePair[0]] = decodeURIComponent(keyValuePair[1].replace(/\+/g, ' '));
-                    }
-                }
-                }
-                return params;
-            }
-            function sendTrackingData() {
-              var visitorId = getVisitorId();
-              if (visitorId) {
-                  var data = {
-                    visitor_id: visitorId,
-                    website_id: '$trackingCode',
-                    referrer: document.referrer,
-                    url: window.location.href,
-                    title: document.title,
-                    session_duration: getSessionDuration(),
-                    query_string_params: getQueryStringParams(),
-                    screen_size: {
-                      width: window.screen.width,
-                      height: window.screen.height
-                    },
-                    device_type: /Mobi/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop',
-                    operating_system: navigator.platform,
-                    browser_version: navigator.userAgent
-                  };
-                  var request = new XMLHttpRequest();
-                  request.open('POST', 'https://app.leadrhino.io/api/tracking', true);
-                  request.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-                  request.send(JSON.stringify(data));
-              }
-            }
-            if (navigator.sendBeacon) {
-              window.addEventListener('unload', function() {
-                var visitorId = getVisitorId();
-                if (visitorId) {
-                  var data = {
-                      visitor_id: visitorId,
-                      website_id: '$trackingCode',
-                      referrer: document.referrer,
-                      url: window.location.href,
-                      title: document.title,
-                      session_duration: getSessionDuration(),
-                      query_string_params: getQueryStringParams(),
-                      screen_size: {
-                        width: window.screen.width,
-                        height: window.screen.height
-                      },
-                      device_type: /Mobi/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop',
-                      operating_system: navigator.platform,
-                      browser_version: navigator.userAgent
-                    };
-                    navigator.sendBeacon('https://app.leadrhino.io/api/tracking', JSON.stringify(data));
-                };
-              });
-            } else {
-              sendTrackingDataOnEvent('beforeunload');
-            }
-            var debouncedSendTrackingData = debounce(sendTrackingData, 2000);
-            function sendTrackingDataOnEvent(event) {
-              if (event === 'load') {
-                window.addEventListener(event, function() {
-                  sendTrackingData();
-                  window.addEventListener(event, debouncedSendTrackingData);
-                });
-              } else {
-                window.addEventListener(event, debouncedSendTrackingData);
-              }
-            }
-            sendTrackingDataOnEvent('load');
-            sendTrackingDataOnEvent('scroll');
-            sendTrackingDataOnEvent('click');
-            debouncedSendTrackingData();
-        })();
+        !function(){function e(){return!window.chrome||!window.chrome.webstore||!window.chrome.webstore.install}function t(){var e=null;if(!/bot|crawl|slurp|spider/i.test(navigator.userAgent)){console.log("not a bot");for(var t=document.cookie.split(";"),r=0;r<t.length;r++){var i=t[r].trim();if(0===i.indexOf("visitor_id=")){e=i.substring(11,i.length);break}}if(!e){e=(n=new Date().getTime(),"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,function(e){var t=(n+16*Math.random())%16|0;return n=Math.floor(n/16),("x"==e?t:3&t|8).toString(16)})),console.log("visitorId by geneateUUID",e);var n,o=new Date;o.setTime(o.getTime()+2592e6);var s="expires="+o.toUTCString();document.cookie="visitor_id="+e+";"+s+";path=/"}}return e}function r(){return new Promise(function(e,t){var r=new XMLHttpRequest;r.open("GET","https://api.ipify.org?format=json",!0),r.onload=function(){200===r.status?e(JSON.parse(r.responseText).ip):t(r.statusText)},r.onerror=function(){t(r.statusText)},r.send()})}function i(){var e=Math.floor((Date.now()-(sessionStorage.getItem("start_time")||Date.now()))/1e3);return sessionStorage.setItem("start_time",Date.now()),e}function n(){var e={},t=window.location.search.substring(1);if(t)for(var r=t.split("&"),i=0;i<r.length;i++){var n=r[i].split("=");2===n.length&&(e[n[0]]=decodeURIComponent(n[1].replace(/\+/g," ")))}return e}function o(){var e=t();if(e){var r={visitor_id:e,website_id:"$trackingCode",referrer:document.referrer,url:window.location.href,title:document.title,session_duration:i(),query_string_params:n(),screen_size:{width:window.screen.width,height:window.screen.height},device_type:/Mobi/i.test(navigator.userAgent)?"Mobile":"Desktop",operating_system:navigator.platform,browser_version:navigator.userAgent},o=new XMLHttpRequest;o.open("POST","https://app.leadrhino.io/api/tracking",!0),o.setRequestHeader("Content-Type","application/json;charset=UTF-8"),o.send(JSON.stringify(r))}}navigator.sendBeacon?window.addEventListener("unload",function(){var e=t();if(e){var r={visitor_id:e,website_id:"$trackingCode",referrer:document.referrer,url:window.location.href,title:document.title,session_duration:i(),query_string_params:n(),screen_size:{width:window.screen.width,height:window.screen.height},device_type:/Mobi/i.test(navigator.userAgent)?"Mobile":"Desktop",operating_system:navigator.platform,browser_version:navigator.userAgent};navigator.sendBeacon("https://app.leadrhino.io/api/tracking",JSON.stringify(r))}}):l("beforeunload");var s,a,c=(s=o,function(){var e=this,t=arguments;clearTimeout(a),a=setTimeout(function(){a=null,s.apply(e,t)},2e3)});function l(e){"load"===e?window.addEventListener(e,function(){o(),window.addEventListener(e,c)}):window.addEventListener(e,c)}l("load"),l("scroll"),l("click"),c()}();
         SCRIPT;
 
         return response($trackingScript, 200)->header('Content-Type', 'application/javascript')->header('Cache-Control', 'no-cache, no-store, must-revalidate');
@@ -371,117 +216,131 @@ class TrackingController extends Controller
 }
 
 
-// legacy tracking:
-// $trackingScript = <<<SCRIPT
+// pre-minified tracking:
 // (function() {
-//     function generateUUID() {
-//         var d = new Date().getTime();
-//         var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-//           var r = (d + Math.random() * 16) % 16 | 0;
-//           d = Math.floor(d / 16);
-//           return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
-//         });
-//         return uuid;
-//     }
-//     function isBot() {
-//         var botRegex = /bot|crawl|slurp|spider/i;
-//         return botRegex.test(navigator.userAgent);
-//     }
-//     function isHeadless() {
-//         return !window.chrome || !window.chrome.webstore || !window.chrome.webstore.install;
-//     }
-//     function getVisitorId() {
-//         var visitorId = null;
-//         if (!isBot()) {
-//           console.log('not a bot');
-//           var cookies = document.cookie.split(';');
-//           for (var i = 0; i < cookies.length; i++) {
-//               var cookie = cookies[i].trim();
-//               if (cookie.indexOf('visitor_id=') === 0) {
-//                 visitorId = cookie.substring('visitor_id='.length, cookie.length);
-//                 break;
-//               }
-//           }
-//           if (!visitorId) {
-//               visitorId = generateUUID();
-//               console.log('visitorId by geneateUUID', visitorId);
-//               var date = new Date();
-//               date.setTime(date.getTime() + (30 * 24 * 60 * 60 * 1000)); // cookie expires in 30 days
-//               var expires = "expires="+date.toUTCString();
-//               document.cookie = "visitor_id=" + visitorId + ";" + expires + ";path=/";
-//           }
-//         }
-//         return visitorId;
-//     }
-//     function debounce(func, wait) {
-//       var timeout;
-//       return function() {
-//         var context = this;
-//         var args = arguments;
-//         clearTimeout(timeout);
-//         timeout = setTimeout(function() {
-//           timeout = null;
-//           func.apply(context, args);
-//         }, wait);
-//       };
-//     }
-//     function getIpAddress() {
-//         return new Promise(function(resolve, reject) {
-//           var xhr = new XMLHttpRequest();
-//           xhr.open('GET', 'https://api.ipify.org?format=json', true);
-//           xhr.onload = function() {
-//             if (xhr.status === 200) {
-//               var response = JSON.parse(xhr.responseText);
-//               resolve(response.ip);
-//             } else {
-//               reject(xhr.statusText);
-//             }
-//         };
-//         xhr.onerror = function() {
-//             reject(xhr.statusText);
-//         };
-//         xhr.send();
-//         });
-//     }
-//     function getSessionDuration() {
-//         var duration = Math.floor((Date.now() - (sessionStorage.getItem('start_time') || Date.now())) / 1000);
-//         sessionStorage.setItem('start_time', Date.now());
-//         return duration;
-//     }
-//     function getQueryStringParams() {
-//         var params = {};
-//         var search = window.location.search.substring(1);
-//         if (search) {
-//         var parts = search.split('&');
-//         for (var i = 0; i < parts.length; i++) {
-//             var keyValuePair = parts[i].split('=');
-//             if (keyValuePair.length === 2) {
-//             params[keyValuePair[0]] = decodeURIComponent(keyValuePair[1].replace(/\+/g, ' '));
-//             }
-//         }
-//         }
-//         return params;
-//     }
-//     var debouncedSendTrackingData = debounce(sendTrackingData, 5000);
-//     function sendTrackingDataOnEvent(event) {
-//       window.addEventListener(event, function() {
-//         debouncedSendTrackingData();
+//   function generateUUID() {
+//       var d = new Date().getTime();
+//       var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+//         var r = (d + Math.random() * 16) % 16 | 0;
+//         d = Math.floor(d / 16);
+//         return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
 //       });
+//       return uuid;
+//   }
+//   function isBot() {
+//       var botRegex = /bot|crawl|slurp|spider/i;
+//       return botRegex.test(navigator.userAgent);
+//   }
+//   function isHeadless() {
+//       return !window.chrome || !window.chrome.webstore || !window.chrome.webstore.install;
+//   }
+//   function getVisitorId() {
+//       var visitorId = null;
+//       if (!isBot()) {
+//         console.log('not a bot');
+//         var cookies = document.cookie.split(';');
+//         for (var i = 0; i < cookies.length; i++) {
+//             var cookie = cookies[i].trim();
+//             if (cookie.indexOf('visitor_id=') === 0) {
+//               visitorId = cookie.substring('visitor_id='.length, cookie.length);
+//               break;
+//             }
+//         }
+//         if (!visitorId) {
+//             visitorId = generateUUID();
+//             console.log('visitorId by geneateUUID', visitorId);
+//             var date = new Date();
+//             date.setTime(date.getTime() + (30 * 24 * 60 * 60 * 1000)); // cookie expires in 30 days
+//             var expires = "expires="+date.toUTCString();
+//             document.cookie = "visitor_id=" + visitorId + ";" + expires + ";path=/";
+//         }
+//       }
+//       return visitorId;
+//   }
+//   function debounce(func, wait) {
+//     var timeout;
+//     return function() {
+//       var context = this;
+//       var args = arguments;
+//       clearTimeout(timeout);
+//       timeout = setTimeout(function() {
+//         timeout = null;
+//         func.apply(context, args);
+//       }, wait);
+//     };
+//   }
+//   function getIpAddress() {
+//       return new Promise(function(resolve, reject) {
+//         var xhr = new XMLHttpRequest();
+//         xhr.open('GET', 'https://api.ipify.org?format=json', true);
+//         xhr.onload = function() {
+//           if (xhr.status === 200) {
+//             var response = JSON.parse(xhr.responseText);
+//             resolve(response.ip);
+//           } else {
+//             reject(xhr.statusText);
+//           }
+//       };
+//       xhr.onerror = function() {
+//           reject(xhr.statusText);
+//       };
+//       xhr.send();
+//       });
+//   }
+//   function getSessionDuration() {
+//       var duration = Math.floor((Date.now() - (sessionStorage.getItem('start_time') || Date.now())) / 1000);
+//       sessionStorage.setItem('start_time', Date.now());
+//       return duration;
+//   }
+//   function getQueryStringParams() {
+//       var params = {};
+//       var search = window.location.search.substring(1);
+//       if (search) {
+//       var parts = search.split('&');
+//       for (var i = 0; i < parts.length; i++) {
+//           var keyValuePair = parts[i].split('=');
+//           if (keyValuePair.length === 2) {
+//           params[keyValuePair[0]] = decodeURIComponent(keyValuePair[1].replace(/\+/g, ' '));
+//           }
+//       }
+//       }
+//       return params;
+//   }
+//   function sendTrackingData() {
+//     var visitorId = getVisitorId();
+//     if (visitorId) {
+//         var data = {
+//           visitor_id: visitorId,
+//           website_id: '$trackingCode',
+//           referrer: document.referrer,
+//           url: window.location.href,
+//           title: document.title,
+//           session_duration: getSessionDuration(),
+//           query_string_params: getQueryStringParams(),
+//           screen_size: {
+//             width: window.screen.width,
+//             height: window.screen.height
+//           },
+//           device_type: /Mobi/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop',
+//           operating_system: navigator.platform,
+//           browser_version: navigator.userAgent
+//         };
+//         var request = new XMLHttpRequest();
+//         request.open('POST', 'https://app.leadrhino.io/api/tracking', true);
+//         request.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+//         request.send(JSON.stringify(data));
 //     }
-//     function sendTrackingData() {
-//       console.log("sendTrackingData() called");
+//   }
+//   if (navigator.sendBeacon) {
+//     window.addEventListener('unload', function() {
 //       var visitorId = getVisitorId();
-//       console.log("visitorId", visitorId);
 //       if (visitorId) {
-//         console.log('Visitor ID:', visitorId);
-//         getIpAddress().then(function(ipAddress) {
-//           var data = {
+//         var data = {
 //             visitor_id: visitorId,
 //             website_id: '$trackingCode',
 //             referrer: document.referrer,
 //             url: window.location.href,
 //             title: document.title,
-//             ip_address: ipAddress,
 //             session_duration: getSessionDuration(),
 //             query_string_params: getQueryStringParams(),
 //             screen_size: {
@@ -492,51 +351,25 @@ class TrackingController extends Controller
 //             operating_system: navigator.platform,
 //             browser_version: navigator.userAgent
 //           };
-//           console.log('Data:', data);
-//           var request = new XMLHttpRequest();
-//           request.open('POST', 'https://app.leadrhino.io/api/tracking', true);
-//           request.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-//           request.send(JSON.stringify(data));
-//           console.log('XHR request sent');
-//         }).catch(function(error) {
-//           console.error('Error getting IP address:', error);
-//         });
-//       }
-//     }
-//     if (navigator.sendBeacon) {
-//       window.addEventListener('unload', function() {
-//         var visitorId = getVisitorId();
-//         if (visitorId) {
-//           getIpAddress().then(function(ipAddress) {
-//             var data = {
-//               visitor_id: visitorId,
-//               website_id: '$trackingCode',
-//               referrer: document.referrer,
-//               url: window.location.href,
-//               title: document.title,
-//               ip_address: ipAddress,
-//               session_duration: getSessionDuration(),
-//               query_string_params: getQueryStringParams(),
-//               screen_size: {
-//                 width: window.screen.width,
-//                 height: window.screen.height
-//               },
-//               device_type: /Mobi/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop',
-//               operating_system: navigator.platform,
-//               browser_version: navigator.userAgent
-//             };
-//             navigator.sendBeacon('https://app.leadrhino.io/api/tracking', JSON.stringify(data));
-//           }).catch(function(error) {
-//             console.error('Error getting IP address:', error);
-//           });
-//         }
+//           navigator.sendBeacon('https://app.leadrhino.io/api/tracking', JSON.stringify(data));
+//       };
+//     });
+//   } else {
+//     sendTrackingDataOnEvent('beforeunload');
+//   }
+//   var debouncedSendTrackingData = debounce(sendTrackingData, 2000);
+//   function sendTrackingDataOnEvent(event) {
+//     if (event === 'load') {
+//       window.addEventListener(event, function() {
+//         sendTrackingData();
+//         window.addEventListener(event, debouncedSendTrackingData);
 //       });
 //     } else {
-//       sendTrackingDataOnEvent('beforeunload');
+//       window.addEventListener(event, debouncedSendTrackingData);
 //     }
-//     sendTrackingDataOnEvent('load');
-//     sendTrackingDataOnEvent('scroll');
-//     sendTrackingDataOnEvent('click');
-//     debouncedSendTrackingData();
+//   }
+//   sendTrackingDataOnEvent('load');
+//   sendTrackingDataOnEvent('scroll');
+//   sendTrackingDataOnEvent('click');
+//   debouncedSendTrackingData();
 // })();
-// SCRIPT;
