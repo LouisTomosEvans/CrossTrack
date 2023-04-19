@@ -44,6 +44,7 @@ class CompanyLeads extends Model
         'timezone',
         'timezone_offset',
         'local_time',
+        'interaction',
     ];
 
     public function website()
