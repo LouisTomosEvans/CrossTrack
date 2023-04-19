@@ -133,7 +133,10 @@ class CompanyLeads extends Model
         $score = max(0, min($score, 100));
 
         // Update the score in the database
-        $this->leadScore->update(['score' => $score]);
+        $this->leadScore()->updateOrCreate(
+            ['company_lead_id' => $this->id],
+            ['score' => $score]
+        );
     }
 
 }
