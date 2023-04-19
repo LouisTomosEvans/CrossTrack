@@ -113,6 +113,7 @@ class TrackingController extends Controller
                 $visit = Visits::create($data);
                 $visit->company_leads_id = $companyLead->id;
                 $visit->save();
+                $companyLead->calculateScore();
                 return response()->json(['success' => true, 'message' => 'Visit created']);
               }
 
@@ -180,13 +181,6 @@ class TrackingController extends Controller
                 'updated_at' => Carbon::now(),
               ]);
 
-              // TO DO: make this more dynamic in determining if the website is active
-              // set website tracking staus to active if not active
-              if($website->tracking_status == 0){
-                $website->tracking_status = 1;
-                $website->save();
-              }
-
               // create visits and associate with company lead
               $visit = Visits::create($data);
               $visit->company_leads_id = $companyLead->id;
@@ -209,6 +203,9 @@ class TrackingController extends Controller
                   }
                 }
               }
+
+              // calculate lead score
+              $companyLead->calculateScore();
 
               return response()->json(['success' => true]);
             }
