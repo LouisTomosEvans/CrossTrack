@@ -488,35 +488,6 @@ import VueApexCharts from 'vue-apexcharts';
         },
         data(){
             return {
-                splineSeries: [{
-                    name: 'series1',
-                    data: [31, 40, 28, 51, 42,  100, 31, 40,42, 109, 100, 31, 40, 28, 51,28, 51, 42, 109, 100, 31, 40, 28, 51, 109,  42, 109, 100]
-                }],
-                splineChartOptions: {
-                    chart: {
-                        events: {
-                            mounted: (chart) => {
-                            chart.windowResizeHandler();
-                            }
-                        },
-                        animations: {
-                            enabled: false,
-                        },
-                    height: 150,
-                    colors: ['#74D3AE'],
-                    type: 'area',
-                    sparkline: {
-                        enabled: true,
-                    }
-                    },
-                    stroke: {
-                        curve: 'straight',
-                        colors: ['#74D3AE']
-                    },
-                    fill: {
-                        colors: ['#74D3AE']
-                    }
-                },  
                 pieseries: [44, 55, 13, 43, 22],
                 piechartOptions: {
                     chart: {

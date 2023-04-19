@@ -303,7 +303,7 @@
                                 <!-- divider -->
                                 <v-divider class="my-3" style="width: 100%; color: whitesmoke;"></v-divider>
                                 <div class="d-flex mb-6">
-                                    <v-btn-toggle variant="outlined" v-model="toggle" active-class="transparent" mandatory color="#f05628" style="width: 100%;" group>
+                                    <v-btn-toggle variant="outlined" v-model="toggle" active-class="transparent" mandatory color="#f05628" style="width: 100%; border: thin solid whitesmoke;" group>
                                     <v-btn elevation="0" :value="0" active-class="transparent" class="m-0 mr-1 flex-grow-1 button-background" style="border-radius: 0px; font-size: 0.75rem; font-weight: 700; text-decoration: none; text-transform: none !important; letter-spacing: 0; text-indent: 0; height: 36px; ">
                                         Activity
                                     </v-btn>
