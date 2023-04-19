@@ -9,6 +9,7 @@ use App\Models\Website;
 use App\Models\Visits;
 use App\Models\Note;
 use App\Models\User;
+use App\Models\LeadScore;
 
 
 class CompanyLeads extends Model
@@ -63,6 +64,11 @@ class CompanyLeads extends Model
     public function users()
     {
         return $this->belongsToMany(User::class, 'lead_user');
+    }
+
+    public function leadScore()
+    {
+        return $this->hasOne(LeadScore::class);
     }
 
 }

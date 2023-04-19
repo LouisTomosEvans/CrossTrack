@@ -45,7 +45,7 @@ class TrackingController extends Controller
         $website->save();
 
         $trackingScript = <<<SCRIPT
-        !function(){function e(){return!window.chrome||!window.chrome.webstore||!window.chrome.webstore.install}function t(){var e=null;if(!/bot|crawl|slurp|spider/i.test(navigator.userAgent)){console.log("not a bot");for(var t=document.cookie.split(";"),r=0;r<t.length;r++){var i=t[r].trim();if(0===i.indexOf("visitor_id=")){e=i.substring(11,i.length);break}}if(!e){e=(n=new Date().getTime(),"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,function(e){var t=(n+16*Math.random())%16|0;return n=Math.floor(n/16),("x"==e?t:3&t|8).toString(16)})),console.log("visitorId by geneateUUID",e);var n,o=new Date;o.setTime(o.getTime()+2592e6);var s="expires="+o.toUTCString();document.cookie="visitor_id="+e+";"+s+";path=/"}}return e}function r(){var e=Math.floor((Date.now()-(sessionStorage.getItem("start_time")||Date.now()))/1e3);return sessionStorage.setItem("start_time",Date.now()),e}function i(){var e={},t=window.location.search.substring(1);if(t)for(var r=t.split("&"),i=0;i<r.length;i++){var n=r[i].split("=");2===n.length&&(e[n[0]]=decodeURIComponent(n[1].replace(/\+/g," ")))}return e}function n(){var e=t();if(e){var n={visitor_id:e,website_id:"$trackingCode",referrer:document.referrer,url:window.location.href,title:document.title,session_duration:r(),query_string_params:i(),screen_size:{width:window.screen.width,height:window.screen.height},device_type:/Mobi/i.test(navigator.userAgent)?"Mobile":"Desktop",operating_system:navigator.platform,browser_version:navigator.userAgent},o=new XMLHttpRequest;o.open("POST","https://app.leadrhino.io/api/tracking",!0),o.setRequestHeader("Content-Type","application/json;charset=UTF-8"),o.send(JSON.stringify(n))}}navigator.sendBeacon?window.addEventListener("unload",function(){var e=t();if(e){var n={visitor_id:e,website_id:"$trackingCode",referrer:document.referrer,url:window.location.href,title:document.title,session_duration:r(),query_string_params:i(),screen_size:{width:window.screen.width,height:window.screen.height},device_type:/Mobi/i.test(navigator.userAgent)?"Mobile":"Desktop",operating_system:navigator.platform,browser_version:navigator.userAgent};navigator.sendBeacon("https://app.leadrhino.io/api/tracking",JSON.stringify(n))}}):l("beforeunload");var o,s,a=(o=n,function(){var e=this,t=arguments;clearTimeout(s),s=setTimeout(function(){s=null,o.apply(e,t)},2e3)});function l(e){"load"===e?window.addEventListener(e,function(){n(),window.addEventListener(e,a)}):window.addEventListener(e,a)}l("load"),l("scroll"),l("click"),a()}();
+        !function(){function e(){return!window.chrome||!window.chrome.webstore||!window.chrome.webstore.install}function t(){var e=null;if(!/bot|crawl|slurp|spider/i.test(navigator.userAgent)){console.log("not a bot");for(var t=document.cookie.split(";"),r=0;r<t.length;r++){var i=t[r].trim();if(0===i.indexOf("visitor_id=")){e=i.substring(11,i.length);break}}if(!e){e=(n=new Date().getTime(),"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,function(e){var t=(n+16*Math.random())%16|0;return n=Math.floor(n/16),("x"==e?t:3&t|8).toString(16)})),console.log("visitorId by geneateUUID",e);var n,o=new Date;o.setTime(o.getTime()+2592e6);var s="expires="+o.toUTCString();document.cookie="visitor_id="+e+";"+s+";path=/"}}return e}function r(){var e=Math.floor((Date.now()-(sessionStorage.getItem("start_time")||Date.now()))/1e3);return sessionStorage.setItem("start_time",Date.now()),e}function i(){var e={},t=window.location.search.substring(1);if(t)for(var r=t.split("&"),i=0;i<r.length;i++){var n=r[i].split("=");2===n.length&&(e[n[0]]=decodeURIComponent(n[1].replace(/\+/g," ")))}return e}function n(e){var n=t();if(n){var o={visitor_id:n,website_id:"$trackingCode",referrer:document.referrer,url:window.location.href,title:document.title,interaction:e,session_duration:r(),query_string_params:i(),screen_size:{width:window.screen.width,height:window.screen.height},device_type:/Mobi/i.test(navigator.userAgent)?"Mobile":"Desktop",operating_system:navigator.platform,browser_version:navigator.userAgent},s=new XMLHttpRequest;s.open("POST","https://app.leadrhino.io/api/tracking",!0),s.setRequestHeader("Content-Type","application/json;charset=UTF-8"),s.send(JSON.stringify(o))}}navigator.sendBeacon?window.addEventListener("unload",function(){var e=t();if(e){var n={visitor_id:e,website_id:"$trackingCode",referrer:document.referrer,url:window.location.href,title:document.title,session_duration:r(),query_string_params:i(),screen_size:{width:window.screen.width,height:window.screen.height},device_type:/Mobi/i.test(navigator.userAgent)?"Mobile":"Desktop",operating_system:navigator.platform,browser_version:navigator.userAgent};navigator.sendBeacon("https://app.leadrhino.io/api/tracking",JSON.stringify(n))}}):c("beforeunload");var o,s,a=(o=n,function(){var e=this,t=arguments;clearTimeout(s),s=setTimeout(function(){s=null,o.apply(e,t)},2e3)});function c(e){"load"===e&&window.addEventListener(e,function(){n("load"),window.addEventListener(e,a)}),"click"===e?window.addEventListener(e,function(){n("click")}):window.addEventListener(e,a)}c("load"),c("scroll"),c("click"),a()}();
         SCRIPT;
 
         return response($trackingScript, 200)->header('Content-Type', 'application/javascript')->header('Cache-Control', 'no-cache, no-store, must-revalidate');
@@ -70,6 +70,7 @@ class TrackingController extends Controller
         $data['url'] = $data['url'] ?? 'unknown';
         $data['title'] = $data['title'] ?? 'unknown';
         $website_id = $data['website_id'] ?? 'unknown';
+        $data['interaction'] = $data['interaction'] ?? 'unknown';
         $data['created_at'] = Carbon::now();
         $data['timestamp'] = Carbon::now();
         $data['updated_at'] = Carbon::now();
@@ -288,7 +289,7 @@ class TrackingController extends Controller
 //       }
 //       return params;
 //   }
-//   function sendTrackingData() {
+//   function sendTrackingData(interaction) {
 //     var visitorId = getVisitorId();
 //     if (visitorId) {
 //         var data = {
@@ -297,6 +298,7 @@ class TrackingController extends Controller
 //           referrer: document.referrer,
 //           url: window.location.href,
 //           title: document.title,
+//           interaction: interaction,
 //           session_duration: getSessionDuration(),
 //           query_string_params: getQueryStringParams(),
 //           screen_size: {
@@ -343,10 +345,15 @@ class TrackingController extends Controller
 //   function sendTrackingDataOnEvent(event) {
 //     if (event === 'load') {
 //       window.addEventListener(event, function() {
-//         sendTrackingData();
+//         sendTrackingData('load');
 //         window.addEventListener(event, debouncedSendTrackingData);
 //       });
-//     } else {
+//     } if (event === 'click') {
+//       window.addEventListener(event, function() {
+//         sendTrackingData('click');
+//       });
+//     }
+//     else {
 //       window.addEventListener(event, debouncedSendTrackingData);
 //     }
 //   }
