@@ -80,9 +80,9 @@ class CompanyLeads extends Model
             'total_page_views' => 0.5,
             'total_time_spent' => 0.001,
             'interactions' => 0.125,
-            'high_value_page_views' => 1,
-            'high_value_time_spent' => 0.002,
-            'high_value_interactions' => 0.25,
+            'high_value_page_views' => 2,
+            'high_value_time_spent' => 0.004,
+            'high_value_interactions' => 2,
             // Add other factors and weights as needed
         ];
 
@@ -112,11 +112,11 @@ class CompanyLeads extends Model
         // Replace the maximum values with the maximum values you expect for each factor
         $maxUniqueVisitors = 2;
         $maxTotalPageViews = 4;
-        $maxTimeSpent = 500;
-        $maxInteractionCount = 10;
-        $maxHighValuePageViews = 2;
-        $maxHighValueTimeSpent = 180;
-        $maxHighValueInteractionCount = 5;
+        $maxTimeSpent = 300;
+        $maxInteractionCount = 5;
+        $maxHighValuePageViews = 1;
+        $maxHighValueTimeSpent = 120;
+        $maxHighValueInteractionCount = 1;
 
         $maxRawScore = (
             $maxUniqueVisitors * $weights['unique_visitors'] +
