@@ -372,7 +372,7 @@
                                                     <!-- for each top_sources on lead item -->
                                                     <div v-for="(value, key) in leadItem.top_pages" :key="value.id" class="source-container">
                                                         <div class="grid-container">
-                                                            <span class="truncate align-items-center" style="font-size: 0.8125rem; font-weight: 600; text-decoration: underline; color: #2196F3;">{{ key }}<v-icon class="ml-2" style="color: #2196F3 !important; font-size: 0.9rem; ">mdi-open-in-new</v-icon></span>
+                                                            <span class="truncate align-items-center" @click="goToLink(key)" style="cursor: pointer; font-size: 0.8125rem; font-weight: 600; text-decoration: underline; color: #2196F3;">{{ key }}<v-icon class="ml-2" style="color: #2196F3 !important; font-size: 0.9rem; ">mdi-open-in-new</v-icon></span>
                                                             <span style="font-size: 0.8125rem; color: #28323b;">{{ value }} Visits</span>
                                                         </div>
                                                     </div>
@@ -391,7 +391,7 @@
                                                     <!-- for each top_sources on lead item -->
                                                     <div v-for="(value, key) in leadItem.top_sources" :key="value.id" class="source-container">
                                                         <div class="grid-container">
-                                                            <span class="truncate align-items-center" style="font-size: 0.8125rem; color: #28323b; font-weight: 600;">{{ key }}</span>
+                                                            <span class="truncate align-items-center" @click="goToLink(key)" style="cursor: pointer; font-size: 0.8125rem; color: #28323b; font-weight: 600; text-decoration: underline; color: #2196F3;">{{ key }}</span>
                                                             <span style="font-size: 0.8125rem; color: #28323b;">{{ value }} Visits</span>
                                                         </div>
                                                     </div>
@@ -759,6 +759,10 @@ import { useLeadStore } from '../store/leadStore';
                 // title case
                 industryString = this.titleCase(industryString);
                 return industryString;
+            },
+            goToLink(link){
+                // go to the link
+                window.open(link, '_blank');
             },
 
         },
