@@ -263,7 +263,7 @@
                             <div v-else>
                                 <!-- circle with plud in it to add users -->
                                 <!-- 0.75 size -->
-                                <v-icon @click="assignDialog = true; assignItem = item" style="font-size: 20px; cursor: pointer; color: #f05628;">mdi-plus-circle</v-icon>
+                                <v-icon @click="assignDialog = true; assignItem = item" style="font-size: 20px; cursor: pointer; color: #f05628; opacity: 0.6 !important;">mdi-plus-circle</v-icon>
                             </div>
                         </template>
 
