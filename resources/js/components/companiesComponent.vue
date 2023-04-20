@@ -107,7 +107,7 @@
                                 </div>
                                 <div class="d-flex flex-wrap" style="width: fit-content">
                                     <span class="ml-1 w-100" style="color: #28323b; font-size: 0.8125rem;">{{ item.name }}</span>
-                                    <a :href="goTo(item.domain)" target="_blank" class="ml-1" style="color: #28323b; font-size: 0.75rem; opacity: 0.75;">{{ item.domain }}<v-icon class="ml-2" style="color: #2196F3 !important; font-size: 0.9rem; ">mdi-open-in-new</v-icon></a>
+                                    <a @click="goTo(item.domain)" class="ml-1" style="color: #2196F3; font-size: 0.75rem; opacity: 0.75;">{{ item.domain }}<v-icon class="ml-1" style="color: #2196F3 !important; font-size: 0.825rem; opacity: 0.75;">mdi-open-in-new</v-icon></a>
                                 </div>
                         </div>
                         </template>
@@ -464,14 +464,14 @@
                                     </div>
                                     <div class="mt-6">
                                         <!-- company socials title -->
-                                        <div style="font-size: 0.8125rem; color: #28323b;"><b>Website</b></div>
+                                        <div style="font-size: 0.8125rem; color: #28323b;"><b>Company Website</b></div>
                                         <div class="d-flex align-items-center">
                                             <div @click="goTo(leadItem.domain)" style="font-size: 0.8125rem; color: #2196F3; text-decoration: underline; cursor: pointer;">{{ leadItem.domain }}<v-icon class="ml-2" style="color: #2196F3 !important; font-size: 0.9rem; ">mdi-open-in-new</v-icon></div>
                                         </div>
                                     </div>
                                     <div class="mt-6">
                                         <!-- company socials title -->
-                                        <div style="font-size: 0.8125rem; color: #28323b;"><b>Social Media</b></div>
+                                        <div style="font-size: 0.8125rem; color: #28323b;"><b>Company Social Media</b></div>
                                         <div class="d-flex align-items-center">
                                             <div @click="goTo(leadItem.linkedin_url)" class="m-1 p-1 ml-0" :style="'background-color:' + (leadItem.linkedin_url ? '#0077B5;' : '#D3D3D3;') + 'border-radius: 4px; cursor: ' + (leadItem.linkedin_url ? 'pointer;' : 'unset;')">
                                                 <v-icon style="font-size: 1rem; color: #ffffff;">mdi-linkedin</v-icon>
@@ -497,7 +497,7 @@
                                     </div>
                                     <div class="mt-6">
                                         <!-- company socials title -->
-                                        <div style="font-size: 0.8125rem; color: #28323b;"><b>Address</b></div>
+                                        <div style="font-size: 0.8125rem; color: #28323b;"><b>Company Address</b></div>
                                         <div class="d-flex flex-wrap align-items-center">
                                             <div class="w-100" style="font-size: 0.8125rem; color: #28323b;">{{ leadItem.address }}</div>
                                             <!-- city -->
