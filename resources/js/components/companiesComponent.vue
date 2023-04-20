@@ -166,10 +166,10 @@
                         <!-- lead score - linear bar -->
                         <template v-slot:item.lead_score="{ item }">
                             <div class="d-flex align-items-center justify-content-start" v-if="item">
-                                <span class="mr-1" style="color: #28323b; font-size: 0.8125rem; width: 25px; text-align: right;">{{ item.lead_score }}</span>
+                                <span class="mr-1" style="color: #28323b; font-size: 0.8125rem; width: 25px; text-align: right;">{{ item.lead_score.score }}</span>
                                 <v-progress-linear
-                                :value="item.lead_score"
-                                :color="getLeadScoreColor(item.lead_score)"
+                                :value="item.lead_score.score"
+                                :color="getLeadScoreColor(item.lead_score.score)"
                                 height="0.5rem"
                                 :id="item.id"
                                 rounded
