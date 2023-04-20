@@ -287,6 +287,9 @@
                                             <span v-if="leadItem.industry" style="width: 100%; color: rgb(40, 50, 59); font-size: 0.8125rem; font-weight: 600;">
                                                 {{ readableIndustry(leadItem.industry) }}
                                             </span>
+                                            <span v-else style="width: 100%; color: rgb(40, 50, 59); font-size: 0.8125rem; font-weight: 600;">
+                                                Unknown
+                                            </span>
                                         </div>
                                         <div class="d-flex flex-wrap align-content-start" style="padding: 1rem; width: 33.33%; border-right: thin solid whitesmoke;">
                                             <span style="width: 100%; color: rgb(40, 50, 59); font-size: 0.8125rem; height: 22px; opacity: 0.75;">
@@ -294,6 +297,9 @@
                                             </span>
                                             <span v-if="leadItem.size" style="width: 100%; color: rgb(40, 50, 59); font-size: 0.8125rem; font-weight: 600;">
                                                 {{ leadItem.size }}
+                                            </span>
+                                            <span v-else style="width: 100%; color: rgb(40, 50, 59); font-size: 0.8125rem; font-weight: 600;">
+                                                Unknown
                                             </span>
                                         </div>
                                         <div class="d-flex flex-wrap align-content-start" style="padding: 1rem; width: 33.33%;">
