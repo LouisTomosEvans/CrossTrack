@@ -357,20 +357,16 @@
                                     </div>   
                                 </div>
                                 <div style="margin-top: 1rem;" v-if="toggle == 0">
-                                    <b><span style="font-size: 0.8125rem; color: #28323b;">Top Pages Visited</span></b>
+                                    <b><span style="font-size: 0.8125rem; color: #28323b;">Top 3 Pages Visited</span></b>
                                 </div>
                                 <div v-if="toggle == 0">
                                     <v-card style="margin-top: 1rem; border-radius: 8px;" elevation="0">
                                             <div>
                                                 <div>
                                                     <!-- for each top_sources on lead item -->
-                                                    <div v-for="(value, key) in leadItem.top_pages" :key="value.id" class="d-flex justify-content-between" style="padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 0.5rem; padding-right: 0.5rem; border: thin solid whitesmoke; border-radius: 0px;">
-                                                        <div class="d-flex align-items-center"  style="width: fit-content !important" >
-                                                        <!-- the key of the source object -->
-                                                            <span style="font-size: 0.8125rem; color: #28323b; font-weight: 600; text-decoration: underline; color: #2196F3;">{{ key }}<v-icon class="ml-2" style="color: #2196F3 !important; font-size: 0.9rem; ">mdi-open-in-new</v-icon></span>
-                                                        </div>
-                                                        <div class="d-flex align-items-end mr-1">
-                                                        <!-- the key of the source object -->
+                                                    <div v-for="(value, key) in leadItem.top_pages" :key="value.id" class="source-container">
+                                                        <div class="grid-container">
+                                                            <span class="truncate align-items-center" style="font-size: 0.8125rem; font-weight: 600; text-decoration: underline; color: #2196F3;">{{ key }}<v-icon class="ml-2" style="color: #2196F3 !important; font-size: 0.9rem; ">mdi-open-in-new</v-icon></span>
                                                             <span style="font-size: 0.8125rem; color: #28323b;">{{ value }} Visits</span>
                                                         </div>
                                                     </div>
@@ -380,20 +376,16 @@
                                     </v-card> 
                                 </div>
                                 <div style="margin-top: 1rem;" v-if="toggle == 0">
-                                    <b><span style="font-size: 0.8125rem; color: #28323b;">Top Sources</span></b>
+                                    <b><span style="font-size: 0.8125rem; color: #28323b;">Top 3 Sources</span></b>
                                 </div>
                                 <div v-if="toggle == 0">
                                     <v-card style="margin-top: 1rem; border-radius: 8px;" elevation="0">
                                             <div>
                                                 <div>
                                                     <!-- for each top_sources on lead item -->
-                                                    <div v-for="(value, key) in leadItem.top_sources" :key="value.id" class="d-flex justify-content-between" style="padding-top: 0.5rem; padding-bottom: 0.5rem; padding-left: 0.5rem; padding-right: 0.5rem; border: thin solid whitesmoke; border-radius: 0px;">
-                                                        <div class="d-flex align-items-center"  style="width: fit-content !important" >
-                                                        <!-- the key of the source object -->
-                                                            <span style="font-size: 0.8125rem; color: #28323b; font-weight: 600;">{{ key }}</span>
-                                                        </div>
-                                                        <div class="d-flex align-items-end mr-1">
-                                                        <!-- the key of the source object -->
+                                                    <div v-for="(value, key) in leadItem.top_sources" :key="value.id" class="source-container">
+                                                        <div class="grid-container">
+                                                            <span class="truncate align-items-center" style="font-size: 0.8125rem; color: #28323b; font-weight: 600;">{{ key }}</span>
                                                             <span style="font-size: 0.8125rem; color: #28323b;">{{ value }} Visits</span>
                                                         </div>
                                                     </div>
@@ -912,7 +904,28 @@ import { useLeadStore } from '../store/leadStore';
     position: relative;
 }
 
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+}
 
+.source-container {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border: thin solid whitesmoke;
+  border-radius: 0;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1rem;
+  align-items: center;
+  width: 100%;
+}
 
 
 </style>
