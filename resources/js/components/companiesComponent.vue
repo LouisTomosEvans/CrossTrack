@@ -752,7 +752,9 @@ import { useLeadStore } from '../store/leadStore';
             },
             readableIndustry(industry){
                 // make the industry readable
-                let industryString = industry.replace('-', ' ');
+                // replace all - with ' '
+                let industryString = industry.replace(/-/g, ' ');
+                
                 // title case
                 industryString = this.titleCase(industryString);
                 return industryString;
