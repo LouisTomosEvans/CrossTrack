@@ -40,7 +40,6 @@ return new class extends Migration
             $table->string('timezone')->nullable();
             $table->string('timezone_offset')->nullable();
             $table->string('local_time')->nullable();
-            $table->string('interaction')->nullable();
             // website id
             $table->foreignId('website_id')->constrained('websites')->onDelete('cascade');
 

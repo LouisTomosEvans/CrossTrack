@@ -24,6 +24,7 @@ class Visits extends Model
         'device_type',
         'operating_system',
         'browser_version',
+        'interaction',
     ];
 
     public function companyLeads()

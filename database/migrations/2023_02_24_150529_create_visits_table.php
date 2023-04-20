@@ -30,6 +30,7 @@ return new class extends Migration
             $table->string('device_type');
             $table->string('operating_system');
             $table->string('browser_version');
+            $table->string('interaction');
         });
     }
 
