@@ -243,7 +243,7 @@
                                             </div>
                                             <div class="d-flex flex-wrap align-self-center">
                                                 <span class="ml-1 align-self-end" style="width: 100%; color: #28323b; font-weight: bold; font-size: 1.5rem;">{{ leadItem.name }}</span>
-                                                <span class="ml-1 align-self-start" style="width: 100%; color: #28323b; font-size: 0.8125rem;">{{ leadItem.domain }}</span>
+                                                <span class="ml-1 align-self-start" @click="formatDomain(leadItem.domain)" style="width: 100%; color: #2196F3; font-size: 0.8125rem; text-decoration: underline; cursor: pointer;">{{ leadItem.domain }}</span>
                                             </div>
                                             </div>
                                             <!-- put in top right of parent element -->
@@ -466,31 +466,31 @@
                                         <!-- company socials title -->
                                         <div style="font-size: 0.8125rem; color: #28323b;"><b>Website</b></div>
                                         <div class="d-flex align-items-center">
-                                            <div @click="goTo(leadItem.domain)" style="font-size: 0.8125rem; color: #28323b; text-decoration: underline;">{{ leadItem.domain }}</div>
+                                            <div @click="goTo(leadItem.domain)" style="font-size: 0.8125rem; color: #2196F3; text-decoration: underline; cursor: pointer;">{{ leadItem.domain }}<v-icon class="ml-2" style="color: #2196F3 !important; font-size: 0.9rem; ">mdi-open-in-new</v-icon></div>
                                         </div>
                                     </div>
                                     <div class="mt-6">
                                         <!-- company socials title -->
                                         <div style="font-size: 0.8125rem; color: #28323b;"><b>Social Media</b></div>
                                         <div class="d-flex align-items-center">
-                                            <div @click="goTo(leadItem.linkedin_url)" class="m-1 p-1 ml-0" :style="'background-color:' + (leadItem.linkedin_url ? '#0077B5;' : '#D3D3D3;') + 'border-radius: 4px; cursor: ' + (leadItem.linkedin ? 'pointer;' : 'unset;')">
+                                            <div @click="goTo(leadItem.linkedin_url)" class="m-1 p-1 ml-0" :style="'background-color:' + (leadItem.linkedin_url ? '#0077B5;' : '#D3D3D3;') + 'border-radius: 4px; cursor: ' + (leadItem.linkedin_url ? 'pointer;' : 'unset;')">
                                                 <v-icon style="font-size: 1rem; color: #ffffff;">mdi-linkedin</v-icon>
                                             </div>
-                                            <div @click="goTo(leadItem.twitter_url)" class="m-1 p-1 " :style="'background-color: '+ (leadItem.twitter_url ? '#1C9CEA;' : '#D3D3D3;') + 'border-radius: 4px; cursor: ' + (leadItem.twitter ? ' pointer;' : ' unset;')">
+                                            <div @click="goTo(leadItem.twitter_url)" class="m-1 p-1 " :style="'background-color: '+ (leadItem.twitter_url ? '#1C9CEA;' : '#D3D3D3;') + 'border-radius: 4px; cursor: ' + (leadItem.twitter_url ? ' pointer;' : ' unset;')">
                                                 <v-icon style="font-size: 1rem; color: #ffffff;">mdi-twitter</v-icon>
                                             </div>
-                                            <div @click="goTo(leadItem.facebook_url)" class="m-1 p-1 " :style="'background-color: '+ (leadItem.facebook_url ? '#3B5998;' : '#D3D3D3;') + 'border-radius: 4px; cursor: ' + (leadItem.facebook ? ' pointer;' : ' unset;')">
+                                            <div @click="goTo(leadItem.facebook_url)" class="m-1 p-1 " :style="'background-color: '+ (leadItem.facebook_url ? '#3B5998;' : '#D3D3D3;') + 'border-radius: 4px; cursor: ' + (leadItem.facebook_url ? ' pointer;' : ' unset;')">
                                                 <v-icon style="font-size: 1rem; color: #ffffff;">mdi-facebook</v-icon>
                                             </div>
-                                            <div @click="goTo(leadItem.instagram_url)" class="m-1 p-1 " :style="'background-color: '+ (leadItem.instagram_url ? '#E1306C;' : '#D3D3D3;') + 'border-radius: 4px; cursor: ' + (leadItem.instagram ? ' pointer;' : ' unset;')">
+                                            <div @click="goTo(leadItem.instagram_url)" class="m-1 p-1 " :style="'background-color: '+ (leadItem.instagram_url ? '#E1306C;' : '#D3D3D3;') + 'border-radius: 4px; cursor: ' + (leadItem.instagram_url ? ' pointer;' : ' unset;')">
                                                 <v-icon style="font-size: 1rem; color: #ffffff;">mdi-instagram</v-icon>
                                             </div>
                                             <!-- youtube -->
-                                            <div @click="goTo(leadItem.youtube_url)" class="m-1 p-1 " :style="'background-color: '+ (leadItem.youtube_url ? '#FF0000;' : '#D3D3D3;') + 'border-radius: 4px; cursor: ' + (leadItem.youtube ? ' pointer;' : ' unset;')">
+                                            <div @click="goTo(leadItem.youtube_url)" class="m-1 p-1 " :style="'background-color: '+ (leadItem.youtube_url ? '#FF0000;' : '#D3D3D3;') + 'border-radius: 4px; cursor: ' + (leadItem.youtube_url ? ' pointer;' : ' unset;')">
                                                 <v-icon style="font-size: 1rem; color: #ffffff;">mdi-youtube</v-icon>
                                             </div>
                                             <!-- tiktok -->
-                                            <div @click="goTo(leadItem.tiktok_url)" class="m-1 p-1 " :style="'background-color: '+ (leadItem.tiktok_url ? '#000000;' : '#D3D3D3;') + 'border-radius: 4px; cursor: ' + (leadItem.tiktok ? ' pointer;' : ' unset;')">
+                                            <div @click="goTo(leadItem.tiktok_url)" class="m-1 p-1 " :style="'background-color: '+ (leadItem.tiktok_url ? '#000000;' : '#D3D3D3;') + 'border-radius: 4px; cursor: ' + (leadItem.tiktok_url ? ' pointer;' : ' unset;')">
                                                 <v-icon style="font-size: 1rem; color: #ffffff;">mdi-music-note</v-icon>
                                             </div>
                                         </div>
