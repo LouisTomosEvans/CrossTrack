@@ -392,7 +392,7 @@
                                                     <div v-for="(value, key) in leadItem.top_sources" :key="value.id" class="source-container">
                                                         <div class="grid-container">
                                                             <span v-if="key != 'unknown'" class="truncate align-items-center" @click="goToLink(key)" style="font-size: 0.8125rem; color: #28323b; font-weight: 600; text-decoration: underline; color: #2196F3;">{{ key }}</span>
-                                                            <span class="truncate align-items-center" style="cursor: pointer; font-size: 0.8125rem; color: #28323b; font-weight: 600;">{{ key }}</span>
+                                                            <span v-else class="truncate align-items-center" style="cursor: pointer; font-size: 0.8125rem; color: #28323b; font-weight: 600;">{{ key }}</span>
                                                             <span style="font-size: 0.8125rem; color: #28323b;">{{ value }} Visits</span>
                                                         </div>
                                                     </div>
