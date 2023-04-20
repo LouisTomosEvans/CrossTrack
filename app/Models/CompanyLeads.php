@@ -90,7 +90,7 @@ class CompanyLeads extends Model
         $unique_visitors = $this->visits->unique('visitor_id')->count();
         $total_time_spent = $this->visits->sum('session_duration');
         $interaction_count = $this->visits->where('interaction', '=', 'click')->count();
-        $total_page_views = $this->visits->unique('title')->count();
+        $total_page_views = $this->visits->unique('title')->where('interaction', '=', 'load')->count();
         // contact, pricing, demo
         // TO DO: make this dynamic
         // TO DO: fix this query - not returning correct results for title like %contact% or title like %pricing% or title like %demo%
