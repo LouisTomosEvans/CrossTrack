@@ -243,7 +243,7 @@
                                             </div>
                                             <div class="d-flex flex-wrap align-self-center">
                                                 <span class="ml-1 align-self-end" style="width: 100%; color: #28323b; font-weight: bold; font-size: 1.5rem;">{{ leadItem.name }}</span>
-                                                <span class="ml-1 align-self-start" @click="formatDomain(leadItem.domain)" style="width: 100%; color: #2196F3; font-size: 0.8125rem; text-decoration: underline; cursor: pointer;">{{ leadItem.domain }}<v-icon class="ml-2" style="color: #2196F3 !important; font-size: 0.9rem;">mdi-open-in-new</v-icon></span>
+                                                <span class="ml-1 align-self-start" @click="formatDomain(leadItem.domain)" style="width: 100%; color: #2196F3; font-size: 0.8125rem; text-decoration: underline; cursor: pointer;">{{ leadItem.domain }}<v-icon class="ml-1" style="color: #2196F3 !important; font-size: 0.9rem;">mdi-open-in-new</v-icon></span>
                                             </div>
                                             </div>
                                             <!-- put in top right of parent element -->
@@ -372,7 +372,7 @@
                                                     <!-- for each top_sources on lead item -->
                                                     <div v-for="(value, key) in leadItem.top_pages" :key="value.id" class="source-container">
                                                         <div class="grid-container">
-                                                            <span class="truncate align-items-center" @click="goToLink(key)" style="cursor: pointer; font-size: 0.8125rem; font-weight: 600; text-decoration: underline; color: #2196F3;">{{ key }}<v-icon class="ml-2" style="color: #2196F3 !important; font-size: 0.9rem; ">mdi-open-in-new</v-icon></span>
+                                                            <span class="truncate align-items-center" @click="goToLink(key)" style="cursor: pointer; font-size: 0.8125rem; font-weight: 600; text-decoration: underline; color: #2196F3;">{{ key }}<v-icon class="ml-1" style="color: #2196F3 !important; font-size: 0.9rem; ">mdi-open-in-new</v-icon></span>
                                                             <span style="font-size: 0.8125rem; color: #28323b;">{{ value }} Visits</span>
                                                         </div>
                                                     </div>
@@ -391,7 +391,7 @@
                                                     <!-- for each top_sources on lead item -->
                                                     <div v-for="(value, key) in leadItem.top_sources" :key="value.id" class="source-container">
                                                         <div class="grid-container">
-                                                            <span v-if="key != 'unknown'" class="truncate align-items-center" @click="goToLink(key)" style="cursor: pointer; font-size: 0.8125rem; color: #28323b; font-weight: 600; text-decoration: underline; color: #2196F3;">{{ key }}</span>
+                                                            <span v-if="key != 'unknown'" class="truncate align-items-center" @click="goToLink(key)" style="cursor: pointer; font-size: 0.8125rem; color: #28323b; font-weight: 600; text-decoration: underline; color: #2196F3;">{{ key }}<v-icon class="ml-1" style="color: #2196F3 !important; font-size: 0.9rem; ">mdi-open-in-new</v-icon></span>
                                                             <span v-else class="truncate align-items-center" style="font-size: 0.8125rem; color: #28323b; font-weight: 600;">{{ key }}</span>
                                                             <span style="font-size: 0.8125rem; color: #28323b;">{{ value }} Visits</span>
                                                         </div>
@@ -466,7 +466,7 @@
                                         <!-- company socials title -->
                                         <div style="font-size: 0.8125rem; color: #28323b;"><b>Company Website</b></div>
                                         <div class="d-flex align-items-center">
-                                            <div @click="goTo(leadItem.domain)" style="font-size: 0.8125rem; color: #2196F3; text-decoration: underline; cursor: pointer;">{{ leadItem.domain }}<v-icon class="ml-2" style="color: #2196F3 !important; font-size: 0.9rem; ">mdi-open-in-new</v-icon></div>
+                                            <div @click="goTo(leadItem.domain)" style="font-size: 0.8125rem; color: #2196F3; text-decoration: underline; cursor: pointer;">{{ leadItem.domain }}<v-icon class="ml-1" style="color: #2196F3 !important; font-size: 0.9rem; ">mdi-open-in-new</v-icon></div>
                                         </div>
                                     </div>
                                     <div class="mt-6">
