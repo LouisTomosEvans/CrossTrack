@@ -754,6 +754,9 @@ import { useLeadStore } from '../store/leadStore';
                 // make the industry readable
                 // replace all - with ' '
                 let industryString = industry.replace(/-/g, ' ');
+
+                // replace all ' and ' with ' & '
+                industryString = industryString.replace(/ and /g, ' & ');
                 
                 // title case
                 industryString = this.titleCase(industryString);
