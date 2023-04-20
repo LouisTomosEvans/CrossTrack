@@ -731,7 +731,7 @@ import { useLeadStore } from '../store/leadStore';
             },
             readableIndustry(industry){
                 // make the industry readable
-                let industry = industry.replace('-', ' ');
+                industry = industry.replace('-', ' ');
                 // title case
                 industry = this.titleCase(industry);
                 return industry
