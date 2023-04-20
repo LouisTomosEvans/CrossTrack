@@ -93,9 +93,11 @@ class CompanyLeads extends Model
         $interaction_count = $this->visits->where('interaction', '=', 'click')->count();
         $total_page_views = $this->visits->unique('title')->count();
         // contact, pricing, demo
-        $high_value_page_views = $this->visits->where(function ($query) {$query->where('title', 'LIKE', '%contact%')->orWhere('title', 'LIKE', '%pricing%')->orWhere('title', 'LIKE', '%demo%');})->where('interaction', '=', 'load')->count();
-        $high_value_time_spent = $this->visits->where(function ($query) {$query->where('title', 'LIKE', '%contact%')->orWhere('title', 'LIKE', '%pricing%')->orWhere('title', 'LIKE', '%demo%');})->sum('session_duration');
-        $high_value_interactions = $this->visits->where(function ($query) {$query->where('title', 'LIKE', '%contact%')->orWhere('title', 'LIKE', '%pricing%')->orWhere('title', 'LIKE', '%demo%');})->where('interaction', '=', 'click')->count();
+        // TO DO: make this dynamic
+        // TO DO: fix this query - not returning correct results for title like %contact% or title like %pricing% or title like %demo%
+        $high_value_page_views = $this->visits->where(function ($query) {$query->where('title', 'like', '%contact%')->orWhere('title', 'like', '%pricing%')->orWhere('title', 'like', '%demo%');})->where('interaction', '=', 'load')->count();
+        $high_value_time_spent = $this->visits->where(function ($query) {$query->where('title', 'like', '%contact%')->orWhere('title', 'like', '%pricing%')->orWhere('title', 'like', '%demo%');})->sum('session_duration');
+        $high_value_interactions = $this->visits->where(function ($query) {$query->where('title', 'like', '%contact%')->orWhere('title', 'like', '%pricing%')->orWhere('title', 'like', '%demo%');})->where('interaction', '=', 'click')->count();
 
         // Calculate the raw lead score using the weights and the stored values
         $rawScore = (
@@ -112,7 +114,7 @@ class CompanyLeads extends Model
         // Replace the maximum values with the maximum values you expect for each factor
         $maxUniqueVisitors = 2;
         $maxTotalPageViews = 4;
-        $maxTimeSpent = 300;
+        $maxTimeSpent = 500;
         $maxInteractionCount = 5;
         $maxHighValuePageViews = 1;
         $maxHighValueTimeSpent = 120;
