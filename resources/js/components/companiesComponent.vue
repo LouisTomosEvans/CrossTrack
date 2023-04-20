@@ -107,7 +107,7 @@
                                 </div>
                                 <div class="d-flex flex-wrap" style="width: fit-content">
                                     <span class="ml-1 w-100" style="color: #28323b; font-size: 0.8125rem;">{{ item.name }}</span>
-                                    <a :href="formatDomain(item.domain)" target="_blank" class="ml-1" style="color: #28323b; font-size: 0.75rem; opacity: 0.75;">{{ item.domain }}</a>
+                                    <a :href="goTo(item.domain)" target="_blank" class="ml-1" style="color: #28323b; font-size: 0.75rem; opacity: 0.75;">{{ item.domain }}<v-icon class="ml-2" style="color: #2196F3 !important; font-size: 0.9rem; ">mdi-open-in-new</v-icon></a>
                                 </div>
                         </div>
                         </template>
@@ -391,7 +391,7 @@
                                                     <!-- for each top_sources on lead item -->
                                                     <div v-for="(value, key) in leadItem.top_sources" :key="value.id" class="source-container">
                                                         <div class="grid-container">
-                                                            <span v-if="key != 'unknown'" class="truncate align-items-center" @click="goToLink(key)" style="cursor: pointer; font-size: 0.8125rem; color: #28323b; font-weight: 600; text-decoration: underline; color: #2196F3;">{{ key }}</span>
+                                                            <span v-if="key != 'unknown'" class="truncate align-items-center" @click="goToLink(key)" style="font-size: 0.8125rem; color: #28323b; font-weight: 600; text-decoration: underline; color: #2196F3;">{{ key }}</span>
                                                             <span class="truncate align-items-center" style="cursor: pointer; font-size: 0.8125rem; color: #28323b; font-weight: 600;">{{ key }}</span>
                                                             <span style="font-size: 0.8125rem; color: #28323b;">{{ value }} Visits</span>
                                                         </div>
