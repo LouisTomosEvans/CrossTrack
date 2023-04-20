@@ -284,15 +284,15 @@
                                             <span style="width: 100%; color: rgb(40, 50, 59); font-size: 0.8125rem; height: 22px; opacity: 0.75;">
                                                 Industry
                                             </span>
-                                            <span style="width: 100%; color: rgb(40, 50, 59); font-size: 0.8125rem; ">
-                                                {{ leadItem.industry }}
+                                            <span style="width: 100%; color: rgb(40, 50, 59); font-size: 0.8125rem; font-weight: 600;">
+                                                {{ readableIndustry(leadItem.industry) }}
                                             </span>
                                         </div>
                                         <div class="d-flex flex-wrap align-content-start" style="padding: 1rem; width: 33.33%; border-right: thin solid whitesmoke;">
                                             <span style="width: 100%; color: rgb(40, 50, 59); font-size: 0.8125rem; height: 22px; opacity: 0.75;">
                                                 Company Size
                                             </span>
-                                            <span style="width: 100%; color: rgb(40, 50, 59); font-size: 0.8125rem;">
+                                            <span style="width: 100%; color: rgb(40, 50, 59); font-size: 0.8125rem; font-weight: 600;">
                                                 {{ leadItem.size }}
                                             </span>
                                         </div>
@@ -301,11 +301,11 @@
                                                 Lead Score
                                             </span>
                                             <span class="d-flex align-items-center" style="width: 100%; color: rgb(40, 50, 59); font-size: 0.8125rem;">
-                                                <span class="mr-2" style="opacity: 0.75;">{{ leadItem.lead_score }}</span>
+                                                <span class="mr-2" style="opacity: 0.75; font-weight: 600;">{{ float2int(leadItem.lead_score.score) }}</span>
                                                 <!-- progress circular -->
                                                 <v-progress-linear
-                                                :value="leadItem.lead_score"
-                                                :color="getLeadScoreColor(leadItem.lead_score)"
+                                                :value="leadItem.lead_score.score"
+                                                :color="getLeadScoreColor(leadItem.lead_score.score)"
                                                 height="0.5rem"
                                                 rounded
                                                 class="mr-3"
@@ -728,6 +728,13 @@ import { useLeadStore } from '../store/leadStore';
             },
             float2int (value) {
                 return value | 0;
+            },
+            readableIndustry(industry){
+                // make the industry readable
+                let industry = industry.replace('-', ' ');
+                // title case
+                industry = this.titleCase(industry);
+                return industry
             },
 
         },
