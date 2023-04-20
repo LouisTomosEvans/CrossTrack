@@ -114,7 +114,7 @@
                         :search="search"
                         :options.sync="tableOptions"
                         :footer-props="footerOptions"
-                        class="elevation-0"
+                        class="elevation-0 custom-data-table"
                         color="#f05628"
                         :loading="loading"
                         loading-text="Loading your team members... Please wait"

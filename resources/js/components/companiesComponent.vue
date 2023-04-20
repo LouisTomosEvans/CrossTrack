@@ -57,6 +57,67 @@
                 </div>
                 
             </div>
+            <v-dialog
+                v-model="assignDialog"
+                persistent
+                max-width="550px"
+                >
+                <v-card style="border-radius: 8px; box-shadow: 0px 0px 5px 0px rgba(40,50,59,.1);">
+                    <v-card-title style="border-bottom: solid 1px lightgrey; margin-bottom: 1rem;">
+                        <b><span style="font-size: 1rem; color: #28323b;">Assign User to Lead</span></b>
+                    </v-card-title>
+                    <v-card-text>
+                        <v-row>
+                            <v-col cols="12">
+                                <span style="color: #28323b; font-size: 0.8125rem;">To add a new team member, simply enter their email address, and select the role you want them to have. Once you've added the new team member, they'll receive an email with instructions to set up their account and confirm their membership.</span>
+                            </v-col>
+                        </v-row>
+                        <v-row class="pt-0">
+                            <v-col cols="12" class="pt-0">
+                                <!-- drop down for category -->
+                                <v-combobox
+                                    color="#f05628"
+                                    :items="teamStore.members"
+                                    v-model="assignItem.users"
+                                    placeholder="Select users to assign to segment"
+                                    dense
+                                    elevation=0
+                                    style="width: 100%;"
+                                    item-text="name"
+                                    item-value="id"
+                                    multiple
+                                    small chips
+                                    >
+                                    <template v-slot:selection="data">
+                                        <v-chip
+                                            v-bind="data.attrs"
+                                            :input-value="data.selected"
+                                            close
+                                            style="background-color: #f05628;"
+                                            class="mb-1"
+                                            @click:close="data.parent.selectItem(data.item)"
+                                        >
+                                            <span style="font-size: 0.8125rem; color: white; font-weight: 600;">
+                                                {{ data.item.name }}
+                                            </span>
+                                            
+                                        </v-chip>
+                                    </template>
+                                </v-combobox>
+                            </v-col>
+                        </v-row>
+                    </v-card-text>
+                    <v-card-actions class="pt-0 pb-4">
+                    <v-spacer></v-spacer>
+                    <v-btn @click="assignDialog = false; assignItem = {};" outlined elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+                        <span>Close</span>
+                    </v-btn>
+                    <v-btn @click="editLead()" class="px-4" elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+                        <span style="color: #FFFFFF;" >Save Changes</span>
+                    </v-btn>
+                    </v-card-actions>
+                </v-card>
+                </v-dialog>
             <div class="col-12 d-flex justify-content-between align=content-center" style="padding-bottom: 0rem;">
                 <div class="p-0 m-0" style="width: 35%;">
                     <v-text-field color="#f05628" label="Search your company leads ex. Amazon" clearable dense v-model="search" height="40px" solo elevation=0 append-icon="mdi-magnify" single-line hide-details style="width: 100%; border-radius: 8px; box-shadow: 0px 0px 5px 0px rgba(40,50,59,.1) !important;">
@@ -82,7 +143,7 @@
                         :search="search"
                         :options.sync="tableOptions"
                         :footer-props="footerOptions"
-                        class="elevation-0"
+                        class="elevation-0 custom-data-table"
                         color="#f05628"
                         :loading="loading"
                         loading-text="Loading your leads... Please wait"
@@ -139,16 +200,19 @@
                         <template v-slot:item.website_name="{ item }">
                             <div v-if="item" class="d-flex align-items-center">
                                 <!-- website icon -->
-                                <v-avatar class="mr-1" rounded size="24" color="info" v-if="!item.website_favicon">
+                                <v-avatar class="mr-1" rounded size="30" color="info" v-if="!item.website_favicon">
                                     <!-- 0.75 size -->
                                     <v-icon color="white" style="font-size: 0.95rem;">mdi-domain</v-icon>
                                 </v-avatar>
                                 <!-- show favicon -->
-                                <div class="mr-1" style="height: 24px; width: 24px;" v-else>
+                                <div class="mr-1" style="height: 30px; width: 30px;" v-else>
                                     <!-- 0.75 size -->
-                                    <img :src="getFaviconURL(item.website_favicon)" style="width: 24px; height: 24px; border-radius: 4px;">
+                                    <img :src="getFaviconURL(item.website_favicon)" style="width: 30px; height: 30px; border-radius: 4px;">
                                 </div>
-                                <span class="ml-1" style="color: #28323b; font-size: 0.8125rem;">{{ item.website_name }}</span>
+                                <div class="d-flex flex-wrap" style="width: fit-content">
+                                    <span class="ml-1 w-100" style="color: #28323b; font-size: 0.8125rem;">{{ item.website_name }}</span>
+                                    <a @click="goTo(item.website_domain)" class="ml-1" style="color: #2196F3; font-size: 0.75rem; opacity: 0.75;">{{ item.website_domain }}<v-icon class="ml-1" style="color: #2196F3 !important; font-size: 0.825rem; opacity: 0.75;">mdi-open-in-new</v-icon></a>
+                                </div>
                             </div>
                         </template>
                         <!-- location -->
@@ -181,7 +245,7 @@
 
                         <template v-slot:item.users="{ item }">
                             <!-- for each users disply their avatar -->
-                            <div v-if="item.users" class="d-flex align-items-center">
+                            <div v-if="item.users.length > 0" class="d-flex align-items-center">
 
                                 <div v-for="(user, index) in item.users" :key="user.id" class="avatar-container" :class="{'avatar-overlap': index > 0}" :style="{left: index > 0 ? (-10 * index) + 'px' : ''}">
                                     <!-- show avatar -->
@@ -195,6 +259,11 @@
                                         <span>{{ user.name }}</span>
                                     </v-tooltip>
                                 </div>
+                            </div>
+                            <div v-else>
+                                <!-- circle with plud in it to add users -->
+                                <!-- 0.75 size -->
+                                <v-icon @click="assignDialog = true; assignItem = item" style="font-size: 20px; cursor: pointer; color: #f05628;">mdi-plus-circle</v-icon>
                             </div>
                         </template>
 
@@ -248,30 +317,50 @@
                                             </div>
                                             <!-- put in top right of parent element -->
                                             <div>
-                                                <v-btn class="leadIcons" @click="dialog = true;" icon style="">
-                                                    <v-icon style="font-size: 1rem;">mdi-tag-plus-outline</v-icon>
-                                                </v-btn>
-                                                <!--  email button -->
-                                                <v-btn class="leadIcons" @click="dialog = true;" icon>
-                                                    <v-icon style="font-size: 1rem;">mdi-account-plus-outline</v-icon>
-                                                </v-btn>
                                                 <!-- more -->
-                                                <v-menu offset-y>
+                                                <v-menu offset-y nudge-left="150px">
                                                     <template v-slot:activator="{ on }">
                                                         <v-btn class="leadIcons mr-0" icon>
-                                                            <v-icon style="font-size: 1rem;">mdi-dots-vertical</v-icon>
+                                                            <v-icon v-on="on" style="font-size: 1rem;">mdi-dots-vertical</v-icon>
                                                         </v-btn>
                                                     </template>
-                                                    <v-list>
-                                                        <v-list-item @click="dialog = true;">
-                                                            <v-list-item-title>View Profile</v-list-item-title>
-                                                        </v-list-item>
-                                                        <v-list-item @click="dialog = true;">
-                                                            <v-list-item-title>View Website</v-list-item-title>
-                                                        </v-list-item>
-                                                        <v-list-item @click="dialog = true;">
-                                                            <v-list-item-title>View Social Media</v-list-item-title>
-                                                        </v-list-item>
+                                                    <v-list dense class="mt-0 p-0">
+                                                    <!-- heading -->
+                                                    <v-list-item style="background-color: #F5F5F5;">
+                                                    <v-list-item-content>
+                                                        <v-list-item-title style="font-weight: 700;">Lead Actions</v-list-item-title>
+                                                    </v-list-item-content>
+                                                    </v-list-item>
+                                                    <v-list-item  style="cursor: pointer;" @click="assignDialog = true; assignItem = leadItem">
+                                                    <v-list-item-content>
+                                                        <v-list-item-title>
+                                                            Edit Lead Assignments
+                                                        </v-list-item-title>
+                                                    </v-list-item-content>
+                                                    </v-list-item>
+                                                    <v-list-item style="cursor: pointer;" @click="assignDialog = true; assignItem = leadItem">
+                                                    <v-list-item-content>
+                                                        <v-list-item-title>
+                                                            Edit Lead Tags
+                                                        </v-list-item-title>
+                                                    </v-list-item-content>
+                                                    </v-list-item>
+                                                    <!-- divider -->
+                                                    <v-divider class="my-1"></v-divider>
+                                                    <v-list-item v-if="leadItem.active == 0" style="cursor: pointer;" @click="activateLeadDialog = true; activateLead = leadItem">
+                                                    <v-list-item-content>
+                                                        <v-list-item-title>
+                                                            Un-Archive Lead
+                                                        </v-list-item-title>
+                                                    </v-list-item-content>
+                                                    </v-list-item >
+                                                    <v-list-item v-if="leadItem.active == 1" style="cursor: pointer;" @click="deactivateLeadDialog = true; deactivateLead = leadItem">
+                                                    <v-list-item-content>
+                                                        <v-list-item-title>
+                                                            Archive Lead
+                                                        </v-list-item-title>
+                                                    </v-list-item-content>
+                                                    </v-list-item>
                                                     </v-list>
                                                 </v-menu>
 
@@ -576,7 +665,7 @@ import { useLeadStore } from '../store/leadStore';
                 toggle: 0,
                 headers: [
                     {
-                        text: 'Company',
+                        text: 'Company Lead',
                         align: 'start',
                         sortable: false,
                         value: 'name',
@@ -627,10 +716,28 @@ import { useLeadStore } from '../store/leadStore';
                 itemsPerPageOptions: [10, 25, 50, 100], // this is the proper name - not "items-per-page options" like what you're using
                 },
                 contactsExist: false,
+                assignDialog: false,
+                assignItem: {
+                    users: [],
+                },
             }
         },
         methods:{
             //  let route = '../api/teams/leads/{team_id}';
+            // edit lead
+            editLead: function () {
+                this.$http.put('/api/teams/leads/' + this.assignItem.id, {
+                    lead: this.assignItem
+                }).then(response => {
+                    this.leadStore.fetchLeads();
+                    this.assignDialog = false;
+                    this.assignItem = {
+                        users: [],
+                    }
+                }, response => {
+                    console.log(response);
+                });
+            },
 
             getFaviconURL(url) {
                 // remove the public and replace it with storage
@@ -775,6 +882,15 @@ import { useLeadStore } from '../store/leadStore';
                     this.appStore.colorArray[this.appStore.colorIndex++ % this.appStore.colorArray.length];
                 }, 100);
             },
+        },
+        watch: {
+            assignItem: function (val) {
+                // assign the item
+                if(this.teamStore.members.length == 0){
+                    // fetch the team
+                    this.teamStore.fetchTeam(this.userStore.user.current_team_id);
+                }
+            },
         }
         
     }
@@ -895,6 +1011,11 @@ import { useLeadStore } from '../store/leadStore';
 
 }
 
+.custom-data-table .v-data-table__wrapper tbody tr:hover {
+  background-color: transparent !important;
+  cursor: default !important;
+}
+
 .avatar-container {
     position: relative;
 }
@@ -925,7 +1046,7 @@ import { useLeadStore } from '../store/leadStore';
 .source-container {
   display: flex;
   align-items: center;
-  padding: 1rem;
+  padding: 0.5rem;
   border: thin solid whitesmoke;
   border-radius: 0;
 }
@@ -933,7 +1054,7 @@ import { useLeadStore } from '../store/leadStore';
 .grid-container {
   display: grid;
   grid-template-columns: 1fr auto;
-  gap: 0.5rem;
+  gap: 1rem;
   align-items: center;
   width: 100%;
 }

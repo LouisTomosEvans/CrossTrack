@@ -35,6 +35,7 @@ export const useLeadStore = defineStore('lead', {
                 }
             });
             this.contacts = response.data;
-        }
+        },
+        
     },
 })

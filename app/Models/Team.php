@@ -46,5 +46,10 @@ class Team extends Model
         return $this->hasManyThrough(Segmentation::class, Website::class);
     }
 
+    public function companyLeads()
+    {
+        return $this->hasManyThrough(CompanyLeads::class, Website::class);
+    }
+
 
 }

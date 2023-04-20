@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Visits;
 use Illuminate\Support\Facades\DB;
+use App\Models\CompanyLeads;
+use App\Models\User;
 
 class CompanyLeadsController extends Controller
 {
@@ -29,6 +31,7 @@ class CompanyLeadsController extends Controller
         foreach ($leads as $lead) {
             $lead->website_name = $lead->website->name;
             $lead->website_favicon = $lead->website->favicon;
+            $lead->website_domain = $lead->website->domain;
             //  get number of sessions, a session is a visit by a user that last 30 minutes, after 30 mins its a new session
             $lead->sessions = $lead->visits->groupBy('visitor_id')->count();
             $lead->last_seen = $lead->visits->sortByDesc('timestamp')->first()->timestamp;
@@ -70,5 +73,50 @@ class CompanyLeadsController extends Controller
         // return the leads
         return $leads;
 
+    }
+    public function update(Request $request, $id)
+    {
+         // check user is apart of team
+         if (!auth()->user()->isMemberOfTeam(auth()->user()->currentTeam)) {
+            abort(403);
+        }
+
+        $validatedData = $request->validate([
+            'lead' => 'required',
+        ]);
+
+        // get data from request
+        $validatedData = $validatedData['lead'];
+
+        // check segment is apart of the users current team
+        $lead = CompanyLeads::find($id);
+        $team = $request->user()->currentTeam;
+        if (!$team->companyLeads->contains($lead)) {
+            return ['error', 'Lead not found in this team.'];
+        }
+
+        // detach all users from the segment
+        $lead->users()->detach();
+
+        // attach semgento to users
+        $users = $validatedData['users'];
+
+
+        // pick id from users array
+        $users = array_map(function ($user) {
+            return $user['id'];
+        }, $users);
+
+        // get the users from the request
+        $users = User::whereIn('id', $users)->get();
+        // check users id are apart of the users current team
+        foreach ($users as $user) {
+            if (!$team->users->contains($user)) {
+                return ['error', 'User not found in this team.'];
+            }
+        }
+        $lead->users()->attach($users);
+
+        return ['success', 'Lead edited successfully.'];
     }
 }

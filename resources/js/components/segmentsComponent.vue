@@ -452,23 +452,26 @@
                         :headers="headers"
                         :items="segmentStore.segments"
                         :search="search"
-                        class="elevation-0"
+                        class="elevation-0 custom-data-table"
                         color="#f05628"
                         style="border-radius: 8px;  border: thin solid rgba(0,0,0,.12);"
                         >
                         <template v-slot:item.website.name="{ item }">
                             <div v-if="item" class="d-flex align-items-center">
                                 <!-- website icon -->
-                                <v-avatar class="mr-1" size="24" color="info" v-if="!item.website.favicon">
+                                <v-avatar class="mr-1" size="30" color="info" v-if="!item.website.favicon">
                                     <!-- 0.75 size -->
                                     <v-icon color="white" style="font-size: 0.95rem;">mdi-web</v-icon>
                                 </v-avatar>
                                 <!-- show favicon -->
-                                <div class="mr-1" style="height: 24px; width: 24px;" v-else>
+                                <div class="mr-1" style="height: 30px; width: 30px;" v-else>
                                     <!-- 0.75 size -->
-                                    <img :src="getFaviconURL(item.website.favicon)" style="width: 24px; height: 24px; border-radius: 4px;">
+                                    <img :src="getFaviconURL(item.website.favicon)" style="width: 30px; height: 30px; border-radius: 4px;">
                                 </div>
-                                <span class="ml-1" style="color: #28323b; font-size: 0.8125rem;">{{ item.website.name }}</span>
+                                <div class="d-flex flex-wrap" style="width: fit-content">
+                                    <span class="ml-1 w-100" style="color: #28323b; font-size: 0.8125rem;">{{ item.website.name }}</span>
+                                    <a @click="goTo(item.website.domain)" class="ml-1" style="color: #2196F3; font-size: 0.75rem; opacity: 0.75;">{{ item.website.domain }}<v-icon class="ml-1" style="color: #2196F3 !important; font-size: 0.825rem; opacity: 0.75;">mdi-open-in-new</v-icon></a>
+                                </div>
                             </div>
                         </template>
                         <template v-slot:item.name="{ item }">
