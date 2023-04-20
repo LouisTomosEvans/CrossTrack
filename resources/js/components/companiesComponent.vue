@@ -166,7 +166,7 @@
                         <!-- lead score - linear bar -->
                         <template v-slot:item.lead_score="{ item }">
                             <div class="d-flex align-items-center justify-content-start" v-if="item">
-                                <span class="mr-1" style="color: #28323b; font-size: 0.8125rem; width: 25px; text-align: right;">{{ item.lead_score.score }}</span>
+                                <span class="mr-1" style="color: #28323b; font-size: 0.8125rem; width: 25px; text-align: right;">{{ float2int(item.lead_score.score) }}</span>
                                 <v-progress-linear
                                 :value="item.lead_score.score"
                                 :color="getLeadScoreColor(item.lead_score.score)"
@@ -725,6 +725,9 @@ import { useLeadStore } from '../store/leadStore';
                 } else {
                     return Math.floor(seconds / 3600) + 'hrs';
                 }
+            },
+            float2int (value) {
+                return value | 0;
             },
 
         },
