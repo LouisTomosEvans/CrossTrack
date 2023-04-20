@@ -284,7 +284,7 @@
                                             <span style="width: 100%; color: rgb(40, 50, 59); font-size: 0.8125rem; height: 22px; opacity: 0.75;">
                                                 Industry
                                             </span>
-                                            <span style="width: 100%; color: rgb(40, 50, 59); font-size: 0.8125rem; font-weight: 600;">
+                                            <span v-if="leadItem.industry" style="width: 100%; color: rgb(40, 50, 59); font-size: 0.8125rem; font-weight: 600;">
                                                 {{ readableIndustry(leadItem.industry) }}
                                             </span>
                                         </div>
@@ -292,12 +292,12 @@
                                             <span style="width: 100%; color: rgb(40, 50, 59); font-size: 0.8125rem; height: 22px; opacity: 0.75;">
                                                 Company Size
                                             </span>
-                                            <span style="width: 100%; color: rgb(40, 50, 59); font-size: 0.8125rem; font-weight: 600;">
+                                            <span v-if="leadItem.size" style="width: 100%; color: rgb(40, 50, 59); font-size: 0.8125rem; font-weight: 600;">
                                                 {{ leadItem.size }}
                                             </span>
                                         </div>
                                         <div class="d-flex flex-wrap align-content-start" style="padding: 1rem; width: 33.33%;">
-                                            <span style="width: 100%; color: rgb(40, 50, 59); font-size: 0.8125rem; height: 22px;">
+                                            <span v-if="leadItem.lead_score" style="width: 100%; color: rgb(40, 50, 59); font-size: 0.8125rem; height: 22px;">
                                                 Lead Score
                                             </span>
                                             <span class="d-flex align-items-center" style="width: 100%; color: rgb(40, 50, 59); font-size: 0.8125rem;">
