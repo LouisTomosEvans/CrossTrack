@@ -243,7 +243,7 @@
                                             </div>
                                             <div class="d-flex flex-wrap align-self-center">
                                                 <span class="ml-1 align-self-end" style="width: 100%; color: #28323b; font-weight: bold; font-size: 1.5rem;">{{ leadItem.name }}</span>
-                                                <span class="ml-1 align-self-start" @click="formatDomain(leadItem.domain)" style="width: 100%; color: #2196F3; font-size: 0.8125rem; text-decoration: underline; cursor: pointer;">{{ leadItem.domain }}</span>
+                                                <span class="ml-1 align-self-start" @click="formatDomain(leadItem.domain)" style="width: 100%; color: #2196F3; font-size: 0.8125rem; text-decoration: underline; cursor: pointer;">{{ leadItem.domain }}<v-icon class="ml-2" style="color: #2196F3 !important; font-size: 0.9rem;">mdi-open-in-new</v-icon></span>
                                             </div>
                                             </div>
                                             <!-- put in top right of parent element -->
@@ -391,8 +391,8 @@
                                                     <!-- for each top_sources on lead item -->
                                                     <div v-for="(value, key) in leadItem.top_sources" :key="value.id" class="source-container">
                                                         <div class="grid-container">
-                                                            <span v-if="key != 'unknown'" class="truncate align-items-center" @click="goToLink(key)" style="font-size: 0.8125rem; color: #28323b; font-weight: 600; text-decoration: underline; color: #2196F3;">{{ key }}</span>
-                                                            <span v-else class="truncate align-items-center" style="cursor: pointer; font-size: 0.8125rem; color: #28323b; font-weight: 600;">{{ key }}</span>
+                                                            <span v-if="key != 'unknown'" class="truncate align-items-center" @click="goToLink(key)" style="cursor: pointer; font-size: 0.8125rem; color: #28323b; font-weight: 600; text-decoration: underline; color: #2196F3;">{{ key }}</span>
+                                                            <span v-else class="truncate align-items-center" style="font-size: 0.8125rem; color: #28323b; font-weight: 600;">{{ key }}</span>
                                                             <span style="font-size: 0.8125rem; color: #28323b;">{{ value }} Visits</span>
                                                         </div>
                                                     </div>
@@ -410,11 +410,11 @@
                                             <v-img src="https://cdn.vuetifyjs.com/images/cards/docks.jpg" max-width="300" max-height="300" contain></v-img>
                                         </div>
                                         <!-- copy -->
-                                        <div class="d-flex align-items-center justify-content-center" style="width: 100%; margin-top: 1rem;">
+                                        <!-- <div class="d-flex align-items-center justify-content-center" style="width: 100%; margin-top: 1rem;">
                                             <span style="font-size: 0.8125rem; color: #28323b;">Search for contacts who work at this company.</span>
-                                        </div>
+                                        </div> -->
                                         <v-btn @click="searchContacts()" elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0; margin-top: 1rem;">
-                                            <span style="color: #FFFFFF;">Search for Contacts</span>
+                                            <span style="color: #FFFFFF;">Search for Contacts Working at this Company</span>
                                         </v-btn>
                                     </div>
                                     <!-- if contacts exit list them with avataar name and email -->
@@ -933,7 +933,7 @@ import { useLeadStore } from '../store/leadStore';
 .grid-container {
   display: grid;
   grid-template-columns: 1fr auto;
-  gap: 1rem;
+  gap: 0.5rem;
   align-items: center;
   width: 100%;
 }
