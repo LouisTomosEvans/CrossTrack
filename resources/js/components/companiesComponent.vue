@@ -731,10 +731,10 @@ import { useLeadStore } from '../store/leadStore';
             },
             readableIndustry(industry){
                 // make the industry readable
-                industry = industry.replace('-', ' ');
+                let industryString = industry.replace('-', ' ');
                 // title case
-                industry = this.titleCase(industry);
-                return industry
+                industryString = this.titleCase(industryString);
+                return industryString;
             },
 
         },
