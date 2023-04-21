@@ -124,14 +124,16 @@ class CompanyLeadsController extends Controller
             }
         }
         $lead->users()->attach($users);
+        
+        // detach all tags from the lead
+        $lead->detachTags($lead->tags);
 
         // update tags
         foreach ($tags as $tag) {
             // Find or create the tag with the specified name and color
             if(isset($tag['text'])){
                         
-                // detach all tags from the lead
-                $lead->detachTags($lead->tags);
+                
                 
                 $tagMod = Tag::findOrCreate($tag['text'], 'default');
 
@@ -143,8 +145,12 @@ class CompanyLeadsController extends Controller
 
                 // Attach the tag to the CompanyLead instance
                 $lead->attachTag($tagMod);
+            } else if (isset($tag['id'])) {
+                $tagMod = Tag::find($tag['id']);
+                $lead->attachTag($tagMod);
             }
         }
+
 
         return ['success', 'Lead edited successfully.'];
     }

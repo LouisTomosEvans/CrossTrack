@@ -173,7 +173,7 @@
                                         <v-list-item>
                                         <span style="font-size: 0.825rem; margin-right: 0.25rem;">Create</span>
                                         <v-chip
-                                            :color="`${colors[noiceOver - 1]} lighten-3`"
+                                            :color="`${colors[noiceOver - 1]}`"
                                             label
                                             small
                                         >
@@ -183,7 +183,7 @@
                                     </template>
                                     <template v-slot:item="{ index, item }">
                                     <v-chip
-                                    :color="`${item.color} lighten-3`"
+                                    :color="`${item.color}`"
                                     label
                                     small
                                     >
@@ -194,7 +194,7 @@
                                         <v-chip
                                         v-if="item == Object(item)"
                                         v-bind="attrs"
-                                        :color="`${item.color} lighten-3`"
+                                        :color="`${item.color}`"
                                         :input-value="selected"
                                         label
                                         small
@@ -381,7 +381,7 @@
 
                                 <div v-for="(tag, index) in item.tags" :key="tag.id">
                                     <!-- show avatar -->
-                                    <v-chip label small class="mr-2" :color="`${tag.color} lighten-3`" style="font-size: 0.75rem; font-weight: 400; text-decoration: none; border-radius: 8px;">
+                                    <v-chip label small class="mr-2" :color="`${tag.color}`" style="font-size: 0.75rem; font-weight: 400; text-decoration: none; border-radius: 8px;">
                                         {{ tag.name[appStore.locale] }}
                                     </v-chip>
                                 </div>
@@ -852,7 +852,7 @@ import { useLeadStore } from '../store/leadStore';
                 tagItem: {
                     tags: [],
                 },
-                colors: ['green', 'purple', 'indigo', 'cyan', 'teal', 'orange'],
+                colors: ['#FFDAB9', '#B0E0E6', '#A8DBA8', '#FFFACD', '#E6E6FA', '#FFB6C1'],
                 // random number 1-6
                 noice: 1,
                 tagSearch: '',
