@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             InviteSeeder::class,
             WebsiteSeeder::class,
             CompanyLeadsSeeder::class,
-            VisitsSeeder::class,
+            // VisitsSeeder::class,
         ]);
     }
 }

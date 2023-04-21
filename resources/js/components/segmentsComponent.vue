@@ -156,15 +156,16 @@
                                     item-text="name"
                                     item-value="id"
                                     multiple
-                                    small chips
+                                    small-chips
                                     >
                                     <template v-slot:selection="data">
                                         <v-chip
                                             v-bind="data.attrs"
                                             :input-value="data.selected"
                                             close
-                                            style="background-color: #f05628;"
-                                            class="mb-1"
+                                            color="#f05628"
+                                            text-color="white"
+                                            class="mb-2"
                                             @click:close="data.parent.selectItem(data.item)"
                                         >
                                             <span style="font-size: 0.8125rem; color: white; font-weight: 600;">
@@ -331,15 +332,16 @@
                                     item-text="name"
                                     item-value="id"
                                     multiple
-                                    small chips
+                                    small-chips
                                     >
                                     <template v-slot:selection="data">
                                         <v-chip
                                             v-bind="data.attrs"
                                             :input-value="data.selected"
                                             close
-                                            style="background-color: #f05628;"
-                                            class="mb-1"
+                                            color="#f05628"
+                                            text-color="white"
+                                            class="mb-2"
                                             @click:close="data.parent.selectItem(data.item)"
                                         >
                                             <span style="font-size: 0.8125rem; color: white; font-weight: 600;">

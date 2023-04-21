@@ -79,22 +79,24 @@
                                     color="#f05628"
                                     :items="teamStore.members"
                                     v-model="assignItem.users"
-                                    placeholder="Select users to assign to segment"
+                                    placeholder="Select users to assign to lead"
                                     dense
                                     elevation=0
                                     style="width: 100%;"
                                     item-text="name"
                                     item-value="id"
                                     multiple
-                                    small chips
+                                    small-chips
                                     >
                                     <template v-slot:selection="data">
                                         <v-chip
                                             v-bind="data.attrs"
                                             :input-value="data.selected"
                                             close
-                                            style="background-color: #f05628;"
-                                            class="mb-1"
+                                            class="mb-2"
+                                            color="#f05628"
+                                            text-color="white"
+                                            dark
                                             @click:close="data.parent.selectItem(data.item)"
                                         >
                                             <span style="font-size: 0.8125rem; color: white; font-weight: 600;">
@@ -112,12 +114,118 @@
                     <v-btn @click="assignDialog = false; assignItem = {};" outlined elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
                         <span>Close</span>
                     </v-btn>
-                    <v-btn @click="editLead()" class="px-4" elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+                    <v-btn @click="assignLead()" class="px-4" elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
                         <span style="color: #FFFFFF;" >Save Changes</span>
                     </v-btn>
                     </v-card-actions>
                 </v-card>
-                </v-dialog>
+            </v-dialog>
+            <v-dialog
+                v-model="tagDialog"
+                persistent
+                max-width="550px"
+                >
+                <v-card style="border-radius: 8px; box-shadow: 0px 0px 5px 0px rgba(40,50,59,.1);">
+                    <v-card-title style="border-bottom: solid 1px lightgrey; margin-bottom: 1rem;">
+                        <b><span style="font-size: 1rem; color: #28323b;">Assign Tags to Lead</span></b>
+                    </v-card-title>
+                    <v-card-text>
+                        <v-row>
+                            <v-col cols="12">
+                                <span style="color: #28323b; font-size: 0.8125rem;">To add a new team member, simply enter their email address, and select the role you want them to have. Once you've added the new team member, they'll receive an email with instructions to set up their account and confirm their membership.</span>
+                            </v-col>
+                        </v-row>
+                        <v-row class="pt-0">
+                            <v-col cols="12" class="pt-0">
+                                <!-- drop down for category -->
+                                <v-combobox
+                                    color="#f05628"
+                                    v-model="tagItemTags"
+                                    :search-input.sync="tagSearch"
+                                    :filter="customFilter"
+                                    placeholder="Select tags to assign to lead"
+                                    :items="availableTags"
+                                    dense
+                                    elevation=0
+                                    style="width: 100%;"
+                                    multiple
+                                    chips
+                                    clearable
+                                    hide-selected
+                                    small-chips
+                                    >
+                                    <!-- <template v-slot:selection="data">
+                                        <v-chip
+                                            v-bind="data.attrs"
+                                            :input-value="data.selected"
+                                            close
+                                            style="background-color: #f05628;"
+                                            class="mb-1"
+                                            @click:close="data.parent.selectItem(data.item)"
+                                        >
+                                            <span style="font-size: 0.8125rem; color: white; font-weight: 600;">
+                                                {{ data.item.name[appStore.locale] }}
+                                            </span>
+                                            
+                                        </v-chip>
+                                    </template> -->
+                                    <template v-slot:no-data>
+                                        <v-list-item>
+                                        <span style="font-size: 0.825rem; margin-right: 0.25rem;">Create</span>
+                                        <v-chip
+                                            :color="`${colors[noiceOver - 1]} lighten-3`"
+                                            label
+                                            small
+                                        >
+                                            {{ tagSearch }}
+                                        </v-chip>
+                                        </v-list-item>
+                                    </template>
+                                    <template v-slot:item="{ index, item }">
+                                    <v-chip
+                                    :color="`${item.color} lighten-3`"
+                                    label
+                                    small
+                                    >
+                                    {{ item.name[appStore.locale] }}
+                                    </v-chip>
+                                    </template>
+                                    <template v-slot:selection="{ attrs, item, parent, selected }">
+                                        <v-chip
+                                        v-if="item == Object(item)"
+                                        v-bind="attrs"
+                                        :color="`${item.color} lighten-3`"
+                                        :input-value="selected"
+                                        label
+                                        small
+                                        class="mb-2"
+                                        >
+                                        <span class="pr-2">
+                                            {{ item.text }}
+                                        </span>
+                                        <v-icon
+                                            small
+                                            @click="parent.selectItem(item)"
+                                        >
+                                            $delete
+                                        </v-icon>
+                                        </v-chip>
+                                    </template>
+                                </v-combobox>
+                            </v-col>
+                        </v-row>
+                    </v-card-text>
+                    <v-card-actions class="pt-0 pb-4">
+                    <v-spacer></v-spacer>
+                    <v-btn @click="tagDialog = false; tagItem = {};" outlined elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+                        <span>Close</span>
+                    </v-btn>
+                    <v-btn @click="tagLead()" class="px-4" elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+                        <span style="color: #FFFFFF;" >Save Changes</span>
+                    </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
             <div class="col-12 d-flex justify-content-between align=content-center" style="padding-bottom: 0rem;">
                 <div class="p-0 m-0" style="width: 35%;">
                     <v-text-field color="#f05628" label="Search your company leads ex. Amazon" clearable dense v-model="search" height="40px" solo elevation=0 append-icon="mdi-magnify" single-line hide-details style="width: 100%; border-radius: 8px; box-shadow: 0px 0px 5px 0px rgba(40,50,59,.1) !important;">
@@ -267,6 +375,24 @@
                             </div>
                         </template>
 
+                        <template v-slot:item.tags="{ item }">
+                            <!-- for each users disply their avatar -->
+                            <div v-if="item.tags.length > 0" class="d-flex align-items-center">
+
+                                <div v-for="(tag, index) in item.tags" :key="tag.id">
+                                    <!-- show avatar -->
+                                    <v-chip label small class="mr-2" :color="`${tag.color} lighten-3`" style="font-size: 0.75rem; font-weight: 400; text-decoration: none; border-radius: 8px;">
+                                        {{ tag.name[appStore.locale] }}
+                                    </v-chip>
+                                </div>
+                            </div>
+                            <div v-else>
+                                <!-- circle with plud in it to add users -->
+                                <!-- 0.75 size -->
+                                <v-icon @click="tagDialog = true; tagItem = item" style="font-size: 20px; cursor: pointer; color: #f05628; opacity: 0.6 !important;">mdi-plus-circle</v-icon>
+                            </div>
+                        </template>
+
                         </v-data-table>
                         <!-- data table -->
 
@@ -338,7 +464,7 @@
                                                         </v-list-item-title>
                                                     </v-list-item-content>
                                                     </v-list-item>
-                                                    <v-list-item style="cursor: pointer;" @click="assignDialog = true; assignItem = leadItem">
+                                                    <v-list-item style="cursor: pointer;" @click="tagItem = leadItem; formatTags(tagItem.tags); tagDialog = true;">
                                                     <v-list-item-content>
                                                         <v-list-item-title>
                                                             Edit Lead Tags
@@ -644,6 +770,7 @@ import { useLeadStore } from '../store/leadStore';
                     this.leadStore.fetchLeads(this.userStore.user.current_team.id);
                 }
             }
+            this.noice = this.randomIntFromInterval(1, 6);
         },
         // once loaded, edit the css
         updated() {
@@ -671,7 +798,8 @@ import { useLeadStore } from '../store/leadStore';
                         value: 'name',
                     },
                     { text: 'Visited', value: 'website_name'},
-                    { text: 'Num. visitors', value: 'unique_visitors' },
+                    // { text: 'Num. visitors', value: 'unique_visitors' },
+                    { text: 'Tags', value: 'tags' },
                     { text: 'Assigned to', value: 'users' },
                     { text: 'Lead Score', value: 'lead_score' },
                     // { text: 'Last Seen', value: 'last_seen' },
@@ -720,16 +848,43 @@ import { useLeadStore } from '../store/leadStore';
                 assignItem: {
                     users: [],
                 },
+                tagDialog: false,
+                tagItem: {
+                    tags: [],
+                },
+                colors: ['green', 'purple', 'indigo', 'cyan', 'teal', 'orange'],
+                // random number 1-6
+                noice: 1,
+                tagSearch: '',
+                tagItemTags: [],
             }
         },
         methods:{
             //  let route = '../api/teams/leads/{team_id}';
             // edit lead
-            editLead: function () {
+            tagLead: function () {
+                this.tagItem.tags = this.tagItemTags
+                this.$http.put('/api/teams/leads/' + this.tagItem.id, {
+                    lead: this.tagItem
+                }).then(response => {
+                    this.leadStore.fetchLeads(this.userStore.user.current_team_id);
+                    this.tagDialog = false;
+                    this.tagItem = {
+                        users: [],
+                    },
+                    this.nonce = 1
+                    this.tagSearch =''
+                    this.tagItemTags = []
+                }, response => {
+                    console.log(response);
+                });
+            },
+
+            assignLead: function () {
                 this.$http.put('/api/teams/leads/' + this.assignItem.id, {
                     lead: this.assignItem
                 }).then(response => {
-                    this.leadStore.fetchLeads();
+                    this.leadStore.fetchLeads(this.userStore.user.current_team_id);
                     this.assignDialog = false;
                     this.assignItem = {
                         users: [],
@@ -737,6 +892,19 @@ import { useLeadStore } from '../store/leadStore';
                 }, response => {
                     console.log(response);
                 });
+            },
+
+            customFilter (item, queryText, itemText) {
+                if (item.header) return false
+
+                const hasValue = val => val != null ? val : ''
+
+                const text = hasValue(item.name[this.appStore.locale])
+                const query = hasValue(queryText)
+
+                return text.toString()
+                .toLowerCase()
+                .indexOf(query.toString().toLowerCase()) > -1
             },
 
             getFaviconURL(url) {
@@ -872,6 +1040,25 @@ import { useLeadStore } from '../store/leadStore';
                 // go to the link
                 window.open(link, '_blank');
             },
+            formatTags(tags){
+                // format the tags to array with text and color from the tag object
+                let formattedTags = [];
+                // loop through the tags
+                tags.forEach(tag => {
+                    // push the tag to the array
+                    formattedTags.push({
+                        text: tag.name[this.appStore.locale],
+                        color: tag.color,
+                    });
+                });
+
+                this.tagItemTags = formattedTags;
+            },
+            randomIntFromInterval(min,max)
+            {
+                // get a random int from min to max
+                return Math.floor(Math.random()*(max-min+1)+min);
+            },
 
         },
         computed: {
@@ -882,6 +1069,21 @@ import { useLeadStore } from '../store/leadStore';
                     this.appStore.colorArray[this.appStore.colorIndex++ % this.appStore.colorArray.length];
                 }, 100);
             },
+            noiceOver() {
+                // get the remainder of the noice and the length of color
+                return (this.noice % this.colors.length) + 1
+
+            },
+            availableTags(){
+                // all team tags minus the tags already assigned to the item or selected by the user using the combo box
+                return this.appStore.tags.filter(tag => {
+                    // return the tags that are not in the tagItemTags array based on text
+                    if(tag.name){
+                        return !this.tagItemTags.map(t => t.text).includes(tag.name[this.appStore.locale]);
+                    }
+                    
+                });
+            }
         },
         watch: {
             assignItem: function (val) {
@@ -891,6 +1093,39 @@ import { useLeadStore } from '../store/leadStore';
                     this.teamStore.fetchTeam(this.userStore.user.current_team_id);
                 }
             },
+            tagItem: function (val) {
+                // assign the item
+                if(this.appStore.tags.length == 0){
+                    // fetch the team
+                    this.appStore.getTeamTags(this.userStore.user.current_team_id);
+                }
+            },
+            tagItemTags: function (val, prev) {
+                // assign the item
+                if (val.length === prev.length) return
+
+                this.tagItemTags = val.map(v => {
+                    if (typeof v === 'string') {
+                            v = {
+                                text: v,
+                                color: this.colors[this.noiceOver - 1],
+                            }
+                            this.appStore.tags.push(v)
+                            this.noice++
+                    } else if (typeof v === 'object') {
+                        if (v.text && v.color) {
+                            return v
+                        } else if (v.name && v.color) {
+                            return {
+                                text: v.name[this.appStore.locale],
+                                color: v.color,
+                            }
+                        }
+                    }
+                return v
+                })
+
+        },
         }
         
     }

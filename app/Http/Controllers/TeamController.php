@@ -186,4 +186,23 @@ class TeamController extends Controller
 
         return json_encode(['success' => true]);
     }
+
+    public function getTags($id) {
+        // get team
+        $team = Team::findOrFail($id);
+
+        // check user is apart of team
+        if (! auth()->user()->isOwnerOfTeam($team) && ! auth()->user()->isMemberOfTeam($team)) {
+            abort(403);
+        }
+
+        // get all tags associated with all teams companyLeads 
+        $companyLeads = $team->companyLeads;
+        $tags = [];
+        foreach ($companyLeads as $companyLead) {
+            $tags = array_merge($tags, $companyLead->tags->toArray());
+        }
+
+        return $tags;
+    }
 }

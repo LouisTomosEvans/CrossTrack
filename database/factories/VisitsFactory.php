@@ -31,6 +31,7 @@ class VisitsFactory extends Factory
             'device_type' => $this->faker->randomElement(['desktop', 'mobile', 'tablet']),
             'operating_system' => $this->faker->randomElement(['windows', 'mac', 'linux']),
             'browser_version' => $this->faker->randomElement(['chrome', 'firefox', 'safari']),
+            'interaction' => $this->faker->randomElement(['click', 'scroll', 'load']),
         ];
     }
 }

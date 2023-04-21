@@ -80,6 +80,9 @@ Route::group(['prefix' => 'teams'], function()
     Route::middleware(['auth:sanctum', 'verified'])->get('leads/{id}', [App\Http\Controllers\CompanyLeadsController::class, 'index'])->name('leads.show');
     Route::middleware(['auth:sanctum', 'verified'])->put('leads/{id}', [App\Http\Controllers\CompanyLeadsController::class, 'update'])->name('leads.update');
 
+    // tags
+    Route::middleware(['auth:sanctum', 'verified'])->get('tags/{id}', [App\Http\Controllers\TeamController::class, 'getTags'])->name('tags.show');
+
     // Dashboard
     Route::middleware(['auth:sanctum', 'verified'])->get('dashboard/{id}', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard.show');
 });

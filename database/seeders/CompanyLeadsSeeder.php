@@ -14,6 +14,12 @@ class CompanyLeadsSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\CompanyLeads::factory()->count(50)->create();
+        // create company leads with lead score and visits
+        \App\Models\CompanyLeads::factory()->count(10)->create()->each(function ($lead) {
+            $lead->leadScore()->save(\App\Models\LeadScore::factory()->make());
+            $lead->visits()->saveMany(\App\Models\Visits::factory()->count(10)->make());
+            // save 
+            $lead->save();
+        });
     }
 }

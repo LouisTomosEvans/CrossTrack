@@ -15,6 +15,8 @@ export const useAppStore = defineStore('app', {
         colorArray: ['#f05628', '#f0a428', '#f0f428', '#a4f428', '#28f0f4', '#284df0', '#a428f0'],
         // dashboard data
         dashboardData: [],
+        tags: [],
+        locale: 'en',
     }),
     actions: {
         async setBranding() {
@@ -28,7 +30,12 @@ export const useAppStore = defineStore('app', {
             const response = await axios.get(api_url);
             this.dashboardData = response.data;
             // go through dashboardData - get visits_this_month and convert to zero arrray of length of days in this month
-        }
-
+        },
+        getTeamTags(team_id) {
+            const api_url = 'api/teams/tags/' + team_id;
+            axios.get(api_url).then(response => {
+                this.tags = response.data;
+            });
+        },
     },
 })

@@ -7,6 +7,7 @@ use App\Models\Visits;
 use Illuminate\Support\Facades\DB;
 use App\Models\CompanyLeads;
 use App\Models\User;
+use Spatie\Tags\Tag; // Import the correct Tag model from the package
 
 class CompanyLeadsController extends Controller
 {
@@ -68,6 +69,12 @@ class CompanyLeadsController extends Controller
 
             $lead->visit_count = DB::selectOne($rawQuery, [$lead->id, $sessionTimeoutSeconds])->session_count;
 
+            // lead with tags
+            $lead->tags = $lead->tags->map(function ($tag) {
+                $tag->name = $tag->name;
+                return $tag;
+            });
+
         }
 
         // return the leads
@@ -88,7 +95,7 @@ class CompanyLeadsController extends Controller
         // get data from request
         $validatedData = $validatedData['lead'];
 
-        // check segment is apart of the users current team
+        // check lead is apart of the users current team
         $lead = CompanyLeads::find($id);
         $team = $request->user()->currentTeam;
         if (!$team->companyLeads->contains($lead)) {
@@ -100,6 +107,7 @@ class CompanyLeadsController extends Controller
 
         // attach semgento to users
         $users = $validatedData['users'];
+        $tags = $validatedData['tags'];
 
 
         // pick id from users array
@@ -116,6 +124,27 @@ class CompanyLeadsController extends Controller
             }
         }
         $lead->users()->attach($users);
+
+        // update tags
+        foreach ($tags as $tag) {
+            // Find or create the tag with the specified name and color
+            if(isset($tag['text'])){
+                        
+                // detach all tags from the lead
+                $lead->detachTags($lead->tags);
+                
+                $tagMod = Tag::findOrCreate($tag['text'], 'default');
+
+                // If a color is provided, update the tag's color
+                if (isset($tag['color'])) {
+                    $tagMod->color = $tag['color'];
+                    $tagMod->save();
+                }
+
+                // Attach the tag to the CompanyLead instance
+                $lead->attachTag($tagMod);
+            }
+        }
 
         return ['success', 'Lead edited successfully.'];
     }
