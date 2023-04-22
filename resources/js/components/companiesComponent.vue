@@ -39,14 +39,58 @@
                     </v-btn>
                 </v-btn-toggle>
                 <div class="m-0 p-0 d-flex align-content-center">
-                    <v-btn text color="#28323b" elevation=0 style="font-size: 0.7rem; font-weight: 700; text-decoration: none; margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
-                        <v-icon class="mr-1">mdi-filter-outline</v-icon>
-                        <span>Filter</span>
-                    </v-btn>
-                    <v-btn text color="#28323b" elevation=0 style="font-size: 0.7rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+                    <!-- add filter menu -->
+                    <v-menu offset-y nudge-left="150px">
+                        <template v-slot:activator="{ on }">
+                            <v-btn text color="#28323b" elevation=0 style="font-size: 0.7rem; font-weight: 700; text-decoration: none; margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;" v-on="on">
+                                <v-icon class="mr-1">mdi-filter-outline</v-icon>
+                                <span>Filter</span>
+                            </v-btn>
+                        </template>
+                        <v-list dense class="mt-0 p-0">
+                        <!-- heading -->
+                        <v-list-item style="background-color: #F5F5F5;">
+                        <v-list-item-content>
+                            <v-list-item-title style="font-weight: 700;">Lead Actions</v-list-item-title>
+                        </v-list-item-content>
+                        </v-list-item>
+                        <v-list-item  style="cursor: pointer;" @click="assignDialog = true; assignItem = leadItem">
+                        <v-list-item-content>
+                            <v-list-item-title>
+                                Edit Lead Assignments
+                            </v-list-item-title>
+                        </v-list-item-content>
+                        </v-list-item>
+                        <v-list-item style="cursor: pointer;" @click="tagItem = leadItem; formatTags(tagItem.tags); tagDialog = true;">
+                        <v-list-item-content>
+                            <v-list-item-title>
+                                Edit Lead Tags
+                            </v-list-item-title>
+                        </v-list-item-content>
+                        </v-list-item>
+                        <!-- divider -->
+                        <v-divider class="my-1"></v-divider>
+                        <v-list-item v-if="leadItem.active == 0" style="cursor: pointer;" @click="activateLeadDialog = true; activateLead = leadItem">
+                        <v-list-item-content>
+                            <v-list-item-title>
+                                Un-Archive Lead
+                            </v-list-item-title>
+                        </v-list-item-content>
+                        </v-list-item >
+                        <v-list-item v-if="leadItem.active == 1" style="cursor: pointer;" @click="deactivateLeadDialog = true; deactivateLead = leadItem">
+                        <v-list-item-content>
+                            <v-list-item-title>
+                                Archive Lead
+                            </v-list-item-title>
+                        </v-list-item-content>
+                        </v-list-item>
+                        </v-list>
+                    </v-menu>
+                    
+                    <!-- <v-btn text color="#28323b" elevation=0 style="font-size: 0.7rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
                         <v-icon class="mr-1">mdi-pencil-outline</v-icon>
                         <span>Data points</span>
-                    </v-btn>
+                    </v-btn> -->
                     <v-btn text color="#28323b" elevation=0 style="font-size: 0.7rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
                         <v-icon class="mr-1">mdi-download-outline</v-icon>
                         <span>Download</span>
@@ -251,6 +295,7 @@
                         :search="search"
                         :options.sync="tableOptions"
                         :footer-props="footerOptions"
+                        :custom-filter="customTableFilter"
                         class="elevation-0 custom-data-table"
                         color="#f05628"
                         :loading="loading"
@@ -857,6 +902,8 @@ import { useLeadStore } from '../store/leadStore';
                 noice: 1,
                 tagSearch: '',
                 tagItemTags: [],
+                tagFilter: [],
+                sectors: window.LaravelConstants.sectors,
             }
         },
         methods:{
@@ -1059,7 +1106,61 @@ import { useLeadStore } from '../store/leadStore';
                 // get a random int from min to max
                 return Math.floor(Math.random()*(max-min+1)+min);
             },
+            customTableFilter(value, search, item) {
+            // Apply regular search filter
+            const isSearchMatch = search
+                ? value.toString().toLowerCase().includes(search.toLowerCase())
+                : true;
 
+            // Apply tag search filter
+            const isTagSearchMatch = this.tagFilter
+                ? item.tags.some((tag) =>
+                    tag.id === this.tagFilter
+                )
+                : true;
+
+
+            // apply industry filter
+            // go through this.sectors and check if the item.industry is in which sector
+            // if it is then check if the sector is in the industryFilter
+            // if it is then return true
+            // else return false
+            let isIndustryFilterMatch = false;
+            this.sectors.forEach(sector => {
+                if(sector.industries.includes(item.industry)){
+                    if(this.industryFilter.includes(sector.name)){
+                        isIndustryFilterMatch = true;
+                    }
+                }
+            });
+
+            // lead score filter
+            // if the lead score is inbetween the leadScoreFilter values then return true
+            // else return false
+            let isLeadScoreFilterMatch = false;
+            if(item.lead_score >= this.leadScoreFilter[0] && item.lead_score <= this.leadScoreFilter[1]){
+                isLeadScoreFilterMatch = true;
+            }
+
+            // wesbite filter
+            // if the website is in the websiteFilter array then return true
+            // else return false
+            let isWebsiteFilterMatch = false;
+            if(this.websiteFilter.includes(item.website.id)){
+                isWebsiteFilterMatch = true;
+            }
+
+            // company size filter
+            // if the company size is inbetween the companySizeFilter values then return true
+            // else return false
+            let isCompanySizeFilterMatch = false;
+            if(item.company_size >= this.companySizeFilter[0] && item.company_size <= this.companySizeFilter[1]){
+                isCompanySizeFilterMatch = true;
+            }
+
+            // return the match
+            return isSearchMatch && isTagSearchMatch && isIndustryFilterMatch && isLeadScoreFilterMatch && isWebsiteFilterMatch && isCompanySizeFilterMatch;
+            },
         },
         computed: {
             rainbowColor() {

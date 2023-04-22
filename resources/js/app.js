@@ -62,6 +62,12 @@ const router = new VueRouter({
 
 const app = document.getElementById('app');
 
+const constantsMeta = document.querySelector('meta[name="laravel-constants"]');
+if (constantsMeta) {
+  window.LaravelConstants = JSON.parse(atob(constantsMeta.content));
+}
+
+
 if (app) {
     new Vue({
         router,
