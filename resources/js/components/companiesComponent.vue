@@ -17,7 +17,7 @@
             </div>
 
             <div class="col-12 d-flex justify-content-between" style="padding-top: 0.5rem;">
-                <v-btn-toggle color="#f05628" group style="background-color: white; border-radius: 8px; box-shadow: 0px 0px 5px 0px rgba(40,50,59,.1);" class="d-flex" dense outlined mandatory>
+                <v-btn-toggle :color="appStore.primary_color" group style="background-color: white; border-radius: 8px; box-shadow: 0px 0px 5px 0px rgba(40,50,59,.1);" class="d-flex" dense outlined mandatory>
                     <v-btn elevation=0 style="font-size: 0.7rem; font-weight: 700; text-decoration: none; background-color: white; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
                         <v-icon class="mr-1">mdi-calendar</v-icon>
                         <span>Custom</span>
@@ -40,7 +40,7 @@
                 </v-btn-toggle>
                 <div class="m-0 p-0 d-flex align-content-center">
                     <!-- add filter menu -->
-                    <v-menu offset-y nudge-left="150px">
+                    <v-menu offset-y>
                         <template v-slot:activator="{ on }">
                             <v-btn text color="#28323b" elevation=0 style="font-size: 0.7rem; font-weight: 700; text-decoration: none; margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;" v-on="on">
                                 <v-icon class="mr-1">mdi-filter-outline</v-icon>
@@ -51,38 +51,58 @@
                         <!-- heading -->
                         <v-list-item style="background-color: #F5F5F5;">
                         <v-list-item-content>
-                            <v-list-item-title style="font-weight: 700;">Lead Actions</v-list-item-title>
+                            <v-list-item-title style="font-weight: 700;">Lead Filters</v-list-item-title>
                         </v-list-item-content>
                         </v-list-item>
                         <v-list-item  style="cursor: pointer;" @click="assignDialog = true; assignItem = leadItem">
                         <v-list-item-content>
                             <v-list-item-title>
-                                Edit Lead Assignments
+                                Website
                             </v-list-item-title>
                         </v-list-item-content>
+                        <v-list-item-icon>
+                        <v-icon style="font-size: 1.2rem">mdi-chevron-right</v-icon>
+                        </v-list-item-icon>
                         </v-list-item>
                         <v-list-item style="cursor: pointer;" @click="tagItem = leadItem; formatTags(tagItem.tags); tagDialog = true;">
                         <v-list-item-content>
                             <v-list-item-title>
-                                Edit Lead Tags
+                                Industry
                             </v-list-item-title>
                         </v-list-item-content>
+                        <v-list-item-icon>
+                        <v-icon style="font-size: 1.2rem">mdi-chevron-right</v-icon>
+                        </v-list-item-icon>
                         </v-list-item>
-                        <!-- divider -->
-                        <v-divider class="my-1"></v-divider>
-                        <v-list-item v-if="leadItem.active == 0" style="cursor: pointer;" @click="activateLeadDialog = true; activateLead = leadItem">
+                        <v-list-item>
                         <v-list-item-content>
                             <v-list-item-title>
-                                Un-Archive Lead
+                                Tags
                             </v-list-item-title>
                         </v-list-item-content>
+                        <v-list-item-icon>
+                        <v-icon style="font-size: 1.2rem">mdi-chevron-right</v-icon>
+                        </v-list-item-icon>
                         </v-list-item >
-                        <v-list-item v-if="leadItem.active == 1" style="cursor: pointer;" @click="deactivateLeadDialog = true; deactivateLead = leadItem">
+                        <v-list-item>
                         <v-list-item-content>
                             <v-list-item-title>
-                                Archive Lead
+                                Company Size
                             </v-list-item-title>
                         </v-list-item-content>
+                        <v-list-item-icon>
+                        <v-icon style="font-size: 1.2rem">mdi-chevron-right</v-icon>
+                        </v-list-item-icon>
+                        </v-list-item>
+                        <v-list-item>
+                        <v-list-item-content>
+                            <v-list-item-title>
+                                Lead Score
+                            </v-list-item-title>
+                        </v-list-item-content>
+                        <v-list-item-icon>
+                        <v-icon style="font-size: 1.2rem">mdi-chevron-right</v-icon>
+                        </v-list-item-icon>
                         </v-list-item>
                         </v-list>
                     </v-menu>
@@ -120,7 +140,7 @@
                             <v-col cols="12" class="pt-0">
                                 <!-- drop down for category -->
                                 <v-combobox
-                                    color="#f05628"
+                                    :color="appStore.primary_color"
                                     :items="teamStore.members"
                                     v-model="assignItem.users"
                                     placeholder="Select users to assign to lead"
@@ -138,7 +158,7 @@
                                             :input-value="data.selected"
                                             close
                                             class="mb-2"
-                                            color="#f05628"
+                                            :color="appStore.primary_color"
                                             text-color="white"
                                             dark
                                             @click:close="data.parent.selectItem(data.item)"
@@ -155,10 +175,10 @@
                     </v-card-text>
                     <v-card-actions class="pt-0 pb-4">
                     <v-spacer></v-spacer>
-                    <v-btn @click="assignDialog = false; assignItem = {};" outlined elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+                    <v-btn @click="assignDialog = false; assignItem = {};" outlined elevation=0 :color="appStore.primary_color" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
                         <span>Close</span>
                     </v-btn>
-                    <v-btn @click="assignLead()" class="px-4" elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+                    <v-btn @click="assignLead()" class="px-4" elevation=0 :color="appStore.primary_color" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
                         <span style="color: #FFFFFF;" >Save Changes</span>
                     </v-btn>
                     </v-card-actions>
@@ -183,7 +203,7 @@
                             <v-col cols="12" class="pt-0">
                                 <!-- drop down for category -->
                                 <v-combobox
-                                    color="#f05628"
+                                    :color="appStore.primary_color"
                                     v-model="tagItemTags"
                                     :search-input.sync="tagSearch"
                                     :filter="customFilter"
@@ -261,10 +281,10 @@
                     </v-card-text>
                     <v-card-actions class="pt-0 pb-4">
                     <v-spacer></v-spacer>
-                    <v-btn @click="tagDialog = false; tagItem = {};" outlined elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+                    <v-btn @click="tagDialog = false; tagItem = {};" outlined elevation=0 :color="appStore.primary_color" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
                         <span>Close</span>
                     </v-btn>
-                    <v-btn @click="tagLead()" class="px-4" elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+                    <v-btn @click="tagLead()" class="px-4" elevation=0 :color="appStore.primary_color" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
                         <span style="color: #FFFFFF;" >Save Changes</span>
                     </v-btn>
                     </v-card-actions>
@@ -272,7 +292,7 @@
             </v-dialog>
             <div class="col-12 d-flex justify-content-between align=content-center" style="padding-bottom: 0rem;">
                 <div class="p-0 m-0" style="width: 35%;">
-                    <v-text-field color="#f05628" label="Search your company leads ex. Amazon" clearable dense v-model="search" height="40px" solo elevation=0 append-icon="mdi-magnify" single-line hide-details style="width: 100%; border-radius: 8px; box-shadow: 0px 0px 5px 0px rgba(40,50,59,.1) !important;">
+                    <v-text-field :color="appStore.primary_color" label="Search your company leads ex. Amazon" clearable dense v-model="search" height="40px" solo elevation=0 append-icon="mdi-magnify" single-line hide-details style="width: 100%; border-radius: 8px; box-shadow: 0px 0px 5px 0px rgba(40,50,59,.1) !important;">
                         <template v-slot:label>
                             <strong>Search your company leads </strong>ex. Amazon
                         </template>
@@ -297,15 +317,15 @@
                         :footer-props="footerOptions"
                         :custom-filter="customTableFilter"
                         class="elevation-0 custom-data-table"
-                        color="#f05628"
+                        :color="appStore.primary_color"
                         :loading="loading"
                         loading-text="Loading your leads... Please wait"
-                        checkbox-color="#f05628"
+                        :checkbox-color="appStore.primary_color"
                         style="border-radius: 8px;  border: thin solid rgba(0,0,0,.12);"
                         >
                         <!-- loading -->
                         <template slot="progress">
-                            <v-progress-linear color="#f05628" indeterminate></v-progress-linear>
+                            <v-progress-linear :color="appStore.primary_color" indeterminate></v-progress-linear>
                         </template>
                         <template v-slot:item.name="{ item }">
                         <div v-if="item" class="d-flex align-items-center" style="width: fit-content">
@@ -416,7 +436,7 @@
                             <div v-else>
                                 <!-- circle with plud in it to add users -->
                                 <!-- 0.75 size -->
-                                <v-icon @click="assignDialog = true; assignItem = item" style="font-size: 20px; cursor: pointer; color: #f05628; opacity: 0.6 !important;">mdi-plus-circle</v-icon>
+                                <v-icon @click="assignDialog = true; assignItem = item" :style="'font-size: 20px; cursor: pointer; color: ' + appStore.primary_color + '; opacity: 0.6 !important;'">mdi-plus-circle</v-icon>
                             </div>
                         </template>
 
@@ -434,7 +454,7 @@
                             <div v-else>
                                 <!-- circle with plud in it to add users -->
                                 <!-- 0.75 size -->
-                                <v-icon @click="tagDialog = true; tagItem = item" style="font-size: 20px; cursor: pointer; color: #f05628; opacity: 0.6 !important;">mdi-plus-circle</v-icon>
+                                <v-icon @click="tagDialog = true; tagItem = item" :style="'font-size: 20px; cursor: pointer; color: ' + appStore.primary_color + '; opacity: 0.6 !important;'">mdi-plus-circle</v-icon>
                             </div>
                         </template>
 
@@ -589,7 +609,7 @@
                                 <!-- divider -->
                                 <v-divider class="my-3" style="width: 100%; color: whitesmoke;"></v-divider>
                                 <div class="d-flex mb-6">
-                                    <v-btn-toggle variant="outlined" v-model="toggle" active-class="transparent" mandatory color="#f05628" style="width: 100%; border: thin solid whitesmoke;" group>
+                                    <v-btn-toggle variant="outlined" v-model="toggle" active-class="transparent" mandatory :color="appStore.primary_color" style="width: 100%; border: thin solid whitesmoke;" group>
                                     <v-btn elevation="0" :value="0" active-class="transparent" class="m-0 mr-1 flex-grow-1 button-background" style="border-radius: 0px; font-size: 0.75rem; font-weight: 700; text-decoration: none; text-transform: none !important; letter-spacing: 0; text-indent: 0; height: 36px; ">
                                         Activity
                                     </v-btn>
@@ -673,7 +693,7 @@
                                         <!-- <div class="d-flex align-items-center justify-content-center" style="width: 100%; margin-top: 1rem;">
                                             <span style="font-size: 0.8125rem; color: #28323b;">Search for contacts who work at this company.</span>
                                         </div> -->
-                                        <v-btn @click="searchContacts()" elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0; margin-top: 1rem;">
+                                        <v-btn @click="searchContacts()" elevation=0 :color="appStore.primary_color" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0; margin-top: 1rem;">
                                             <span style="color: #FFFFFF;">Search for Contacts Working at this Company</span>
                                         </v-btn>
                                     </div>

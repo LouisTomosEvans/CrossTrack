@@ -378,10 +378,10 @@
           </v-card-text>
           <v-card-actions class="pt-0 pb-4">
           <v-spacer></v-spacer>
-          <v-btn @click="leaveTeamDialog = false" outlined elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+          <v-btn @click="leaveTeamDialog = false" outlined elevation=0 :color="appStore.primary_color" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
               <span>Close</span>
           </v-btn>
-          <v-btn @click="leaveTeam()" class="px-4" elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+          <v-btn @click="leaveTeam()" class="px-4" elevation=0 :color="appStore.primary_color" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
               <span style="color: #FFFFFF;">Leave team</span>
           </v-btn>
           </v-card-actions>

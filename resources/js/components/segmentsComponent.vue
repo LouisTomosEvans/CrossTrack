@@ -8,7 +8,7 @@
                     <span style="color: #28323b; font-size: 0.8125rem;">Welcome to the Lead Segmentation section! Here, you can create and manage segments of your leads. You can easily classify your leads into different categories, based on criteria like geography, industry, size and behaviour. This is a great way to ensure you are targeting the right people with the right message.</span>
                 </div>
                 <div class="m-0 p-0 d-flex align-content-center">
-                    <v-btn @click="dialog = true" elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+                    <v-btn @click="dialog = true" elevation=0 :color="appStore.primary_color" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
                         <span style="color: #FFFFFF;">+ Add Segment</span>
                     </v-btn>
                 </div>
@@ -34,7 +34,7 @@
                                 <span style="color: #28323b; font-size: 0.8125rem; font-weight: 600;">1. Name your new segment.</span>
                             </v-col>
                             <v-col cols="6" class="pt-0">
-                                <v-text-field color="#f05628" dense v-model="name" height="40px" elevation=0 single-line hide-details style="width: 100%;">
+                                <v-text-field  :color="appStore.primary_color"  dense v-model="name" height="40px" elevation=0 single-line hide-details style="width: 100%;">
                                     <template v-slot:label>
                                         Enter your segment name ex. Tech Start-ups
                                     </template>
@@ -49,7 +49,7 @@
                             <v-col cols="4" class="pt-0">
                                 <!-- drop down for category -->
                                 <v-select
-                                    color="#f05628"
+                                    :color="appStore.primary_color" 
                                     :items="websiteStore.websites"
                                     v-model="website"
                                     placeholder="Select a website"
@@ -72,7 +72,7 @@
                                 <v-col cols="12" class="pt-0">
                                 <!-- drop down for category -->
                                 <v-select
-                                    color="#f05628"
+                                    :color="appStore.primary_color" 
                                     :items="links"
                                     v-model="criteria.link"
                                     v-if="criteria.link != null"
@@ -88,7 +88,7 @@
                                 <v-col cols="4" class="pt-0">
                                 <!-- drop down for category -->
                                 <v-select
-                                    color="#f05628"
+                                    :color="appStore.primary_color" 
                                     :items="categories"
                                     v-model="criteria.category"
                                     placeholder="Select a category"
@@ -103,7 +103,7 @@
                             <v-col cols="4" class="pt-0">
                                 <!-- drop down for logical operator -->
                                 <v-select
-                                    color="#f05628"
+                                    :color="appStore.primary_color" 
                                     :items="logicalOperatorSelector(criteria.category)"
                                     v-model="criteria.logical_operator"
                                     placeholder="Select a logical operator"
@@ -118,7 +118,7 @@
                             <v-col cols="4" class="pt-0">
                                 <!-- drop down for country -->
                                 <v-select
-                                    color="#f05628"
+                                    :color="appStore.primary_color" 
                                     :items="valueSelector(criteria.category)"
                                     v-model="criteria.value"
                                     placeholder="Select a value"
@@ -133,7 +133,7 @@
                             </div>
                             <!-- add another criteria -->
                             <v-col cols="12" class="pt-0 d-flex justify-content-end mt-0 pt-0">
-                                <v-btn @click="addCriteria()" outlined text elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+                                <v-btn @click="addCriteria()" outlined text elevation=0  :color="appStore.primary_color"  style="font-size: 0.8125rem; font-weight: 700; text-decoration: none; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
                                     <span>+ Add another criteria</span>
                                 </v-btn>
                             </v-col>
@@ -146,7 +146,7 @@
                             <v-col cols="8" class="pt-0">
                                 <!-- drop down for category -->
                                 <v-combobox
-                                    color="#f05628"
+                                    :color="appStore.primary_color" 
                                     :items="teamStore.members"
                                     v-model="users"
                                     placeholder="Select users to assign to segment"
@@ -163,7 +163,7 @@
                                             v-bind="data.attrs"
                                             :input-value="data.selected"
                                             close
-                                            color="#f05628"
+                                            :color="appStore.primary_color" 
                                             text-color="white"
                                             class="mb-2"
                                             @click:close="data.parent.selectItem(data.item)"
@@ -180,10 +180,10 @@
                     </v-card-text>
                     <v-card-actions class="pt-0 pb-4">
                     <v-spacer></v-spacer>
-                    <v-btn @click="dialog = false" outlined elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+                    <v-btn @click="dialog = false" outlined elevation=0  :color="appStore.primary_color"  style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
                         <span>Close</span>
                     </v-btn>
-                    <v-btn @click="submitSegment()" class="px-4" elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+                    <v-btn @click="submitSegment()" class="px-4" elevation=0  :color="appStore.primary_color"  style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
                         <span style="color: #FFFFFF;" >+ Add Segment</span>
                     </v-btn>
                     </v-card-actions>
@@ -210,7 +210,7 @@
                                 <span style="color: #28323b; font-size: 0.8125rem; font-weight: 600;">1. Name your new segment.</span>
                             </v-col>
                             <v-col cols="6" class="pt-0">
-                                <v-text-field color="#f05628" dense v-model="editItem.name" height="40px" elevation=0 single-line hide-details style="width: 100%;">
+                                <v-text-field  :color="appStore.primary_color"  dense v-model="editItem.name" height="40px" elevation=0 single-line hide-details style="width: 100%;">
                                     <template v-slot:label>
                                         Enter your segment name ex. Tech Start-ups
                                     </template>
@@ -225,7 +225,7 @@
                             <v-col cols="4" class="pt-0">
                                 <!-- drop down for category -->
                                 <v-select
-                                    color="#f05628"
+                                    :color="appStore.primary_color" 
                                     :items="websiteStore.websites"
                                     v-model="editItem.website"
                                     placeholder="Select a website"
@@ -248,7 +248,7 @@
                                 <v-col cols="12" class="pt-0">
                                 <!-- drop down for category -->
                                 <v-select
-                                    color="#f05628"
+                                    :color="appStore.primary_color" 
                                     :items="links"
                                     v-model="criteria.link"
                                     v-if="criteria.link != null"
@@ -264,7 +264,7 @@
                                 <v-col cols="4" class="pt-0">
                                 <!-- drop down for category -->
                                 <v-select
-                                    color="#f05628"
+                                    :color="appStore.primary_color" 
                                     :items="categories"
                                     v-model="criteria.category"
                                     placeholder="Select a category"
@@ -279,7 +279,7 @@
                             <v-col cols="4" class="pt-0">
                                 <!-- drop down for logical operator -->
                                 <v-select
-                                    color="#f05628"
+                                    :color="appStore.primary_color" 
                                     :items="logicalOperatorSelector(criteria.category)"
                                     v-model="criteria.logical_operator"
                                     placeholder="Select a logical operator"
@@ -294,7 +294,7 @@
                             <v-col cols="4" class="pt-0">
                                 <!-- drop down for country -->
                                 <v-select
-                                    color="#f05628"
+                                    :color="appStore.primary_color" 
                                     :items="valueSelector(criteria.category)"
                                     v-model="criteria.value"
                                     placeholder="Select a value"
@@ -309,7 +309,7 @@
                             </div>
                             <!-- add another criteria -->
                             <v-col cols="12" class="pt-0 d-flex justify-content-end mt-0 pt-0">
-                                <v-btn @click="addEditCriteria()" outlined text elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+                                <v-btn @click="addEditCriteria()" outlined text elevation=0  :color="appStore.primary_color" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
                                     <span>+ Add another criteria</span>
                                 </v-btn>
                             </v-col>
@@ -322,7 +322,7 @@
                             <v-col cols="8" class="pt-0">
                                 <!-- drop down for category -->
                                 <v-combobox
-                                    color="#f05628"
+                                    :color="appStore.primary_color" 
                                     :items="teamStore.members"
                                     v-model="editItem.users"
                                     placeholder="Select users to assign to segment"
@@ -339,7 +339,7 @@
                                             v-bind="data.attrs"
                                             :input-value="data.selected"
                                             close
-                                            color="#f05628"
+                                            :color="appStore.primary_color" 
                                             text-color="white"
                                             class="mb-2"
                                             @click:close="data.parent.selectItem(data.item)"
@@ -356,10 +356,10 @@
                     </v-card-text>
                     <v-card-actions class="pt-0 pb-4">
                     <v-spacer></v-spacer>
-                    <v-btn @click="editDetailsDialog = false" outlined elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+                    <v-btn @click="editDetailsDialog = false" outlined elevation=0  :color="appStore.primary_color"  style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
                         <span>Close</span>
                     </v-btn>
-                    <v-btn @click="editSegment()" class="px-4" elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+                    <v-btn @click="editSegment()" class="px-4" elevation=0  :color="appStore.primary_color"  style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
                         <span style="color: #FFFFFF;" >Save Changes</span>
                     </v-btn>
                     </v-card-actions>
@@ -386,10 +386,10 @@
                     </v-card-text>
                     <v-card-actions class="pt-0 pb-4">
                     <v-spacer></v-spacer>
-                    <v-btn @click="deleteSegmentDialog = false" outlined elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+                    <v-btn @click="deleteSegmentDialog = false" outlined elevation=0  :color="appStore.primary_color"  style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
                         <span>Close</span>
                     </v-btn>
-                    <v-btn @click="deleteSegment()" elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+                    <v-btn @click="deleteSegment()" elevation=0  :color="appStore.primary_color" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
                         <span style="color: #FFFFFF;" class="px-4">Delete Segment</span>
                     </v-btn>
                     </v-card-actions>
@@ -436,7 +436,7 @@
             </div>
             <div class="col-12 d-flex justify-content-between align=content-center" style="padding-bottom: 0rem;">
                 <div class="p-0 m-0" style="width: 35%;">
-                    <v-text-field color="#f05628" label="Search your company leads ex. Amazon" clearable dense v-model="search" height="40px" solo elevation=0 append-icon="mdi-magnify" single-line hide-details style="width: 100%; border-radius: 8px; box-shadow: 0px 0px 5px 0px rgba(40,50,59,.1) !important;">
+                    <v-text-field  :color="appStore.primary_color"  label="Search your company leads ex. Amazon" clearable dense v-model="search" height="40px" solo elevation=0 append-icon="mdi-magnify" single-line hide-details style="width: 100%; border-radius: 8px; box-shadow: 0px 0px 5px 0px rgba(40,50,59,.1) !important;">
                         <template v-slot:label>
                             <strong>Search your segments </strong>ex. agri-tech over 100M in funding
                         </template>
@@ -455,7 +455,7 @@
                         :items="segmentStore.segments"
                         :search="search"
                         class="elevation-0 custom-data-table"
-                        color="#f05628"
+                        :color="appStore.primary_color" 
                         style="border-radius: 8px;  border: thin solid rgba(0,0,0,.12);"
                         >
                         <template v-slot:item.website.name="{ item }">

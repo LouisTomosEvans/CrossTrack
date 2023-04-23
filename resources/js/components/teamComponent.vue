@@ -8,7 +8,7 @@
                     <span style="color: #28323b; font-size: 0.8125rem;">Welcome to the Team section! Here, you can view and manage your team members. You can add new team members, view current team members, and edit their profiles. You can also review your team’s progress and performance. This is a great way to keep track of your team’s progress and ensure everyone is working together to reach your business goals.</span>
                 </div>
                 <div class="m-0 p-0 d-flex align-content-center">
-                    <v-btn v-if="checkIfUserIsOwnerOfCurrentTeam" @click="dialog = true" elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+                    <v-btn v-if="checkIfUserIsOwnerOfCurrentTeam" @click="dialog = true" elevation=0  :color="appStore.primary_color"  style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
                         <span style="color: #FFFFFF;">+ Add Team Member</span>
                     </v-btn>
                 </div>
@@ -29,7 +29,7 @@
                         </v-row>
                         <v-row class="pt-0">
                             <v-col cols="12" class="pt-0">
-                                <v-text-field color="#f05628" dense v-model="email" height="40px" elevation=0 single-line hide-details style="width: 100%;">
+                                <v-text-field  :color="appStore.primary_color"  dense v-model="email" height="40px" elevation=0 single-line hide-details style="width: 100%;">
                                     <template v-slot:label>
                                         <strong>Enter your team members e-mail address</strong> ex. example@email.com
                                     </template>
@@ -39,10 +39,10 @@
                     </v-card-text>
                     <v-card-actions class="pt-0 pb-4">
                     <v-spacer></v-spacer>
-                    <v-btn @click="dialog = false" outlined elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+                    <v-btn @click="dialog = false" outlined elevation=0  :color="appStore.primary_color"  style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
                         <span>Close</span>
                     </v-btn>
-                    <v-btn @click="addTeamMember()" class="px-4" elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+                    <v-btn @click="addTeamMember()" class="px-4" elevation=0  :color="appStore.primary_color"  style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
                         <v-icon class="mr-1" style="color: #FFFFFF; font-size: 0.8125rem;">mdi-send</v-icon>
                         <span style="color: #FFFFFF;" >Send Invitation</span>
                     </v-btn>
@@ -91,7 +91,7 @@
             </div>
             <div class="col-12 d-flex justify-content-between align=content-center" style="padding-bottom: 0rem;">
                 <div class="p-0 m-0" style="width: 35%;">
-                    <v-text-field color="#f05628" label="Search your company leads ex. Amazon" clearable dense v-model="search" height="40px" solo elevation=0 append-icon="mdi-magnify" single-line hide-details style="width: 100%; border-radius: 8px; box-shadow: 0px 0px 5px 0px rgba(40,50,59,.1) !important;">
+                    <v-text-field  :color="appStore.primary_color"  label="Search your company leads ex. Amazon" clearable dense v-model="search" height="40px" solo elevation=0 append-icon="mdi-magnify" single-line hide-details style="width: 100%; border-radius: 8px; box-shadow: 0px 0px 5px 0px rgba(40,50,59,.1) !important;">
                         <template v-slot:label>
                             <strong>Search your team </strong>ex. Will Smith
                         </template>
@@ -115,10 +115,10 @@
                         :options.sync="tableOptions"
                         :footer-props="footerOptions"
                         class="elevation-0 custom-data-table"
-                        color="#f05628"
+                        :color="appStore.primary_color" 
                         :loading="loading"
                         loading-text="Loading your team members... Please wait"
-                        checkbox-color="#f05628"
+                        :checkbox-color="appStore.primary_color" 
                         style="border-radius: 8px;  border: thin solid rgba(0,0,0,.12);"
                         >
                         <!-- change how the name is displayed -->
@@ -129,7 +129,7 @@
                                 </v-avatar>
                                 <span class="ml-1" style="color: #28323b; font-size: 0.8125rem;">{{ item.name }}</span>
                                 <!-- if this is the same as user -->
-                                <v-chip label v-if="item.email === user.email" small color="#f0562820" text-color="#f05628" class="ml-2">
+                                <v-chip label v-if="item.email === user.email" small  :color="appStore.primary_color + '20'"  :text-color="appStore.primary_color"  class="ml-2">
                                     <span>You</span>
                                 </v-chip>
                             </div>
@@ -230,7 +230,7 @@
                             
                         </template>
                         <template slot="progress">
-                            <v-progress-linear color="#f05628" indeterminate></v-progress-linear>
+                            <v-progress-linear :color="appStore.primary_color" indeterminate></v-progress-linear>
                         </template>
                         </v-data-table>
                         <!-- data table -->
@@ -258,10 +258,10 @@
           </v-card-text>
           <v-card-actions class="pt-0 pb-4">
           <v-spacer></v-spacer>
-          <v-btn @click="removeUserDialog = false" outlined elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+          <v-btn @click="removeUserDialog = false" outlined elevation=0  :color="appStore.primary_color"  style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
               <span>Close</span>
           </v-btn>
-          <v-btn @click="removeTeamMember()" elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+          <v-btn @click="removeTeamMember()" elevation=0  :color="appStore.primary_color"  style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
               <span style="color: #FFFFFF;" class="px-4">Remove User</span>
           </v-btn>
           </v-card-actions>
@@ -286,10 +286,10 @@
           </v-card-text>
           <v-card-actions class="pt-0 pb-4">
           <v-spacer></v-spacer>
-          <v-btn @click="deactivateUserDialog = false" outlined elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+          <v-btn @click="deactivateUserDialog = false" outlined elevation=0  :color="appStore.primary_color"  style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
               <span>Close</span>
           </v-btn>
-          <v-btn @click="deactivateTeamMember()" elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+          <v-btn @click="deactivateTeamMember()" elevation=0  :color="appStore.primary_color"  style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
               <span style="color: #FFFFFF;" class="px-4">De-activate User</span>
           </v-btn>
           </v-card-actions>
@@ -314,10 +314,10 @@
           </v-card-text>
           <v-card-actions class="pt-0 pb-4">
           <v-spacer></v-spacer>
-          <v-btn @click="activateUserDialog = false" outlined elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+          <v-btn @click="activateUserDialog = false" outlined elevation=0  :color="appStore.primary_color"  style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
               <span>Close</span>
           </v-btn>
-          <v-btn @click="activateTeamMember()" elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+          <v-btn @click="activateTeamMember()" elevation=0  :color="appStore.primary_color"  style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
               <span style="color: #FFFFFF;" class="px-4">Activate User</span>
           </v-btn>
           </v-card-actions>
@@ -342,10 +342,10 @@
           </v-card-text>
           <v-card-actions class="pt-0 pb-4">
           <v-spacer></v-spacer>
-          <v-btn @click="deleteInvitationDialog = false" outlined elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+          <v-btn @click="deleteInvitationDialog = false" outlined elevation=0  :color="appStore.primary_color"  style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
               <span>Close</span>
           </v-btn>
-          <v-btn @click="deleteInvitation()" elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+          <v-btn @click="deleteInvitation()" elevation=0  :color="appStore.primary_color"  style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
               <span style="color: #FFFFFF;" class="px-4">Delete Invitation</span>
           </v-btn>
           </v-card-actions>
@@ -492,7 +492,7 @@
             // get random color for avatar
             getColor(name) {
                 // list of bright orange colors
-                const colors = ['#f05628'];
+                const colors = [ this.appStore.primary_color];
                 
                 // get legth of name
                 const nameLength = name.length;

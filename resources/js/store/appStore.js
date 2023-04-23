@@ -21,9 +21,13 @@ export const useAppStore = defineStore('app', {
     actions: {
         async setBranding() {
             this.logo = 'brandAssets/Logo.png';
+            // this.logo = 'brandAssets/Validient/ValidientLogo.svg';
             this.mark = 'brandAssets/Mark.svg';
+            // this.mark = 'https://www.validient.com/wp-content/uploads/2019/09/Validient-Logo-Color-1.svg';
+            this.logoWhite = 'brandAssets/whiteLogo.png';
             // f05628
             this.primary_color = '#f05628';
+            // this.primary_color = '#04565F';
         },
         async setDashboardData(team_id) {
             const api_url = 'api/teams/dashboard/' + team_id;

@@ -8,7 +8,7 @@
                     <span style="color: #28323b; font-size: 0.8125rem;">Welcome to the Website section! Here, you can view and manage your websites. You can add new websites, view current websites, copy their tracking script and turn-off websites. With our intuitive interface, it's easy to stay on top of your website's performance and make any necessary adjustments. Take control of your online presence and optimize your websites with ease in this section.</span>
                 </div>
                 <div class="m-0 p-0 d-flex align-content-center">
-                    <v-btn @click="dialog = true" elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+                    <v-btn @click="dialog = true" elevation=0  :color="appStore.primary_color"  style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
                         <span style="color: #FFFFFF;">+ Add Website</span>
                     </v-btn>
                 </div>
@@ -29,7 +29,7 @@
                         </v-row>
                         <v-row class="pt-0">
                             <v-col cols="12" class="pt-0">
-                                <v-text-field color="#f05628" dense v-model="name" height="40px" elevation=0 single-line hide-details style="width: 100%;">
+                                <v-text-field  :color="appStore.primary_color" dense v-model="name" height="40px" elevation=0 single-line hide-details style="width: 100%;">
                                     <template v-slot:label>
                                         <strong>Enter your website name</strong> ex. LeadRhino
                                     </template>
@@ -38,7 +38,7 @@
                         </v-row>
                         <v-row class="pt-0">
                             <v-col cols="12" class="pt-0">
-                                <v-text-field prefix="https://" color="#f05628" dense v-model="domain" height="40px" elevation=0 single-line hide-details style="width: 100%;">
+                                <v-text-field prefix="https://"  :color="appStore.primary_color" dense v-model="domain" height="40px" elevation=0 single-line hide-details style="width: 100%;">
                                     <template v-slot:label>
                                         <strong>Enter your website domain</strong> ex. LeadRhino.io
                                     </template>
@@ -48,10 +48,10 @@
                     </v-card-text>
                     <v-card-actions class="pt-0 pb-4">
                     <v-spacer></v-spacer>
-                    <v-btn @click="dialog = false" outlined elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+                    <v-btn @click="dialog = false" outlined elevation=0  :color="appStore.primary_color" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
                         <span>Close</span>
                     </v-btn>
-                    <v-btn @click="addWebsite()" class="px-4" elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+                    <v-btn @click="addWebsite()" class="px-4" elevation=0  :color="appStore.primary_color" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
                         <span style="color: #FFFFFF;" >+ Add Website</span>
                     </v-btn>
                     </v-card-actions>
@@ -60,7 +60,7 @@
                 
             </div>
             <div class="col-12 d-flex justify-content-between" style="padding-top: 0.5rem;">
-                <!-- <v-btn-toggle color="#f05628" group style="background-color: white; border-radius: 8px; box-shadow: 0px 0px 5px 0px rgba(40,50,59,.1);" class="d-flex" dense outlined mandatory>
+                <!-- <v-btn-toggle  :color="appStore.primary_color" group style="background-color: white; border-radius: 8px; box-shadow: 0px 0px 5px 0px rgba(40,50,59,.1);" class="d-flex" dense outlined mandatory>
                     <v-btn elevation=0 style="font-size: 0.7rem; font-weight: 700; text-decoration: none; background-color: white; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
                         <v-icon class="mr-1">mdi-calendar</v-icon>
                         <span>Custom</span>
@@ -99,7 +99,7 @@
             </div>
             <div class="col-12 d-flex justify-content-between align=content-center" style="padding-bottom: 0rem;">
                 <div class="p-0 m-0" style="width: 35%;">
-                    <v-text-field color="#f05628" label="Search your company leads ex. Amazon" clearable dense v-model="search" height="40px" solo elevation=0 append-icon="mdi-magnify" single-line hide-details style="width: 100%; border-radius: 8px; box-shadow: 0px 0px 5px 0px rgba(40,50,59,.1) !important;">
+                    <v-text-field  :color="appStore.primary_color" label="Search your company leads ex. Amazon" clearable dense v-model="search" height="40px" solo elevation=0 append-icon="mdi-magnify" single-line hide-details style="width: 100%; border-radius: 8px; box-shadow: 0px 0px 5px 0px rgba(40,50,59,.1) !important;">
                         <template v-slot:label>
                             <strong>Search your websites </strong>ex. LeadRhino
                         </template>
@@ -123,10 +123,10 @@
                         :options.sync="tableOptions"
                         :footer-props="footerOptions"
                         class="elevation-0 custom-data-table"
-                        color="#f05628"
+                         :color="appStore.primary_color"
                         :loading="loading"
                         loading-text="Loading your websites... Please wait"
-                        checkbox-color="#f05628"
+                        checkbox-color="appStore.primary_color"
                         style="border-radius: 8px;  border: thin solid rgba(0,0,0,.12);"
                         >
                         <!-- change how the name is displayed -->
@@ -263,7 +263,7 @@
                             
                         </template>
                         <template slot="progress">
-                            <v-progress-linear color="#f05628" indeterminate></v-progress-linear>
+                            <v-progress-linear  :color="appStore.primary_color" indeterminate></v-progress-linear>
                         </template>
                         </v-data-table>
                         <!-- data table -->
@@ -291,10 +291,10 @@
           </v-card-text>
           <v-card-actions class="pt-0 pb-4">
           <v-spacer></v-spacer>
-          <v-btn @click="deleteWebsiteDialog = false" outlined elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+          <v-btn @click="deleteWebsiteDialog = false" outlined elevation=0  :color="appStore.primary_color" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
               <span>Close</span>
           </v-btn>
-          <v-btn @click="deleteWebsiteFunction()" elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+          <v-btn @click="deleteWebsiteFunction()" elevation=0  :color="appStore.primary_color" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
               <span style="color: #FFFFFF;" class="px-4">Delete Website</span>
           </v-btn>
           </v-card-actions>
@@ -319,10 +319,10 @@
           </v-card-text>
           <v-card-actions class="pt-0 pb-4">
           <v-spacer></v-spacer>
-          <v-btn @click="deactivateWebsiteDialog = false" outlined elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+          <v-btn @click="deactivateWebsiteDialog = false" outlined elevation=0  :color="appStore.primary_color" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
               <span>Close</span>
           </v-btn>
-          <v-btn @click="deactivateWebsiteFunction()" elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+          <v-btn @click="deactivateWebsiteFunction()" elevation=0  :color="appStore.primary_color" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
               <span style="color: #FFFFFF;" class="px-4">Archive Website</span>
           </v-btn>
           </v-card-actions>
@@ -347,10 +347,10 @@
           </v-card-text>
           <v-card-actions class="pt-0 pb-4">
           <v-spacer></v-spacer>
-          <v-btn @click="activateWebsiteDialog = false" outlined elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+          <v-btn @click="activateWebsiteDialog = false" outlined elevation=0  :color="appStore.primary_color" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
               <span>Close</span>
           </v-btn>
-          <v-btn @click="activateWebsiteFunction()" elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+          <v-btn @click="activateWebsiteFunction()" elevation=0  :color="appStore.primary_color" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
               <span style="color: #FFFFFF;" class="px-4">Un-Archive Website</span>
           </v-btn>
           </v-card-actions>
@@ -374,7 +374,7 @@
                         </v-row>
                         <v-row class="pt-0">
                             <v-col cols="12" class="pt-0">
-                                <v-text-field color="#f05628" dense v-model="editItem.name" height="40px" elevation=0 single-line hide-details style="width: 100%;">
+                                <v-text-field  :color="appStore.primary_color" dense v-model="editItem.name" height="40px" elevation=0 single-line hide-details style="width: 100%;">
                                     <template v-slot:label>
                                         <strong>Change your websites name</strong> ex. LeadRhino
                                     </template>
@@ -383,7 +383,7 @@
                         </v-row>
                         <v-row class="pt-0">
                             <v-col cols="12" class="pt-0">
-                                <v-text-field prefix="https://" color="#f05628" dense v-model="editItem.domain" height="40px" elevation=0 single-line hide-details style="width: 100%;">
+                                <v-text-field prefix="https://"  :color="appStore.primary_color" dense v-model="editItem.domain" height="40px" elevation=0 single-line hide-details style="width: 100%;">
                                     <template v-slot:label>
                                         <strong>Change your websites domain</strong> ex. LeadRhino.io
                                     </template>
@@ -393,10 +393,10 @@
                     </v-card-text>
                     <v-card-actions class="pt-0 pb-4">
                     <v-spacer></v-spacer>
-                    <v-btn @click="editDetailsDialog = false" outlined elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+                    <v-btn @click="editDetailsDialog = false" outlined elevation=0  :color="appStore.primary_color" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
                         <span>Close</span>
                     </v-btn>
-                    <v-btn @click="editWebsite()" class="px-4" elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+                    <v-btn @click="editWebsite()" class="px-4" elevation=0  :color="appStore.primary_color" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
                         <span style="color: #FFFFFF;" >Save Changes</span>
                     </v-btn>
                     </v-card-actions>
@@ -420,7 +420,7 @@
                         </v-row>
                         <v-row class="pt-1">
                             <v-col cols="12" class="pt-0">
-                                <v-textarea color="#f05628" dense rows="2" v-model="websiteStore.trackingSnippet" elevation=0 hide-details style="width: 100%;">
+                                <v-textarea  :color="appStore.primary_color" dense rows="2" v-model="websiteStore.trackingSnippet" elevation=0 hide-details style="width: 100%;">
                                     <template v-slot:label>
                                         <strong>Tracking Snippet</strong>
                                     </template>
@@ -430,10 +430,10 @@
                     </v-card-text>
                     <v-card-actions class="pt-0 pb-4">
                     <v-spacer></v-spacer>
-                    <v-btn @click="trackingSnippetDialog = false" outlined elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+                    <v-btn @click="trackingSnippetDialog = false" outlined elevation=0  :color="appStore.primary_color" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
                         <span>I'll do it later</span>
                     </v-btn>
-                    <v-btn @click="copyTrackingSnippet" class="px-4" elevation=0 color="#f05628" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+                    <v-btn @click="copyTrackingSnippet" class="px-4" elevation=0  :color="appStore.primary_color" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
                         <span style="color: #FFFFFF;" >Copy Snippet</span>
                     </v-btn>
                     </v-card-actions>
@@ -731,6 +731,20 @@ import { useWebsiteStore } from '../store/websiteStore.js';
 
                 // return the url
                 return redirect;
+            },
+            goTo(link, website = null){
+                // go to the link
+                if(website != null){
+                    if (website == 'twitter') {
+                        // add the twitter url
+                        link = 'https://www.twitter.com/' + link;
+                    }
+                }
+                // if not https:// or http:// add it
+                if(!link.includes('https://') && !link.includes('http://')){
+                    link = 'https://' + link;
+                }
+                window.open(link, '_blank');
             },
             
         }

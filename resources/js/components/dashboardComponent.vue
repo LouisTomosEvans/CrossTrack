@@ -3,7 +3,10 @@
 
             <!-- button toggle date selector -->
             <div class="col-12 d-flex justify-content-between">
-                <v-btn-toggle color="#f05628" group style="background-color: white; border-radius: 8px; box-shadow: 0px 0px 5px 0px rgba(40,50,59,.1);" class="d-flex" dense outlined mandatory>
+                <div>
+                    <b><span style="font-size: 1.25rem; color: #28323b;">Your Overview</span></b>
+                </div>
+                <!-- <v-btn-toggle color="#f05628" group style="background-color: white; border-radius: 8px; box-shadow: 0px 0px 5px 0px rgba(40,50,59,.1);" class="d-flex" dense outlined mandatory>
                     <v-btn elevation=0 style="font-size: 0.7rem; font-weight: 700; text-decoration: none; background-color: white; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
                         <v-icon class="mr-1">mdi-calendar</v-icon>
                         <span>Custom</span>
@@ -23,9 +26,10 @@
                     <v-btn elevation=0 style="font-size: 0.7rem; font-weight: 700; text-decoration: none;  background-color: white; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
                         <span>3M</span>
                     </v-btn>
-                </v-btn-toggle>
+                </v-btn-toggle> -->
+
                 <div class="m-0 p-0 d-flex align-content-center">
-                    <v-btn text color="#f05628" elevation=0 style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+                    <v-btn text :color="appStore.primary_color" elevation=0 style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
                         <v-icon class="mr-1">mdi-download-outline</v-icon>
                         <span>Download PDF Report</span>
                     </v-btn>
@@ -84,7 +88,7 @@
                                     <div class="p-0 align-items-end d-flex" style="margin-top: 2rem;">
                                         <span style="font-size: 3rem; color: #28323b; font-weight:bolder; line-height: 2.3rem;">{{ appStore.dashboardData.unique_visitors_this_month }}</span>
                                         <!-- add badge -->
-                                        <span class="badge badge-pill badge-success ml-2" style="font-size: 0.75rem; color: #f05628; background-color: #f0562820;">+33% vs last month</span>
+                                        <span class="badge badge-pill badge-success ml-2" :style="'font-size: 0.75rem; color: ' + appStore.primary_color + '; background-color: ' + appStore.primary_color + '20;'">+33% vs last month</span>
 
                                     </div>
                                 </div>
@@ -115,7 +119,7 @@
                                     <div class="p-0 align-items-end d-flex" style="margin-top: 2rem;">
                                         <span style="font-size: 3rem; color: #28323b; font-weight:bolder; line-height: 2.3rem;">{{ appStore.dashboardData.returning_leads_this_month }}</span>
                                         <!-- add badge -->
-                                        <span class="badge badge-pill badge-success ml-2" style="font-size: 0.75rem; color: #f05628; background-color: #f0562820;">+33% vs last month</span>
+                                        <span class="badge badge-pill badge-success ml-2" :style="'font-size: 0.75rem; color: ' + appStore.primary_color + ' ; background-color: ' + appStore.primary_color + '20;'">+33% vs last month</span>
 
                                     </div>
                                 </div>
@@ -136,12 +140,12 @@
                     <v-spacer></v-spacer>
                     <div class="d-flex" >
                         <v-btn
-                        color="#f05628"
+                        :color="appStore.primary_color"
                         @click="selected = null"
                         elevation=0
                         text
                         >
-                        <span style="font-size: 0.7rem !important; font-weight: bold; color: #f05628;">Actions</span>
+                        <span :style="'font-size: 0.7rem !important; font-weight: bold; color: ' + appStore.primary_color + ';'">Actions</span>
                         </v-btn>
                     </div>
                     </div>
@@ -185,12 +189,12 @@
                     <v-spacer></v-spacer>
                     <div class="d-flex" >
                         <v-btn
-                        color="#f05628"
+                        :color="appStore.primary_color"
                         elevation=0
                         text
                         :to="'/companies'"
                         >
-                        <span style="font-size: 0.7rem !important; font-weight: bold; color: #f05628;">View Lead List</span>
+                        <span style="font-size: 0.7rem !important; font-weight: bold;">View Lead List</span>
                         </v-btn>
                     </div>
                     </div>
@@ -241,12 +245,12 @@
                     <v-spacer></v-spacer>
                     <div class="d-flex" >
                         <v-btn
-                        color="#f05628"
+                        :color="appStore.primary_color"
                         @click="selected = null"
                         elevation=0
                         text
                         >
-                        <span style="font-size: 0.7rem !important; font-weight: bold; color: #f05628;">View Lead Map</span>
+                        <span style="font-size: 0.7rem !important; font-weight: bold;">View Lead Map</span>
                         </v-btn>
                     </div>
                     </div>
@@ -377,7 +381,7 @@ import VueApexCharts from 'vue-apexcharts';
                         height: 350,
                         type: 'area',
                         stacked: false,
-                        colors: ['#f05628', '#96C5F7'],
+                        colors: [this.appStore.primary_color, '#96C5F7'],
                         zoom: {
                             enabled: false
                         },
@@ -385,7 +389,7 @@ import VueApexCharts from 'vue-apexcharts';
                     stroke: {
                         width: [0, 2, 2],
                         curve: 'smooth',
-                        colors: ['#f05628','#96C5F7']
+                        colors: [this.appStore.primary_color,'#96C5F7']
                     },
                     plotOptions: {
                     bar: {
@@ -405,7 +409,7 @@ import VueApexCharts from 'vue-apexcharts';
                             opacityTo: 0.1,
                             stops: [0, 100, 100, 100]
                         },
-                        colors: ['#f05628', '#96C5F7']
+                        colors: [this.appStore.primary_color, '#96C5F7']
                     },
                     labels: this.appStore.dashboardData.labels ?? [],
                     markers: {
