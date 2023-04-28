@@ -39,11 +39,11 @@ class CompanyLeadsController extends Controller
             $lead->location = $lead->city . ', ' . $lead->country;
             $lead->unique_visitors = $lead->visits->unique('visitor_id')->count();
             $lead->total_duration = $lead->visits->sum('session_duration');
-            // if ($lead->leadScore){
-            //     $lead->lead_score = $lead->leadScore->score;
-            // } else {
-            //     $lead->lead_score = 0;
-            // }
+            if ($lead->leadScore){
+                $lead->lead_score = $lead->leadScore->score;
+            } else {
+                $lead->lead_score = 0;
+            }
             // top pages visited
             $lead->top_pages = $lead->visits->groupBy('url')->map(function ($item) {
                 return $item->count();
