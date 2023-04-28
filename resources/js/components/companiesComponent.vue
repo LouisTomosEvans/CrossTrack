@@ -466,7 +466,7 @@
             </div>
 
             <!-- v-overlay -->
-            <v-overlay :value="dialog">
+            <v-overlay :value="dialog || filterDialog || assignDialog || tagDialog">
                 
             </v-overlay>
 
@@ -807,6 +807,69 @@
                             </v-col>
                         </v-row>
                     </v-card-text>
+                </v-card>
+            </v-dialog>
+            <v-dialog
+                v-model="filterDialog"
+                persistent
+                max-width="550px"
+                >
+                <v-card style="border-radius: 8px; box-shadow: 0px 0px 5px 0px rgba(40,50,59,.1);">
+                    <v-card-title style="border-bottom: solid 1px lightgrey; margin-bottom: 1rem;">
+                        <b><span style="font-size: 1rem; color: #28323b;">Filter by</span></b>
+                    </v-card-title>
+                    <v-card-text>
+                        <v-row>
+                            <v-col cols="12">
+                                <span style="color: #28323b; font-size: 0.8125rem;">To add a new team member, simply enter their email address, and select the role you want them to have. Once you've added the new team member, they'll receive an email with instructions to set up their account and confirm their membership.</span>
+                            </v-col>
+                        </v-row>
+                        <v-row class="pt-0">
+                            <v-col cols="12" class="pt-0">
+                                <!-- drop down for category -->
+                                <v-combobox
+                                    :color="appStore.primary_color"
+                                    :items="teamStore.members"
+                                    v-model="assignItem.users"
+                                    placeholder="Select users to assign to lead"
+                                    dense
+                                    elevation=0
+                                    style="width: 100%;"
+                                    item-text="name"
+                                    item-value="id"
+                                    multiple
+                                    small-chips
+                                    >
+                                    <template v-slot:selection="data">
+                                        <v-chip
+                                            v-bind="data.attrs"
+                                            :input-value="data.selected"
+                                            close
+                                            class="mb-2"
+                                            :color="appStore.primary_color"
+                                            text-color="white"
+                                            dark
+                                            @click:close="data.parent.selectItem(data.item)"
+                                        >
+                                            <span style="font-size: 0.8125rem; color: white; font-weight: 600;">
+                                                {{ data.item.name }}
+                                            </span>
+                                            
+                                        </v-chip>
+                                    </template>
+                                </v-combobox>
+                            </v-col>
+                        </v-row>
+                    </v-card-text>
+                    <v-card-actions class="pt-0 pb-4">
+                    <v-spacer></v-spacer>
+                    <v-btn @click="filterDialog = false;" outlined elevation=0 :color="appStore.primary_color" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+                        <span>Close</span>
+                    </v-btn>
+                    <v-btn @click="filterTabke()" class="px-4" elevation=0 :color="appStore.primary_color" style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
+                        <span style="color: #FFFFFF;" >Save Changes</span>
+                    </v-btn>
+                    </v-card-actions>
                 </v-card>
             </v-dialog>
         </div>
