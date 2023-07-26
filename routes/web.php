@@ -23,7 +23,7 @@ use App\Http\Controllers\TrackingController;
 */
 
 Route::get('/', function () {
-    return redirect('https://leadrhino.webflow.io');
+    return redirect('https://getcrosstrack.com');
 });
 
 Route::get('member/register/{token}', [AuthController::class, 'create'])->name('member/register');

@@ -33,19 +33,19 @@
           </v-list-item-icon>
         </v-list-item>
 
-        <v-list-item :color="appStore.primary_color" :v-ripple="false" :to="'/companies'" class="p-1 pl-5" style="text-decoration: none;"  v-if="!mini"  >
+        <v-list-item :color="appStore.primary_color" :v-ripple="false" :to="'/programs'" class="p-1 pl-5" style="text-decoration: none;"  v-if="!mini"  >
           <v-list-item-icon class="d-flex align-items-center">
-            <v-icon>mdi-domain</v-icon>
+            <v-icon>mdi-dumbbell</v-icon>
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title class="sidebarText">Company Leads</v-list-item-title>
+            <v-list-item-title class="sidebarText">Workouts</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 
         <v-list-item :color="appStore.primary_color" :v-ripple="false" :to="'/companies'" class="p-1" style="text-decoration: none;" v-if="mini" >
           <v-list-item-icon class="d-flex align-items-center">
-            <v-icon>mdi-domain</v-icon>
+            <v-icon>mdi-dumbbell</v-icon>
           </v-list-item-icon>
         </v-list-item>
 
@@ -133,13 +133,13 @@
                   </v-list-item-icon>
                 </v-list-item> -->
 
-                <v-list-item :color="appStore.primary_color" :v-ripple="false"  :to="'/team'" class="p-1 pl-5" style="text-decoration: none;" v-if="!mini">
+                <v-list-item :color="appStore.primary_color" :v-ripple="false"  :to="'/roster'" class="p-1 pl-5" style="text-decoration: none;" v-if="!mini">
           <v-list-item-icon class="d-flex align-items-center">
             <v-icon>mdi-account-group</v-icon>
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title class="sidebarText">Team</v-list-item-title>
+            <v-list-item-title class="sidebarText">Roster</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 
@@ -294,7 +294,7 @@
           <v-card-text>
               <v-row>
                   <v-col cols="12">
-                      <span style="color: #28323b; font-size: 0.8125rem;">To create your team, simply enter your team name and click “Create Team”. Once your team is created, you’ll be able to add members and begin using the LeadRhino Dashboard. We're excited to have you on board!</span>
+                      <span style="color: #28323b; font-size: 0.8125rem;">To create your team, simply enter your team name and click “Create Team”. Once your team is created, you’ll be able to add members and begin using the CrossTrack Dashboard. We're excited to have you on board!</span>
                   </v-col>
               </v-row>
               <v-row class="pt-0">
@@ -333,7 +333,7 @@
           <v-card-text>
               <v-row>
                   <v-col cols="12">
-                      <span style="color: #28323b; font-size: 0.8125rem;">To edit your team, simply enter your new team name and click “Edit Team”. Once your changes are sved, you’ll be directed to the LeadRhino Dashboard.</span>
+                      <span style="color: #28323b; font-size: 0.8125rem;">To edit your team, simply enter your new team name and click “Edit Team”. Once your changes are sved, you’ll be directed to the CrossTrack Dashboard.</span>
                   </v-col>
               </v-row>
               <v-row class="pt-0">
@@ -372,7 +372,7 @@
           <v-card-text>
               <v-row>
                   <v-col cols="12">
-                      <span style="color: #28323b; font-size: 0.8125rem;">To leave your team, simply click the “Leave Team” button below. You will no longer have access to the LeadRhino Dashboard or any of your team's data.</span>
+                      <span style="color: #28323b; font-size: 0.8125rem;">To leave your team, simply click the “Leave Team” button below. You will no longer have access to the CrossTrack Dashboard or any of your team's data.</span>
                   </v-col>
               </v-row>
           </v-card-text>
@@ -401,7 +401,7 @@
           <v-card-text>
               <v-row>
                   <v-col cols="12">
-                      <span style="color: #28323b; font-size: 0.8125rem;">To leave your team, simply click the “Leave Team” button below. You will no longer have access to the LeadRhino Dashboard or any of your team's data.</span>
+                      <span style="color: #28323b; font-size: 0.8125rem;">To leave your team, simply click the “Leave Team” button below. You will no longer have access to the CrossTrack Dashboard or any of your team's data.</span>
                   </v-col>
               </v-row>
           </v-card-text>
@@ -697,7 +697,7 @@ export default {
       margin-right: 3px;
     }
     .active-text {
-      color: #f05628 !important;
+      color: #2196f3 !important;
     }
 
     .v-menu__content{

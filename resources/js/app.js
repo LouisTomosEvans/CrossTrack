@@ -31,14 +31,14 @@ Vue.use(VueAxios, axios);
 import dashboardComponent from './components/dashboardComponent.vue'
 Vue.component('dashboard-component', dashboardComponent);
 
-import companiesComponent from './components/companiesComponent.vue'
-Vue.component('companies-component', companiesComponent);
+import programmingComponent from './components/programmingComponent.vue'
+Vue.component('programming-component', programmingComponent);
 
 import segmentsComponent from './components/segmentsComponent.vue'
 Vue.component('segments-component', segmentsComponent);
 
-import teamComponent from './components/teamComponent.vue'
-Vue.component('team-component', teamComponent);
+import rosterComponent from './components/rosterComponent.vue'
+Vue.component('roster-component', rosterComponent);
 
 import websiteComponent from './components/websiteComponent.vue'
 Vue.component('website-component', websiteComponent);
@@ -48,9 +48,9 @@ Vue.component('loading-screen', loadingScreenComponent);
 
 const routes = [
     { path: '/', component: dashboardComponent },
-    { path: '/companies', component: companiesComponent },
+    { path: '/programs', component: programmingComponent },
     { path: '/segments', component: segmentsComponent, name: 'segments' },
-    { path: '/team', component: teamComponent },
+    { path: '/roster', component: rosterComponent },
     { path: '/websites', component: websiteComponent },
     {path: '/:catchAll(.*)', component: dashboardComponent }
 ]

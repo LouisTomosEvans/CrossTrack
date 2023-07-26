@@ -14,7 +14,7 @@
 
         <form method="POST" action="{{ route('login') }}">
             @csrf
-            <p class="text-sm" style="color: #28323b">To access your account and start identifying leads, please login below:</p>
+            <p class="text-sm" style="color: #28323b">To access your account and start managing your Crossfit Box, please login below:</p>
 
             <div>
                 <x-jet-label for="email" value="{{ __('Your Email') }}" />

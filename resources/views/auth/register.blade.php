@@ -13,7 +13,7 @@
             @if(session('invite'))
                 <p class="text-sm" style="color: #28323b">You have been invited to join a team. Please enter your details below to create your account:</p>
             @else
-                <p class="text-sm" style="color: #28323b">Sign up now and start your <b>14-day free trial</b> to see how LeadRhino can help you identify and convert more leads:</p>
+                <p class="text-sm" style="color: #28323b">Sign up now and start your <b>14-day free trial</b> to see how CrossTrack can help you on your Crossfit journey:</p>
             @endif
 
             <div>

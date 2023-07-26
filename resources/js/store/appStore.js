@@ -26,7 +26,7 @@ export const useAppStore = defineStore('app', {
             // this.mark = 'https://www.validient.com/wp-content/uploads/2019/09/Validient-Logo-Color-1.svg';
             this.logoWhite = 'brandAssets/whiteLogo.png';
             // f05628
-            this.primary_color = '#f05628';
+            this.primary_color = '#1a59e0';
             // this.primary_color = '#04565F';
         },
         async setDashboardData(team_id) {

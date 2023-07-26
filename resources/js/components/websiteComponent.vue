@@ -31,7 +31,7 @@
                             <v-col cols="12" class="pt-0">
                                 <v-text-field  :color="appStore.primary_color" dense v-model="name" height="40px" elevation=0 single-line hide-details style="width: 100%;">
                                     <template v-slot:label>
-                                        <strong>Enter your website name</strong> ex. LeadRhino
+                                        <strong>Enter your website name</strong> ex. CrossTrack
                                     </template>
                                 </v-text-field>
                             </v-col>
@@ -40,7 +40,7 @@
                             <v-col cols="12" class="pt-0">
                                 <v-text-field prefix="https://"  :color="appStore.primary_color" dense v-model="domain" height="40px" elevation=0 single-line hide-details style="width: 100%;">
                                     <template v-slot:label>
-                                        <strong>Enter your website domain</strong> ex. LeadRhino.io
+                                        <strong>Enter your website domain</strong> ex. CrossTrack.io
                                     </template>
                                 </v-text-field>
                             </v-col>
@@ -101,7 +101,7 @@
                 <div class="p-0 m-0" style="width: 35%;">
                     <v-text-field  :color="appStore.primary_color" label="Search your company leads ex. Amazon" clearable dense v-model="search" height="40px" solo elevation=0 append-icon="mdi-magnify" single-line hide-details style="width: 100%; border-radius: 8px; box-shadow: 0px 0px 5px 0px rgba(40,50,59,.1) !important;">
                         <template v-slot:label>
-                            <strong>Search your websites </strong>ex. LeadRhino
+                            <strong>Search your websites </strong>ex. CrossTrack
                         </template>
                     </v-text-field>
                 </div>
@@ -376,7 +376,7 @@
                             <v-col cols="12" class="pt-0">
                                 <v-text-field  :color="appStore.primary_color" dense v-model="editItem.name" height="40px" elevation=0 single-line hide-details style="width: 100%;">
                                     <template v-slot:label>
-                                        <strong>Change your websites name</strong> ex. LeadRhino
+                                        <strong>Change your websites name</strong> ex. CrossTrack
                                     </template>
                                 </v-text-field>
                             </v-col>
@@ -385,7 +385,7 @@
                             <v-col cols="12" class="pt-0">
                                 <v-text-field prefix="https://"  :color="appStore.primary_color" dense v-model="editItem.domain" height="40px" elevation=0 single-line hide-details style="width: 100%;">
                                     <template v-slot:label>
-                                        <strong>Change your websites domain</strong> ex. LeadRhino.io
+                                        <strong>Change your websites domain</strong> ex. CrossTrack.io
                                     </template>
                                 </v-text-field>
                             </v-col>

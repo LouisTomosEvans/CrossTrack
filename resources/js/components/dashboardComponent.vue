@@ -4,7 +4,7 @@
             <!-- button toggle date selector -->
             <div class="col-12 d-flex justify-content-between">
                 <div>
-                    <b><span style="font-size: 1.25rem; color: #28323b;">Your Overview</span></b>
+                    <b><span style="font-size: 1.25rem; color: #28323b;">Gym Overview</span></b>
                 </div>
                 <!-- <v-btn-toggle color="#f05628" group style="background-color: white; border-radius: 8px; box-shadow: 0px 0px 5px 0px rgba(40,50,59,.1);" class="d-flex" dense outlined mandatory>
                     <v-btn elevation=0 style="font-size: 0.7rem; font-weight: 700; text-decoration: none; background-color: white; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
@@ -48,16 +48,16 @@
                                 <!-- add heading -->
                                 <div class="col-12 p-0 d-flex flex-wrap">
                                     <div class="d-flex justify-content-between" style="width: 100%;">
-                                        <b><span style="font-size: 1rem; color: #28323b;">Companies Identified</span></b>
+                                        <b><span style="font-size: 1rem; color: #28323b;">Active Athletes</span></b>
                                         <v-icon style="font-size: 1.5rem; color: #28323b;">mdi-dots-vertical</v-icon>
                                     </div>
                                     <div style="width: 100%;" >
-                                        <span style="font-size: 0.75rem; color: dark-gray; opacity: 0.75;">This Month</span>
+                                        <span style="font-size: 0.75rem; color: dark-gray; opacity: 0.75;">Today</span>
                                     </div>
                                     <div class="p-0 align-items-end d-flex" style="margin-top: 2rem;">
                                         <span style="font-size: 3rem; color: #28323b; font-weight:bolder; line-height: 2.3rem;">{{ appStore.dashboardData.new_leads_this_month }}</span>
                                         <!-- add badge -->
-                                        <span class="badge badge-pill badge-success ml-2" style="font-size: 0.75rem; color: #6ec59e; background-color: #6ec59e20;">+33% vs last month</span>
+                                        <span class="badge badge-pill badge-success ml-2" style="font-size: 0.75rem; color: #6ec59e; background-color: #6ec59e20;">+33% vs Yesterday</span>
 
                                     </div>
                                 </div>
@@ -79,16 +79,16 @@
                                 <!-- add heading -->
                                 <div class="col-12 p-0 d-flex flex-wrap">
                                     <div class="d-flex justify-content-between" style="width: 100%;">
-                                        <b><span style="font-size: 1rem; color: #28323b;">Unique Visitors</span></b>
+                                        <b><span style="font-size: 1rem; color: #28323b;">Workout Logged</span></b>
                                         <v-icon style="font-size: 1.5rem; color: #28323b;">mdi-dots-vertical</v-icon>
                                     </div>
                                     <div style="width: 100%;" >
-                                        <span style="font-size: 0.75rem; color: dark-gray; opacity: 0.75;">This Month</span>
+                                        <span style="font-size: 0.75rem; color: dark-gray; opacity: 0.75;">Today</span>
                                     </div>
                                     <div class="p-0 align-items-end d-flex" style="margin-top: 2rem;">
                                         <span style="font-size: 3rem; color: #28323b; font-weight:bolder; line-height: 2.3rem;">{{ appStore.dashboardData.unique_visitors_this_month }}</span>
                                         <!-- add badge -->
-                                        <span class="badge badge-pill badge-success ml-2" :style="'font-size: 0.75rem; color: ' + appStore.primary_color + '; background-color: ' + appStore.primary_color + '20;'">+33% vs last month</span>
+                                        <span class="badge badge-pill badge-success ml-2" :style="'font-size: 0.75rem; color: ' + appStore.primary_color + '; background-color: ' + appStore.primary_color + '20;'">+33% vs Yesterday</span>
 
                                     </div>
                                 </div>
@@ -110,16 +110,16 @@
                                 <!-- add heading -->
                                 <div class="col-12 p-0 d-flex flex-wrap">
                                     <div class="d-flex justify-content-between" style="width: 100%;">
-                                        <b><span style="font-size: 1rem; color: #28323b;">Returning Companies</span></b>
+                                        <b><span style="font-size: 1rem; color: #28323b;">Reactions Given</span></b>
                                         <v-icon style="font-size: 1.5rem; color: #28323b;">mdi-dots-vertical</v-icon>
                                     </div>
                                     <div style="width: 100%;" >
-                                        <span style="font-size: 0.75rem; color: dark-gray; opacity: 0.75;">This Month</span>
+                                        <span style="font-size: 0.75rem; color: dark-gray; opacity: 0.75;">Today</span>
                                     </div>
                                     <div class="p-0 align-items-end d-flex" style="margin-top: 2rem;">
                                         <span style="font-size: 3rem; color: #28323b; font-weight:bolder; line-height: 2.3rem;">{{ appStore.dashboardData.returning_leads_this_month }}</span>
                                         <!-- add badge -->
-                                        <span class="badge badge-pill badge-success ml-2" :style="'font-size: 0.75rem; color: ' + appStore.primary_color + ' ; background-color: ' + appStore.primary_color + '20;'">+33% vs last month</span>
+                                        <span class="badge badge-pill badge-success ml-2" :style="'font-size: 0.75rem; color: ' + appStore.primary_color + ' ; background-color: ' + appStore.primary_color + '20;'">+33% vs Yesterday</span>
 
                                     </div>
                                 </div>

@@ -1,11 +1,11 @@
 <template>
         <div class="row justify-content-center">
             <div class="col-12">
-                <b><span style="font-size: 1.25rem; color: #28323b;">Your Team</span></b>
+                <b><span style="font-size: 1.25rem; color: #28323b;">Your Roster</span></b>
             </div>
             <div class="col-12 d-flex justify-content-between" style="padding-top: 0.5rem;">
                 <div class="d-flex align-items-end" style="width: 75%;">
-                    <span style="color: #28323b; font-size: 0.8125rem;">Welcome to the Team section! Here, you can view and manage your team members. You can add new team members, view current team members, and edit their profiles. You can also review your team’s progress and performance. This is a great way to keep track of your team’s progress and ensure everyone is working together to reach your business goals.</span>
+                    <span style="color: #28323b; font-size: 0.8125rem;">Welcome to the Roster section! Here, you can view and manage your team members. You can add new team members, view current team members, and edit their profiles. You can also review your team’s progress and performance. This is a great way to keep track of your team’s progress and ensure everyone is working together to reach your business goals.</span>
                 </div>
                 <div class="m-0 p-0 d-flex align-content-center">
                     <v-btn v-if="checkIfUserIsOwnerOfCurrentTeam" @click="dialog = true" elevation=0  :color="appStore.primary_color"  style="font-size: 0.8125rem; font-weight: 700; text-decoration: none;  margin: 4px; text-transform: none !important; letter-spacing: 0; text-indent: 0;">
@@ -400,8 +400,9 @@
                 headers: [
                     { text: 'Name', value: 'name' },
                     { text: 'Email', value: 'email' },
+                    { text: 'Role', value: '' },
                     { text: 'Status', value: 'pivot.active' },
-                    { text: 'Date Created', value: 'created_at' },
+                    { text: 'Joined', value: 'created_at' },
                     { text: 'Last Seen', value: 'last_active_at' },
                     { text: '', value: 'actions', sortable: false },
                 ],

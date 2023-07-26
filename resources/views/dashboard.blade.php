@@ -9,7 +9,6 @@
         font-family: 'Inter', sans-serif;
     }
     </style>
-    <meta name="laravel-constants" content="{{ base64_encode(json_encode(\App\Constants\IndustrySectors::SECTORS)) }}">
     </head>
     <body>
     <script defer src="{{ mix('/js/app.js') }}"></script>
